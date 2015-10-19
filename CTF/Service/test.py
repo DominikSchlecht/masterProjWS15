@@ -1,18 +1,18 @@
 #!/bin/env python
 import md5
+import random
 
 flag    = "flg000001"
-inStr   = "00000"
-
-print("Flag: \t\t" + flag)
-print("Input: \t\t" + inStr)
+inStr   = "ABC00000000000000000000000000000"
+ran     = ""
+for _ in range(0, 32):
+    ran += random.choice("0123456789abcdef")
 
 m = md5.new()
 m.update(flag)
 hsh = m.hexdigest()
-print("Hash: \t\t" + hsh)
 
-def encrpyt(inStr, hsh):
+def encrypt(inStr, hsh):
     outStr  = ""
     cnt = 0
     for ch in inStr:
@@ -20,14 +20,16 @@ def encrpyt(inStr, hsh):
             cnt = 0
         #print(ch + ": " + str(ord(ch)))
         #print(hsh[cnt] + ": " + str(ord(hsh[cnt])))
-        tmp = ord(ch)+int(hsh[cnt],16)
+        newOrd = ord(ch)+int(hsh[cnt],16)
+        if newOrd > ord("9") and newOrd < ord("a"):
+            newOrd += ord("a")-ord("9")-1
         #print("New Ord: " + str(tmp))
-        newChar = chr(tmp)
+        newChar = chr(newOrd)
         #print(newChar + " " + str(ord(newChar)))
         while ord(newChar) > ord("z"):
         #while not newChar.isalnum():
             tmp = ord(newChar)-26
-            print("While not alnum: " + str(tmp))
+            #print("While not alnum: " + str(tmp))
             newChar = chr(ord(newChar)-26)
         outStr += newChar
         cnt += 1
@@ -41,7 +43,14 @@ def decrypt_to_hash(inStr, outStr):
         hsh += str(hex((ord(outStr[cnt]) - ord(ch))%26))[2:]
         cnt += 1
     return hsh
+print("Private:")
+print("\t Flag: \t\t\t" + flag)
+print("\t Hash: \t\t\t" + hsh)
+print("\t encry no rand: \t" + encrypt(inStr, hsh))
 
-print("encrpyted: \t" + encrpyt(inStr, hsh))
-print(decrypt_to_hash(inStr, encrpyt(inStr, hsh)))
-print(hsh)
+print("\nUser defined:")
+print("\t Input: \t\t" + inStr)
+
+print("\nPublic:")
+print("\t Rand: \t\t\t" + ran)
+print("\t encry w. rand: \t" + encrypt(encrypt(inStr, ran), hsh))
