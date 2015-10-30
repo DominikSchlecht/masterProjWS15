@@ -24,7 +24,7 @@ TCP_IP = '127.0.0.1'
 TCP_PORT = 1337
 BUFFER_SIZE = 512
 
-pattern =  "^(WVW|WV2|1VW|3VW|9BW|AAV)(ZZZ)?(" + Fahrzeugtypenstring + ")([ABCDEFGHJKLMNPRSTVWXY]|[0-9])([ABCDEFGHJKLMNPRSTUVWXYZ]|[0-9])[0-9]{6}"
+pattern =  "^(WVW|WV2|1VW|3VW|9BW|AAV)(ZZZ)?(" + Fahrzeugtypenstring + ")([ABCDEFGHJKLMNPRSTVWXY]|[0-9])([ABCDEFGHJKLMNPRSTUVWXYZ]|[0-9])[0-9]{6}$"
 counter = 1 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
@@ -55,9 +55,9 @@ try:
             sys.stdout.flush()
 
             if(re.match(pattern, data)):
-                conn.send('yeah')
+                conn.send('Dei Emissionwert der ist ne so guad schaust ma her: \n Platzhalter\n')
             else:
-                conn.send('buuuh') 
+                conn.send('Des is fei koa gscheide Numma du de** du damischer...\n') 
 
         sys.stdout.flush()
         conn.close()
