@@ -1,4 +1,17 @@
 import sys, socket
+import re
+import csv
+
+Fahrzeugtypenstring = ""
+
+f = open("info/Fahrzeugtypen.csv", 'rt')
+try:
+    reader = csv.reader(f)
+    for row in reader:
+        Fahrzeugtypenstring += str(row)[2:5] + "|"
+finally:
+    f.close()
+Fahrzeugtypenstring = Fahrzeugtypenstring[:-1]
 
 OKBLUE  = '\033[94m'
 OKGREEN = '\033[92m'
@@ -6,10 +19,13 @@ WARNING = '\033[93m'
 FAIL    = '\033[91m'
 ENDC    = '\033[0m'
 
-TCP_IP = '88.198.205.243'
+TCP_IP = '127.0.0.1'
+#TCP_IP = '88.198.205.243'
 TCP_PORT = 1337
 BUFFER_SIZE = 512
 
+pattern =  "^(WVW|WV2|1VW|3VW|9BW|AAV)(ZZZ)?(" + Fahrzeugtypenstring + ")([ABCDEFGHJKLMNPRSTVWXY]|[0-9])([ABCDEFGHJKLMNPRSTUVWXYZ]|[0-9])[0-9]{6}"
+counter = 1 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
 s.listen(5)
@@ -23,6 +39,9 @@ try:
             print(OKGREEN + "[+] Client %s connected" % (str(addr[0])) + ENDC)
         #print(OKBLUE    + "[*] Starting keydump..."                     + ENDC)
         tmp = ""
+        
+        conn.send("Ey du Gradler gib a moi dei Fahrgsteinumma ei: \n")
+
         while 1:
             try:
                 data = conn.recv(BUFFER_SIZE) # This returns immediately with no data, when client connection is run from script and doesn't send() anything, just connects.
@@ -32,21 +51,13 @@ try:
             if not data:
                 #print(WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC)
                 break
-
             data = str(data)
-            # Filter for the first / and the HTTP to find the send character
-            print(data[7:data.find("HTTP")-1], end='')
             sys.stdout.flush()
 
-            response = ("HTTP/1.1 200 OK\r\n" +
-                        "Server: WebServer\r\n" +
-                        "Content-Type: text/html\r\n" +
-                        "Content-Length: 3\r\n"
-                        "Cache-Control: no-cache\r\n" +
-                        "Connection: close\r\n" +
-                        "\r\n" +
-                        "123")
-            conn.send(response.encode())
+            if(re.match(pattern, data)):
+                conn.send('yeah')
+            else:
+                conn.send('buuuh') 
 
         sys.stdout.flush()
         conn.close()
