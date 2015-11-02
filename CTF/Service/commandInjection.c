@@ -18,7 +18,7 @@ main(int argc, char *argv[])
   // Defines the "bad" characters
   const char *invalid_characters = ";|><`$-";
   char str[BUFSIZ];
-  char *command = "cat info/Fahrzeugtypen.csv | grep ";
+  char *command = "cat info/Fahrzeugnummern.csv | grep ";
   int ciFound = 0;
 
   // Read the command
