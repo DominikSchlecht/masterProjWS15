@@ -18,11 +18,12 @@ main(int argc, char *argv[])
   // Defines the "bad" characters
   const char *invalid_characters = ";|><`$-";
   char str[BUFSIZ];
-  char *command = "ls -la ";
+  char *command = "cat info/Fahrzeugtypen.csv | grep ";
   int ciFound = 0;
 
   // Read the command
-  scanf("%[^\n]", str);
+  //scanf("%[^\n]", str);
+  strcpy(str, argv[1]);
 
   // Check the user input for bad characters
   char *c = str;
