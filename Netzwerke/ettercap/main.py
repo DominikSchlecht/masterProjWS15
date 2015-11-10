@@ -3,6 +3,7 @@ import os
 import subprocess
 import time
 import ettercap
+import colors
 
 # ToDo:
 #	add default interface eth0 if selected is empty or not existend
@@ -14,13 +15,15 @@ import ettercap
 
 # Shows the ARP Spoofing menu
 def arpMenu():
+	shellCols = colors.ShellColors
 	showMenu = True
 	while(showMenu):
-		print("ARP Spoofing Menu")
-		print("1.\tStart Ettercap in sniffing mode")
-		print("2.\tStart Ettercap in fun mode")
-		print("0.\tBack to main menu")
-		selection = input("Your selection: ")
+		subprocess.call(["clear"])
+		print shellCols.UNDERLINE + shellCols.HEADER + "ARP Spoofing Menu" + shellCols.ENDC
+		print shellCols.WARNING + "1.\tStart Ettercap in sniffing mode" + shellCols.ENDC
+		print shellCols.WARNING + "2.\tStart Ettercap in fun mode" + shellCols.ENDC
+		print shellCols.WARNING + "0.\tBack to main menu" + shellCols.ENDC
+		selection = input(shellCols.BLUE + "\nYour selection: " + shellCols.ENDC)
 		etter = ettercap.ArpSpoofing()
 		if(selection == 1):
 			etter.start(etter, 1)
@@ -29,8 +32,10 @@ def arpMenu():
 			etter.start(etter, 2)
 			#ettercapFun()
 		elif(selection == 0):
-			print("\nBack to main menu...\n")
+			print "\nBack to main menu...\n"
 			showMenu = False
+		else:
+			print "Not valid"
 
 ##########################################
 # Show Menu
@@ -38,17 +43,19 @@ def arpMenu():
 showMenu = True
 #while(showMenu):
 while(showMenu):
+	shellCols = colors.ShellColors
 	#Main Menu
-	print("Main Menu")
-	print("1.\tARP Spoofing")
-	print("2.\tDNS Spoofing")
-	print("0.\tExit Programm")
-	mainSelection = input("Your selection: ")
+	subprocess.call(["clear"])
+	print shellCols.UNDERLINE + shellCols.HEADER + "Main Menu" + shellCols.ENDC
+	print shellCols.WARNING + "1.\tARP Spoofing" + shellCols.ENDC
+	print shellCols.WARNING + "2.\tDNS Spoofing" + shellCols.ENDC
+	print shellCols.WARNING + "0.\tExit Programm" + shellCols.ENDC
+	mainSelection = input(shellCols.BLUE + "\nYour selection: " + shellCols.ENDC)
 	if(mainSelection == 1):
 		arpMenu()
 	elif(mainSelection == 2):
-		print("DNS Spoofing Menu")
+		print "DNS Spoofing Menu"
 	elif(mainSelection == 0):
-		print("\nExiting\n")
+		print "\nExiting\n"
 		showMenu = False
 
