@@ -44,27 +44,70 @@ try:
             print(OKGREEN + "[+] Client %s connected" % (str(addr[0])) + ENDC)
         #print(OKBLUE    + "[*] Starting keydump..."                     + ENDC)
         tmp = ""
+        conn.send("********************************************************\n")
+	    conn.send("**************** Welcome to Folkswagen *****************\n")        
+	    conn.send("********************************************************\n")
+        conn.send("*                                                      *\n")
+	    conn.send("* FFFFFFFFFFFFFFFFF  W               W               W *\n")
+	    conn.send("* FF                  W             W W             W  *\n")
+        conn.send("* FF                   W           W   W           W   *\n")
+        conn.send("* FF                    W         W     W         W    *\n")
+        conn.send("* FFFFFFFFFFF            W       W       W       W     *\n")
+        conn.send("* FF                      W     W         W     W      *\n")
+        conn.send("* FF                       W   W           W   W       *\n")
+        conn.send("* FF                        W W             W W        *\n")
+        conn.send("* FF                         W               W         *\n")
+        conn.send("*                                                      *\n")
+	    conn.send("********************************************************\n")
 
         conn.send("Ey du Gradler gib a moi dei Fahrgsteinumma ei: \n")
 
+        helper = False
+        translator = False
+
         while 1:
             try:
-                data = conn.recv(BUFFER_SIZE) # This returns immediately with no data, when client connection is run from script and doesn't send() anything, just connects.
+                data = conn.recv(BUFFER_SIZE)  # This returns immediately with no data, when client connection is run from script and doesn't send() anything, just connects.
             except ConnectionResetError as e:
-                print(FAIL + "\n[-] Client %s disconnected hard" % (str(addr[0])) + ENDC)
+                #print(FAIL + "\n[-] Client %s disconnected hard" % (str(addr[0])) + ENDC)
                 break
             if not data:
-                #print(WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC)
+                print((WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC))
                 break
-            data = str(data)
-            sys.stdout.flush()
-
-            if(re.match(pattern, data)):
-                r = execute_shell("./commandInjection " + data)
-                conn.send('Dei Emissionwert der ist ne so guad schaust ma her: \n' + r.stdout.read() + '\n')
             else:
-                conn.send('Des is fei koa gscheide Numma du de** du damischer...\n')
-
+                data = (str(data)).strip()
+                sys.stdout.flush()
+                if translator:
+                    if(data == "quit" or data == "exit"):
+                        translator = False
+                    else:
+                        #ToDo: take out after translator is implemented
+                        conn.send('sorry not implemented yet\n')
+                        #ToDo: insert translator call here!
+                        #r = execute_shell("./translator " + data
+                        #conn.send('The word ' + data + ' means ' + r.stdout.read() + ' in english\n\n')
+                        conn.send('Of which word do you want a translation?\n')
+                elif helper:
+                    if(data == 'y'):
+                        helper = False
+                        translator = True
+                        conn.send('You can exit the translator through "exit" or "quit".\nOf which word do you want a translation?\n')
+                    elif(data == 'n'):
+                        helper = False
+                        conn.send('well, its your loss\n')
+                    else:
+                        conn.send('If you have problems understanding the language please use our sophisticated translation tool!(y/n)\n')
+                elif(data == "quit" or data == "exit"):
+                    print((WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC))
+                    break
+                elif(data == "help"):
+                    helper = True
+                    conn.send('If you have problems understanding the language please use our sophisticated translation tool!(y/n)\n')
+                elif(re.match(pattern, data)):
+                    r = execute_shell("./commandInjection " + data)
+                    conn.send('Dei Emissionwert der ist ne so guad schaust ma her: \n' + r.stdout.read() + '\n')
+                else:
+                    conn.send('Des is fei koa gscheide Numma du de** du dammischer...\n')
         sys.stdout.flush()
         conn.close()
 except KeyboardInterrupt as e:
