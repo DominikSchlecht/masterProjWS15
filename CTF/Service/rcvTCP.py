@@ -62,9 +62,8 @@ try:
         conn.send("*                                                      *\n")
         conn.send("********************************************************\n\n\n")
 
-        conn.send("Ey du Gradler gib a moi dei Fahrgsteinumma ei: \n")
+        conn.send("Ey du Gradler gib a moi dei Fahrgsteinumma ei:\n")
 
-        helper = False
         translator = False
 
         while 1:
@@ -88,23 +87,16 @@ try:
                         #ToDo: insert translator call here!
                         #r = execute_shell("./translator " + data
                         #conn.send('The word ' + data + ' means ' + r.stdout.read() + ' in english\n\n')
-                        conn.send('Of which word do you want a translation?\n')
-                elif helper:
-                    if(data == 'y'):
-                        helper = False
-                        translator = True
-                        conn.send('You can exit the translator through "exit" or "quit".\nOf which word do you want a translation?\n')
-                    elif(data == 'n'):
-                        helper = False
-                        conn.send('well, its your loss\n')
-                    else:
-                        conn.send('If you have problems understanding the language please use our sophisticated translation tool!(y/n)\n')
+                        conn.send("Welches bayrische Wort moechten sie wissen?\n")
                 elif(data == "quit" or data == "exit"):
                     print((WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC))
                     break
                 elif(data == "help"):
-                    helper = True
-                    conn.send('If you have problems understanding the language please use our sophisticated translation tool!(y/n)\n')
+                    conn.send("The cake is a lie!")
+                elif(data == "I ko koa Bayrisch"):
+                    translator = True
+                    conn.send('Der Uebersetzer laesst sich mit exit oder quit beenden.\n')
+                    conn.send("Welches bayrische Wort moechten sie wissen?\n")
                 elif(1==1):
                 #elif(re.match(pattern, data)):
                     print("./commandInjection " + data)
@@ -114,7 +106,7 @@ try:
                         print(tmp)
                         conn.send('Dei Emissionwert der ist ne so guad schaust ma her: \n' + tmp + '\n')
                     else:
-                        conn.send('Des is fei koa gscheide Numma du de** du dammischer...\n')
+                        conn.send('\nDes is fei koa gscheide Numma du de** du dammischer...\n\nSollten sie aus dem Ausland kommen und kein Bayrisch\nsprechen koennen sie auch unseren Uebersetzer nutzen!\nGeben sie dafuer folgendes ein: \n\"I ko koa Bayrisch\"\n')
                 else:
                     conn.send('Des is fei koa gscheide Numma du de** du dammischer...\n')
         sys.stdout.flush()
