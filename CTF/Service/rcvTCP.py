@@ -44,12 +44,14 @@ try:
             print(OKGREEN + "[+] Client %s connected" % (str(addr[0])) + ENDC)
         #print(OKBLUE    + "[*] Starting keydump..."                     + ENDC)
         tmp = ""
+        conn.send("\n********************************************************\n")
+	conn.send("**************** Welcome to Folkswagen *****************\n")        
         conn.send("********************************************************\n")
-	    conn.send("**************** Welcome to Folkswagen *****************\n")        
-	    conn.send("********************************************************\n")
+	
+	conn.send("\n********************************************************\n")
         conn.send("*                                                      *\n")
-	    conn.send("* FFFFFFFFFFFFFFFFF  W               W               W *\n")
-	    conn.send("* FF                  W             W W             W  *\n")
+	conn.send("* FFFFFFFFFFFFFFFFF  W               W               W *\n")
+	conn.send("* FF                  W             W W             W  *\n")
         conn.send("* FF                   W           W   W           W   *\n")
         conn.send("* FF                    W         W     W         W    *\n")
         conn.send("* FFFFFFFFFFF            W       W       W       W     *\n")
@@ -58,7 +60,7 @@ try:
         conn.send("* FF                        W W             W W        *\n")
         conn.send("* FF                         W               W         *\n")
         conn.send("*                                                      *\n")
-	    conn.send("********************************************************\n")
+	conn.send("********************************************************\n\n\n")
 
         conn.send("Ey du Gradler gib a moi dei Fahrgsteinumma ei: \n")
 
