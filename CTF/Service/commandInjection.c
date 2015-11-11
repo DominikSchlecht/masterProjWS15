@@ -108,10 +108,8 @@ main(int argc, char *argv[])
 
     // Check the user input for bad characters
 
-    if(test_regex(str) != -1){
-      printf("OK\n"); // Go on..
-    } else {
-      printf("No valid number...\n");
+    if(test_regex(str) == -1){
+      printf("Na\n");
       return -1;
     }
 
@@ -120,7 +118,7 @@ main(int argc, char *argv[])
     {
       if (strchr(invalid_characters, *c))
       {
-         printf("%c is in \"%s\"\n", *c, str);
+         printf("Na\n");
          // Set flag if found
          ciFound = 1;
       }
@@ -140,7 +138,7 @@ main(int argc, char *argv[])
       pclose(ls);
     }
   } else {
-    printf("You hit the wrong condition!");
+    printf("Na\n");
   }
   return 1;
 }

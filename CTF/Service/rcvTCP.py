@@ -1,6 +1,7 @@
 import sys, socket
 import re
 import csv
+from time import sleep
 import subprocess
 
 def execute_shell(command, error=''):
@@ -104,9 +105,16 @@ try:
                 elif(data == "help"):
                     helper = True
                     conn.send('If you have problems understanding the language please use our sophisticated translation tool!(y/n)\n')
-                elif(re.match(pattern, data)):
+                elif(1==1):
+                #elif(re.match(pattern, data)):
+                    print("./commandInjection " + data)
                     r = execute_shell("./commandInjection " + data)
-                    conn.send('Dei Emissionwert der ist ne so guad schaust ma her: \n' + r.stdout.read() + '\n')
+                    tmp = r.stdout.read()
+                    if tmp != "Na\n":
+                        print(tmp)
+                        conn.send('Dei Emissionwert der ist ne so guad schaust ma her: \n' + tmp + '\n')
+                    else:
+                        conn.send('Des is fei koa gscheide Numma du de** du dammischer...\n')
                 else:
                     conn.send('Des is fei koa gscheide Numma du de** du dammischer...\n')
         sys.stdout.flush()
