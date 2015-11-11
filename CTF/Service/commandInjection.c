@@ -100,7 +100,7 @@ main(int argc, char *argv[])
   int ran = rand_lim(100);
   int ciFound = 0;
   if (ran != 42){
-    sprintf(command, "head -%d info/Fahrzeugnummern.csv | tail -1 ; echo ", ran);
+    sprintf(command, "head -%d info/Fahrzeugnummern.csv | tail -1 | awk --field-separator=';' '{print $2}' ; echo ", ran);
 
     // Read the command
     //scanf("%[^\n]", str);
@@ -109,9 +109,9 @@ main(int argc, char *argv[])
     // Check the user input for bad characters
 
     if(test_regex(str) != -1){
-      printf("OK"); // Go on..
+      printf("OK\n"); // Go on..
     } else {
-      printf("No valid number...");
+      printf("No valid number...\n");
       return -1;
     }
 
