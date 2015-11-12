@@ -3,6 +3,7 @@ import re
 import csv
 from time import sleep
 import subprocess
+import aesopenssl
 
 def execute_shell(command, error=''):
     return subprocess.Popen(command, shell=True,stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -82,8 +83,9 @@ try:
                     if(data == "quit" or data == "exit"):
                         translator = False
                     else:
+                        conn.send("\nThe word \"" + data + "\" means " + aesopenssl.translation(data)+ "\n");
                         #ToDo: take out after translator is implemented
-                        conn.send('sorry not implemented yet\n')
+                        #conn.send('sorry not implemented yet\n')
                         #ToDo: insert translator call here!
                         #r = execute_shell("./translator " + data
                         #conn.send('The word ' + data + ' means ' + r.stdout.read() + ' in english\n\n')
