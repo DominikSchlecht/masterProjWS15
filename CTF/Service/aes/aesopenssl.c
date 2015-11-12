@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 
 char *randstring(size_t length) 
@@ -24,9 +25,23 @@ char *randstring(size_t length)
     return randomString;
 }
 
+const char* getfield(char* line, int num)
+{
+    const char* tok;
+    for (tok = strtok(line, ";");
+            tok && *tok;
+            tok = strtok(NULL, ";\n"))
+    {
+        if (!--num)
+            return tok;
+    }
+    return NULL;
+}
+
+//char* translation(char* word)
 int main(int argc, char* argv[])
 {
-	if (argc == 3)
+	/*if (argc == 3)			Encryption (not needed?)
 	{
 		if(strcmp(argv[1], "encrypt") == 0)
 		{
@@ -36,50 +51,39 @@ int main(int argc, char* argv[])
 			return 0;		
 		}
 		else if(strcmp(argv[1], "decrypt")==0)
-		{
-			char* randName = randstring(15);
-			FILE* f = NULL;
-			char* tmp = malloc(sizeof(char)*2000);
-			char* remove = malloc(sizeof(char)*200);
-			sprintf(tmp, "openssl aes-256-cbc -d -in %s.enc -out %s -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", argv[2], randName);
-			printf("%s\n", randName);
-			f = popen(tmp, "w");
-			pclose(f);
-			FILE* output=fopen(randName, "r");
-			char* encryptedData[1500];
-			int i = 0;
-			encryptedData[0] = malloc(sizeof(char)*500);
-			char line[1024];
-			while(fgets(line, 1024, output)!=NULL)
-			{
-				sprintf(encryptedData[i], "%s", line); 
-				i++;
-				encryptedData[i] = malloc(sizeof(char)*500);
-			}
-			int p = 0;
-			for(p = 0; p < 15; p++)
-				printf("---------------------------------------->%s\n", encryptedData[p]);
-			
-			
-			/*
-			FILE *test = fopen("Bayrisch.csv.out");
-			char line[1024];
-			fgets();*/
-			/*
-			 *	Hier kommt was hin was die Datei weitergibt!
-			 * 
-			 *
-			 */
-			sprintf(remove, "rm %s", randName);
-			popen(remove, "w");
-			return 0;
-		}
-
-	}
-	else
+		{*/
+	char* randName = randstring(15);
+	FILE* f = NULL;
+	char* tmp = malloc(sizeof(char)*2000);
+	char* remove = malloc(sizeof(char)*200);
+	sprintf(tmp, "openssl aes-256-cbc -d -in Bayrisch.csv.enc -out %s -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", randName);
+	f = popen(tmp, "w");
+	pclose(f);
+	FILE* output=fopen(randName, "r");
+	char* encryptedData[1500];
+	int i = 0;
+	int p = 1;
+	char* result = malloc(128);
+	encryptedData[0] = malloc(sizeof(char)*500);
+	char line[1024];
+	while(fgets(line, 1024, output)!=NULL)
 	{
-		printf("too few or too many arguments");
-		
+		char* tmp = strdup(line);
+		if(strstr(getfield(tmp, 1), argv[1]) != NULL)
+		{
+			strcpy(tmp, line);
+			strcpy(result, getfield(tmp,2));
+		}
+		sprintf(encryptedData[i], "%s", line); 
+		i++;
+		encryptedData[i] = malloc(sizeof(char)*500);
+		free(tmp);
 	}
-
+	/* give result to the next function */
+	printf("The result: %s\n", result);
+	
+	
+	sprintf(remove, "rm %s", randName);
+	popen(remove, "w");
+	return 0;
 }
