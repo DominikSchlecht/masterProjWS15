@@ -83,7 +83,7 @@ try:
                     if(data == "quit" or data == "exit"):
                         translator = False
                     else:
-                        conn.send("\nThe word \"" + data + "\" means " + aesopenssl.translation(data)+ "\n");
+                        conn.send(aesopenssl.translation(data));
                         #ToDo: take out after translator is implemented
                         #conn.send('sorry not implemented yet\n')
                         #ToDo: insert translator call here!

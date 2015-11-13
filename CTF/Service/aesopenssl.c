@@ -68,21 +68,24 @@ const char* translator(const char* word)
 	int i = 0;
 	int p = 1;
 	char* result = malloc(128);
+	sprintf(result, "");
 	encryptedData[0] = malloc(sizeof(char)*500);
 	char line[1024];
 	while(fgets(line, 1024, output)!=NULL)
 	{
 		char* tmp = strdup(line);
-		if(strstr(getfield(tmp, 1), word) != NULL)
+		if(strcmp(getfield(tmp, 1), word) == 0)
 		{
 			strcpy(tmp, line);
-			strcpy(result, getfield(tmp,2));
+			sprintf(result,"The word %s means %s\n", word, getfield(tmp,2));
 		}
 		sprintf(encryptedData[i], "%s", line); 
 		i++;
 		encryptedData[i] = malloc(sizeof(char)*500);
 		free(tmp);
 	}
+	if(strlen(result) == 0)
+		sprintf(result, "Sorry we couldn't find that word\n");
 	/* give result to the next function */
 	sprintf(remove, "rm %s", randName);
 	popen(remove, "w");
