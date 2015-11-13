@@ -18,8 +18,9 @@
 
 import os
 import subprocess
+import attackBase
 
-class DNSSpoofing:
+class DNSSpoofing(attackBase.Attack):
 
 	spoofedEntries = []
 	hostsFile = "/usr/local/spoofedHosts"

@@ -2,8 +2,9 @@
 import os
 import subprocess
 import time
-import ettercap
+#import ettercap
 import colors
+from ettercap import ettercap
 
 # ToDo:
 #	add default interface eth0 if selected is empty or not existend
