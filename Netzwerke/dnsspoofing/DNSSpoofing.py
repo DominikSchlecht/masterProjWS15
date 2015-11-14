@@ -60,7 +60,7 @@ class DNSSpoofing(attackBase.Attack):
 			for entry in self.spoofedEntries:
 				dnsname, ipAddress = entry
 				# Write DNS-Entries into seperated hosts-file
-				hostsFile.write(ipAddress+"	"+dnsname)
+				hostsFile.write("\n"+ipAddress+"	"+dnsname)
 		print "\n Hostsentries successfully added to local hosts-list! \n"
 
 		print "Start with DNS-Spoofing"
