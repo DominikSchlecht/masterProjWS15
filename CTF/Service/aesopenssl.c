@@ -39,47 +39,6 @@ const char* getfield(char* line, int num)
     return NULL;
 }
 
-int addStringToFile(char* lineToAppend, char* method, char* filename) { // line format: flag_id;encrypted_flag
-   FILE *fd;
-   char command[500];  
-
-    if ( (fd = fopen(filename,"a+")) == NULL) {
-      fprintf(stderr, "\nKonnte Datei %s nicht öffnen!", filename);
-      return EXIT_FAILURE;
-      }
-   
-   if(strcmp(method, "ba") == 0) {
-      sprintf(command, "echo '%s' >> '%s'", lineToAppend, filename);
-      FILE *ls = popen(command, "r");
-   }else{
-      if(strcmp(method, "in") == 0){
-         fputs(lineToAppend, fd);
-      }
-   }   
- 
-   fclose(fd);
-   return 0;
-}
-
-char* addStringToEnc(char* line)
-{
-	char* randName = randstring(15);
-	FILE* f = NULL;
-	char* tmp = malloc(sizeof(char)*2000);
-	sprintf(tmp, "openssl aes-256-cbc -d -in Bayrisch.csv.enc -out %s -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", randName);
-	f = popen(tmp, "w");
-	pclose(f);
-	FILE* output=fopen(randName, "r");
-	addStringToFile(line, "ba", randName);
-	free(tmp);
-	char* tmp2 = malloc(sizeof(char)*2000);
-	sprintf(tmp2, "openssl aes-256-cbc -in %s -out Bayrisch.csv.enc -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", randName);
-	popen(tmp2, "w");
-	free(tmp2);
-	return 0;	
-}
-
-
 const char* translator(const char* word)
 //int main(int argc, char* argv[])
 {
@@ -108,7 +67,7 @@ const char* translator(const char* word)
 	int i = 0;
 	int p = 1;
 	char* result = malloc(128);
-	sprintf(result, "");
+	memset(result,0 ,strlen(result));
 	encryptedData[0] = malloc(sizeof(char)*500);
 	char line[1024];
 	while(fgets(line, 1024, output)!=NULL)
