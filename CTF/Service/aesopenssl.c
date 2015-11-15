@@ -39,7 +39,6 @@ const char* getfield(char* line, int num)
     return NULL;
 }
 
-
 const char* translator(const char* word)
 //int main(int argc, char* argv[])
 {
@@ -69,6 +68,7 @@ const char* translator(const char* word)
   int arLen;
   int len;
 	char* result = malloc(128);
+	memset(result,0 ,strlen(result));
 	char line[1024];
   char* test = word;
   char* encryptedData[1500];
@@ -77,10 +77,10 @@ const char* translator(const char* word)
 	while(fgets(line, 1024, output)!=NULL)
 	{
 		char* tmp = strdup(line);
-		if(strstr(getfield(tmp, 1), word) != NULL)
+		if(strcmp(getfield(tmp, 1), word) == 0)
 		{
 			strcpy(tmp, line);
-			strcpy(result, getfield(tmp,2));
+			sprintf(result,"The word %s means %s\n", word, getfield(tmp,2));
 		}
 		sprintf(encryptedData[i], "%s", line);
 		i++;
@@ -126,7 +126,8 @@ const char* translator(const char* word)
     }
   }
   printf(test);
-
+	if(strlen(result) == 0)
+		sprintf(result, "Sorry we couldn't find that word\n");
 	/* give result to the next function */
 	sprintf(remove, "rm %s", randName);
 	popen(remove, "w");
