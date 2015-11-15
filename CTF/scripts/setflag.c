@@ -9,6 +9,11 @@
 #include "./chilkat-9.5.0-x86_64-linux-gcc/include/C_CkCrypt2.h"
 #include <time.h>
 
+// http://www.example-code.com/c/aes_stringEncryption.asp
+// http://www.chilkatsoft.com/chilkatLinux.asp
+// http://www.cknotes.com/linking-c-programs-with-the-chilkat-cc-libs/ .... how to compile
+// setflag.compileit.sh
+
 
 int addBayWordAndKeyToBayCsv(char* bayword, char* key) {
 	char tmp[1000];
