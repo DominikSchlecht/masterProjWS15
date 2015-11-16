@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
+#include <time.h>
 
 char *randstring(size_t length)
 {
-
+    struct timespec spec;
+    clock_gettime(CLOCK_REALTIME, &spec);
+    srand(spec.tv_nsec);
     static char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     char *randomString = NULL;
     int n = 0;
@@ -22,7 +24,6 @@ char *randstring(size_t length)
             randomString[length] = '\0';
         }
     }
-
     return randomString;
 }
 
