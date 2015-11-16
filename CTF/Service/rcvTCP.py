@@ -85,7 +85,7 @@ try:
                     else:
                         r = execute_shell("./aesopenssl " + data)
                         tmp = r.stdout.read()
-                        conn.send("\nThe word \"" + data + "\" means " + tmp + "\n");
+                        conn.send("\n"+tmp);
                         #ToDo: take out after translator is implemented
                         #conn.send('sorry not implemented yet\n')
                         #ToDo: insert translator call here!

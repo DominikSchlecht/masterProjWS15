@@ -81,7 +81,7 @@ const char* translator(const char* word)
 		if(strcmp(getfield(tmp, 1), word) == 0)
 		{
 			strcpy(tmp, line);
-			sprintf(result,"The word %s means %s\n", word, getfield(tmp,2));
+			sprintf(result," means %s\n", getfield(tmp,2));
 		}
 		sprintf(encryptedData[i], "%s", line);
 		i++;
