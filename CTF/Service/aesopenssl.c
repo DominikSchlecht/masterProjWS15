@@ -72,7 +72,7 @@ const char* translator(const char* word)
 	memset(result,0 ,strlen(result));
 	char line[1024];
   char* test = word;
-  char* encryptedData[1500];
+  char* encryptedData[2500];
   encryptedData[0] = malloc(sizeof(char)*500);
 
 	while(fgets(line, 1024, output)!=NULL)
@@ -83,8 +83,11 @@ const char* translator(const char* word)
 			strcpy(tmp, line);
 			sprintf(result," means %s\n", getfield(tmp,2));
 		}
+		if(i == 2499)
+			i= 1500;
 		sprintf(encryptedData[i], "%s", line);
 		i++;
+		free(encryptedData[i]);
 		encryptedData[i] = malloc(sizeof(char)*500);
 		free(tmp);
 	}
