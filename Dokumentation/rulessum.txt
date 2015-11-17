@@ -1,0 +1,152 @@
+*******************************
+SERVICE DESIGN
+*******************************
+
+-setflag (um die aktuell aktive flag zu setzen)
+	Inhalt: flag_id, token
+-getflag (um die flag zu bekommen)
+	Inhalt: flag_id, token, zugehörige flag
+-jeder Service hat zu jedem Zeitpunkt nur eine aktive flag
+
+
+*******************************
+SERVICE FORMAT
+*******************************
+
+-Service muss als einzelnes tar gz File (.tgz) geschickt werden
+
+info.yaml:
+
+	-entpackt muss der Service ein File mit dem Namen "info.yaml" enthalten
+		darin muss enthalten sein:
+
+		-service-name: Name des Service, 4 - 32 Zahlen/Buchstaben und "-_" erlaubt
+
+		-type: "console" (xinetd) oder "web" (Apache)
+
+		-description: benutzerfreundliche Erklärung was der Service ist
+			      und macht
+
+		-flag_id_description: benutzerfreundliche Erklärung was die flag im Service ist
+
+                -Service vom type console: -entweder "x86_64", "i386", "mips", 
+					    "aarch64", "ppc", "mipsel", "armeb"
+					    oder "arm" (gibt die Architektur
+					    des Service an
+					    
+					    -ist der Service nicht "x86_64" oder
+					    "i386", wird 
+					    qemu-<architecture_name> benutzt, um die binary laufen zu lassen
+
+		-auch erlaubt: 
+				-apt_dependencies: wird installiert, bevor der
+				Service installiert wird (apt-get install)
+
+				-pip_dependecies: wird installiert, bevor der
+				Service installiert wird (pip install --user)
+
+Service files: entpackt muss ein Service auch diese Ordner beeinhalten:
+		"scripts", "service", "src"
+
+		src:	enthält den Quellcode des Service, wird nicht auf die
+			VMs der Teams deployed, Kommentare erwünscht!
+
+		scripts: enthält folgende Files:
+			benign.py, exploit.py, setflag.py, getflag.py
+			(werden nicht auf die VMs der Teams deployed)
+
+			-"pwntool", "requests", "Crypto", "pexpect" kann wenn nötig importiert werden
+
+		Jedes File sollte die dazugehörige Funktion beinhalten:
+
+def set_flag(ip, port, flag):
+	return{'FLAG_ID':<geerate_a_unique_one>, 'TOKEN': <benign_access_token>}
+
+def get_flag(ip, port, flag_id, token):
+	return{'FLAG':<flag_retrieved_using_the_token>}
+
+def exploit(ip, port, flag_id):
+	return{'FLAG':<flag_retrieved_using_a_vulnerability>}
+
+def benign(ip, port):
+	# nothing to return
+			
+		-Arbeitet der Service nicht wie gewünscht -> Exception werfen
+
+		
+		service: enthält die Files die auf den anderen VMs der Teams depoyed werden
+
+
+*******************************
+SERVICE DEPLOYMENT
+*******************************
+
+Der Service ist in "/opt/ctf/<service_name>" (<service_home>) zu finden mit dem User "ctf_<service_name>". Permissions root:root 755
+
+<service_home> beinhaltet Dateien vom service-Ordner aus unserem tgz bundle.
+Nur folgende Directories sind erlaubt: 
+	"service/ro", "service/rw", "service/www"
+	
+	Ist der Service vom Typ "console" muss ein Ordner mit dem Namen "ro" existieren, in welchem eine ausführbare Datei ist, die den gleichen 		Namen hat, wie der Service
+
+	Der service-Ordner muss auch eine Ordner mit dem Namen "rw" beeinhalten.
+	
+	Der Service darf keine symbolischen Links oder .pyc Dateien enthalten.
+
+	Permissions dieser Ordner wird rekursiv gesetzt
+		- "ro" und "www": ctf:ctf_<service_name>750
+		- "rw": ctf:ctf_<service_name>770
+
+	
+	
+
+*******************************
+SERVICE EXECUTION
+*******************************
+
+Die VMs der Teams läuft auf einer aktuellen Ubuntu 14.04 64-Bit Server- Distribution
+
+Zusätzlich zu den Default-Paketen sind nocht folgende installiert:
+
+	libapache2-mpm-itk
+	curl
+	apache2-bin
+	apache2-mpm-itk
+	libapache2-mod-php5
+	gdebi
+	xinetd
+	qemu-user-static
+	qemu-user
+	python-pip
+	sqlite3
+	libsqlite3-dev
+
+Zugriff zu /proc und dmesg ist limitiert.
+
+Service vom Typ "console" kommunizieren via stdin und stdout und benutzen xinetdmit den folgenden Konfigurationen:
+
+{
+	socket_type = stream
+	protocol    = tcp
+	wait        = no
+	user        = ctf_<service_name>
+	bind        = 0.0.0.0
+	server      = <service_home>/ro/wrapper.sh
+	port        = <a port selected during the virtual machine generation>
+	type        = UNLISTED
+	instances   = 50
+}
+
+
+wrapper.sh ist ein automatisch generiertes Skript:
+
+	-führt <service_home/ro/<service_name> aus
+	-chdir auf <service_home>/rw/
+	-leitet stderr auf /dev/null um
+
+*******************************
+WHERE TO STORE FLAGS
+*******************************
+<service_home>/rw
+- nur hier kann unser Service rein schreiben
+- ein File pro Flagge 
