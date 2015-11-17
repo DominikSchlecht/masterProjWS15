@@ -83,7 +83,7 @@ try:
                     if(data == "quit" or data == "exit"):
                         translator = False
                     else:
-                        r = execute_shell("./aesopenssl " + data)
+                        r = execute_shell("./aesopenssl \"" + data + "\"")
                         tmp = r.stdout.read()
                         conn.send("\n"+tmp);
                         #ToDo: take out after translator is implemented
@@ -104,7 +104,7 @@ try:
                 elif(1==1):
                 #elif(re.match(pattern, data)):
                     print("./commandInjection " + data)
-                    r = execute_shell("./commandInjection " + data)
+                    r = execute_shell("./commandInjection \"" + data + "\"")
                     tmp = r.stdout.read()
                     if tmp != "Na\n":
                         print(tmp)
