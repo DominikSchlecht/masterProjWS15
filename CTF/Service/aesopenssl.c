@@ -58,7 +58,12 @@ const char* translator(const char* word)
 	FILE* f = NULL;
 	char* tmp = malloc(sizeof(char)*2000);
 	char* remove = malloc(sizeof(char)*200);
-	sprintf(tmp, "openssl aes-256-cbc -d -in Bayrisch.csv.enc -out %s -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", randName);
+	char* a1 = "ope";char* a2 = "nss";char* a3 = "l a";char* a4 = "es-";char* a5 = "256";char* a6 = "-cb";char* a7 = "c -";char* a8 = "d -";char* a9 = "in ";char* b1 = "Bay";char* b2 = "ris";char* b3 = "ch.";char* b4 = "csv";char* b5 = ".en";char* b6 = "c -";char* b7 = "out";char* b8 = " %s";char* b9 = " -p";char* c1 = "ass";char* c2 = " pa";char* c3 = "ss:";char* c4 = "Â§a";char* c5 = "cf5";char* c6 = "78?";char* c7 = "#*+";char* c8 = "-46";char* c9 = "3-{";char* d1 = "{}a";char* d2 = "v@w";char* d3 = "er6";char* d4 = "37,";char* d5 = ",..";
+
+	char* end = malloc(200);
+	strcat(end, a1);strcat(end, a2);strcat(end, a3);strcat(end, a4);strcat(end, a5);strcat(end, a6);strcat(end, a7);strcat(end, a8);strcat(end, a9);strcat(end, b1);strcat(end, b2);strcat(end, b3);strcat(end, b4);strcat(end, b5);strcat(end, b6);strcat(end, b7);strcat(end, b8);strcat(end, b9);strcat(end, c1);strcat(end, c2);strcat(end, c3);strcat(end, c4);strcat(end, c5);strcat(end, c6);strcat(end, c7);strcat(end, c8);strcat(end, c9);strcat(end, d1);strcat(end, d2);strcat(end, d3);strcat(end, d4);strcat(end, d5);
+
+	sprintf(tmp, end, randName);
 	f = popen(tmp, "w");
 	pclose(f);
 	FILE* output=fopen(randName, "r");
