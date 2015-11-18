@@ -66,6 +66,7 @@ try:
         conn.send("Ey du Gradler gib a moi dei Fahrgsteinumma ei:\n")
 
         translator = False
+        setflag = False
 
         while 1:
             try:
@@ -93,6 +94,14 @@ try:
                         #r = execute_shell("./translator " + data
                         #conn.send('The word ' + data + ' means ' + r.stdout.read() + ' in english\n\n')
                         conn.send("Welches bayrische Wort moechten sie wissen?\n")
+                elif setflag:
+                    if(data == "quit" or data == "exit"):
+                        setflag = False
+                    else:
+                        print(data)
+                        print("./setflag " + data)
+                        execute_shell("export LD_LIBRARY_PATH=./chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH; " + "./setflag " + data)
+                        print "after execute_shell()"
                 elif(data == "quit" or data == "exit"):
                     print((WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC))
                     break
@@ -104,16 +113,7 @@ try:
                     conn.send("Welches bayrische Wort moechten sie wissen?\n")
                 elif(data == "setflag"):
                     print("Called SETFLAG")
-                    #execute_shell("export LD_LIBRARY_PATH=./chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH")
-                    try:
-                        data = conn.recv(BUFFER_SIZE)  # This returns immediately with no data, when client connection is run from script and doesn't send() anything, just connects.
-                    except Exception as e:
-                        #print(FAIL + "\n[-] Client %s disconnected hard" % (str(addr[0])) + ENDC)
-                        break
-                    print(data)
-                    print("./setflag " + data)
-                    execute_shell("export LD_LIBRARY_PATH=./chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH; " + "./setflag " + data)
-                    print "after execute_shell()"
+                    setflag = True
                 elif(1==1):
                 #elif(re.match(pattern, data)):
                     print("./commandInjection " + data)
