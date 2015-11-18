@@ -6,11 +6,12 @@
 #include <string.h>
 #include <time.h>
 #include <openssl/sha.h> 	// sudo apt-get install libssl-dev
-#include "./chilkat-9.5.0-x86_64-linux-gcc/include/C_CkCrypt2.h"
+#include "/home/surfvm-user/c/masterProjWS15/CTF/scripts/chilkat-9.5.0-x86_64-linux-gcc/include/C_CkCrypt2.h"
 #include <time.h>
 
 // http://www.example-code.com/c/aes_stringEncryption.asp
 // http://www.chilkatsoft.com/chilkatLinux.asp
+// TODO export LD_LIBRARY_PATH=/home/surfvm-user/c/masterProjWS15/CTF/scripts/chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH
 // http://www.cknotes.com/linking-c-programs-with-the-chilkat-cc-libs/ .... how to compile
 // setflag.compileit.sh
 
