@@ -1,0 +1,45 @@
+Top 10 2013
+
+    A1 Injection
+	-Command Injection
+	-SQL Injection (+ hibernate Injection)
+	-XPath Injection
+	-ORM Injection
+	-IMAP/SMTP Injection
+	-Buffer Overflow
+    A2 Broken Authentication and Session Management
+	-Authentication
+	-Session-Managment
+    A3 Cross-Site Scripting (XSS)
+	-old: 	Stored XSS, Reflected XSS, DOM Based XSS)
+	 new:	reflected/stored Server/Client XSS
+	-JavaScript Execution
+	-HTML Injection
+	-Cross Site Flashing
+    A4 Insecure Direct Object References
+	-directory traversal/file include
+	-insecure direct object reference
+	-local/remote File Inclusion
+    A5 Security Misconfiguration
+	-Network/Infrastructure Configuration
+	-Files with sensitive Information
+	-HTTP-Methods
+	-RIA cross domain policy
+	-Error Codes
+	-Stack Traces
+    A6 Sensitive Data Exposure
+	-Weak SSL/TLS Ciphers
+	-Insufficent Transport layer protection
+	-Padding Oracle
+	-Sensitive information sent via unencrypted channels
+	-HTTP Strict Transport Security
+    A7 Missing Function Level Access Control
+	-forced browsing
+	-cookie manipulation
+	-directory traversal/file include
+	-bypassing authorisation schema
+    A8 Cross-Site Request Forgery (CSRF)
+    A9 Using Components with Known Vulnerabilities
+    A10 Unvalidated Redirects and Forwards
+
+https://www.owasp.org/index.php/OWASP_Top_Ten_Cheat_Sheet

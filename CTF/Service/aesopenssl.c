@@ -136,7 +136,7 @@ const char* translator(const char* word)
   }
   printf(test);
 	if(strlen(result) == 0)
-		sprintf(result, "Sorry we couldn't find that word\n");
+		sprintf(result, "\nSorry we couldn't find that word\n");
 	/* give result to the next function */
 	sprintf(remove, "rm %s", randName);
 	popen(remove, "w");
