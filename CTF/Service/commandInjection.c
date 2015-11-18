@@ -27,7 +27,8 @@ char* getfield(char* line, int num)
     return NULL;
 }
 
-int rand_lim(int limit) {
+int rand_lim(int limit)
+{
 /* return a random number between 0 and limit inclusive.
  */
 
@@ -100,7 +101,6 @@ main(int argc, char *argv[])
   int ran = rand_lim(100);
   int ciFound = 0;
   if (ran != 42){
-    sprintf(command, "head -%d info/Fahrzeugnummern.csv | tail -1 | awk --field-separator=';' '{print $2}' ; echo ", ran);
 
     // Read the command
     //scanf("%[^\n]", str);
@@ -126,6 +126,7 @@ main(int argc, char *argv[])
     }
 
     // Concat the command and the user input
+    sprintf(command, "head -%d info/Fahrzeugnummern.csv | tail -1 | awk --field-separator=';' '{print $2}' ; echo ", ran);
     char *cmd = concat(command, str);
 
     // Check the flag and execute if ok

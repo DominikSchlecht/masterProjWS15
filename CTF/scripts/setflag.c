@@ -178,6 +178,12 @@ int decryptString(char* result, char* password)
 /// MAX ADDED
 char *randstring(size_t length) 
 {
+    
+    /*real random*/
+    struct timespec spec;
+    clock_gettime(CLOCK_REALTIME, &spec);
+    srand(spec.tv_nsec); 
+    /*real random*/
 
     static char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";        
     char *randomString = NULL;
@@ -186,10 +192,9 @@ char *randstring(size_t length)
         randomString = malloc(sizeof(char) * (length +1));
         
 	if (randomString) {            
-	    srand(time(NULL));
             for (n = 0;n < length;n++) {            
 //                int key = rand() % (int)(sizeof(charset) -1);
-                int key = (rand() + clock()) % (int)(sizeof(charset) -1);	// etwas besser aber nicht gut	//ggf mtwist.h impl (mersenne twist)
+                int key = rand() % (int)(sizeof(charset) -1);
 		//printf("key: %i\n", key);
 //		printf("time() %i\n", (int)gettimeofday(NULL));
 //		printf("time() %i\n", (int)clock());
