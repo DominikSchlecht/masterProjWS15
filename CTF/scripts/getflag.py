@@ -8,33 +8,47 @@ def get_flag(ip, port, flag_id, token):
     # Whatever the patch, this must still work!
     note_id = flag_id
     password = token
+    content = ""
+    print note_id
+    print password
 
-    # Interaction with the service
-    # Try to be robust, services will not always answer immediately
-    if ip:
-        conn = socket.create_connection((ip,port))
-        c = pexpect.fdpexpect.fdspawn(conn.fileno())
-    else:
-        # Makes it easier to test locally
-        c = pexpect.spawn("../src/sample_py")
-        c.logfile = sys.stdout
+    password_splitted = password.split("-.-")
+    print password_splitted
+    fzn = password_splitted[0]
+    print fzn
+    bayWord = password_splitted[1]
+    print bayWord
 
-    c.expect("Hi! Welcome to our note storage service")
-    c.expect("Want to \(R\)ead or \(W\)rite a note?") # Note: these are RegExps!
+    try:
+        s = socket.socket()
+        s.connect((ip,port))
 
-    c.sendline("R")
+        data = s.recv(4096)
+        s.send(fzn)
+        print "fzn sent"
+        data = s.recv(4096)
+        print data
+        #c.expect("P  lease type: note_id password")
+        s.send("{} {}".format(note_id, password))
 
-    c.expect("Please type: note_id password")
-    c.sendline("{} {}".format(note_id, password))
+        #c.expect("Note content: ")
+        #content = s.readline().strip()
+        data = s.recv(4096)
+        print data
 
-    c.expect("Note content: ")
-    content = c.readline().strip()
-    c.close()
-    if ip: conn.close()
+    except Exception as e:
+      error = 42
+      error_msg = str(e)
+      print "exception!"
+      print e
 
+    print "b4 ret"
+    s.send("b4 close")
+    s.close()
+
+    print "b4 ret"
     return { 'FLAG': content }
 
 
 if __name__ == "__main__":
-    print get_flag(None, None, sys.argv[1], sys.argv[2])
-
+    print get_flag("127.0.0.1", 1337, sys.argv[3], sys.argv[4])
