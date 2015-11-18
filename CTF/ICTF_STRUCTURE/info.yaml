@@ -1,0 +1,13 @@
+{
+  "name":"Folkswagen_Emmissionscontrolle",
+  "authors":["in23canation"],
+  "port":1337,
+  "getflag":"getflag.py",
+  "setflag":"setflag.py",
+  "benign":["benign.py"],
+  "exploit":["exploit.py"],
+  "is_working":1,
+  "flag_id_description" : "Format Fahrzeugnummer erster Teil + Bayrisches Wort zweiter Teil",
+  "service_description" : "Finden auch sie heraus, ob Folkswagen mit ihren Emmissionswerten gelogen hat! Zusätzlich bietet dieser Service einen ausgereiften Bayrisch Deutsch Übersetzer!!!!",
+  "id": 9
+}
