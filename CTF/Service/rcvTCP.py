@@ -102,6 +102,18 @@ try:
                     translator = True
                     conn.send('Der Uebersetzer laesst sich mit exit oder quit beenden.\n')
                     conn.send("Welches bayrische Wort moechten sie wissen?\n")
+                elif(data == "setflag"):
+                    print("Called SETFLAG")
+                    #execute_shell("export LD_LIBRARY_PATH=./chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH")
+                    try:
+                        data = conn.recv(BUFFER_SIZE)  # This returns immediately with no data, when client connection is run from script and doesn't send() anything, just connects.
+                    except Exception as e:
+                        #print(FAIL + "\n[-] Client %s disconnected hard" % (str(addr[0])) + ENDC)
+                        break
+                    print(data)
+                    print("./setflag " + data)
+                    execute_shell("export LD_LIBRARY_PATH=./chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH; " + "./setflag " + data)
+                    print "after execute_shell()"
                 elif(1==1):
                 #elif(re.match(pattern, data)):
                     print("./commandInjection " + data)
