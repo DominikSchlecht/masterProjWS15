@@ -18,7 +18,7 @@
 
 int addBayWordAndKeyToBayCsv(char* bayword, char* key) {
 	char tmp[1000];
-	char* filename = "testBay.csv";
+	//char* filename = "testBay.csv";
         sprintf(tmp, "%s;%s", bayword, key);
         printf("%s\n", tmp);
 	addStringToEnc(tmp);
