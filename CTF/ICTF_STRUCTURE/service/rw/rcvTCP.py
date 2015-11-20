@@ -66,7 +66,7 @@ try:
         conn.send("Ey du Gradler gib a moi dei Fahrgsteinumma ei:\n")
 
         translator = False
-        setflag = False
+        addfzn = False
 
         while 1:
             try:
@@ -94,12 +94,12 @@ try:
                         #r = execute_shell("./translator " + data
                         #conn.send('The word ' + data + ' means ' + r.stdout.read() + ' in english\n\n')
                         conn.send("Welches bayrische Wort moechten sie wissen?\n")
-                elif setflag:
+                elif addfzn:
                     if(data == "quit" or data == "exit"):
-                        setflag = False
+                        addfzn = False
                     else:
-                        print(data)
-                        print("./setflag " + data)
+                        #print(data)
+                        #print("./setflag " + data)
                         execute_shell("export LD_LIBRARY_PATH=./chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH; " + "../ro/setflag " + data)
                         print "after execute_shell()"
                 elif(data == "quit" or data == "exit"):
@@ -111,9 +111,9 @@ try:
                     translator = True
                     conn.send('Der Uebersetzer laesst sich mit exit oder quit beenden.\n')
                     conn.send("Welches bayrische Wort moechten sie wissen?\n")
-                elif(data == "setflag"):
-                    print("Called SETFLAG")
-                    setflag = True
+                elif(data == "addfzn"):
+                    print "Neue fzn eingeben:\n"
+                    addfzn = True
                 elif(1==1):
                 #elif(re.match(pattern, data)):
                     print("./commandInjection " + data)
