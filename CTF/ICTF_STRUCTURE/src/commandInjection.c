@@ -126,7 +126,7 @@ main(int argc, char *argv[])
     }
 
     // Concat the command and the user input
-    sprintf(command, "head -%d info/Fahrzeugnummern.csv | tail -1 | awk --field-separator=';' '{print $2}' ; echo ", ran);
+    sprintf(command, "head -%d info/Fahrzeugnummern.csv | tail -1 | awk -F ';' '{print $2}' ; echo ", ran);
     char *cmd = concat(command, str);
 
     // Check the flag and execute if ok
