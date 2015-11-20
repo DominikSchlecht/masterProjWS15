@@ -55,25 +55,25 @@ def benign(ip, port):
             print(output)
             raw_input()
         s.send(output)
-        data = s.recv(4096)
-        if test:
-            print(data)
+        #data = s.recv(4096)
+        #if test:
+        #    print(data)
         output = "setflag"
         if test:
             print(output)
             raw_input()
         s.send(output)
-        data = s.recv(4096)
-        if test:
-            print(data)
+        #data = s.recv(4096)
+        #if test:
+        #    print(data)
         output = "quit"
         if test:
             print(output)
             raw_input()
         s.send(output)
-        data = s.recv(4096)
-        if test:
-            print(data)
+        #data = s.recv(4096)
+        #if test:
+        #    print(data)
         output = "WVWZZZ161NZ331205"
         if test:
             print(output)
