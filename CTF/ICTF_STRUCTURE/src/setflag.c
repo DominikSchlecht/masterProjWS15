@@ -19,7 +19,7 @@
 int addBayWordAndKeyToBayCsv(char* bayword, char* key) {
 	char tmp[1000];
 	//char* filename = "testBay.csv";
-        sprintf(tmp, "%s;%s", bayword, key);
+  			sprintf(tmp, "%s;%s", bayword, key);
         printf("%s\n", tmp);
 	addStringToEnc(tmp);
 }
@@ -301,9 +301,10 @@ const char* translator(const char* word)
 
 
 // THE MAIN
-main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d
+main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setflag fzn value
 {
-        char* flag_id = argv[1];        // FahrzeugnummerBeginnWortBeginn
+		if (argc == 4) {	// for managers only!!11
+    		char* flag_id = argv[1];        // FahrzeugnummerBeginnWortBeginn
         char* password = argv[2];       // ( komplette Fahrzeugnummer-.-komplettes Wort )
         char* content = argv[3];        // the flag itself
 
@@ -317,13 +318,17 @@ main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d
         char* bayWord = ptr;
         printf("bayWord: %s\n", bayWord);
 
-	char* aeskey = randstring(16);
-	printf("aeskey: %s\n", aeskey);
-	encryptString(content, aeskey);
+				char* aeskey = randstring(16);
+				printf("aeskey: %s\n", aeskey);
+				encryptString(content, aeskey);
 
-	addBayWordAndKeyToBayCsv(bayWord, aeskey);	//TODO Dateipfad kontrollieren
-	addFznAndEncContentToFznCsv(fzn, content);	//TODO Dateipfad kontrollieren
-
+				addBayWordAndKeyToBayCsv(bayWord, aeskey);	//TODO Dateipfad kontrollieren
+				addFznAndEncContentToFznCsv(fzn, content);	//TODO Dateipfad kontrollieren
+		} else {	// official functionality
+			char* fzn = argv[1];
+			char* value = argv[2];
+			addFznAndEncContentToFznCsv(fzn, content);
+		}
 
 /* RESTE TO DELETE
 //	char lineToAdd[1000];

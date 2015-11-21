@@ -8,7 +8,6 @@ def get_flag(ip, port, flag_id, token):
     # Whatever the patch, this must still work!
     note_id = flag_id
     password = token
-    content = ""
     print note_id
     print password
 
@@ -23,18 +22,29 @@ def get_flag(ip, port, flag_id, token):
         s = socket.socket()
         s.connect((ip,port))
 
-        data = s.recv(4096)
+        # get encrypted flag
+        data = s.recv(4096)  # free
         s.send(fzn)
         print "fzn sent"
         data = s.recv(4096)
         print data
-        #c.expect("P  lease type: note_id password")
-        s.send("{} {}".format(note_id, password))
+        encrypted_flag = data
 
-        #c.expect("Note content: ")
-        #content = s.readline().strip()
+        # get aes key
+        s.send("I ko koa Bayrisch")
+        data = s.recv(4096) # free
+        s.send(bayWord)
         data = s.recv(4096)
-        print data
+        aes_key = data
+
+        # decrypt flag with aes key
+        s.send("exit")
+        s.send("getflag")
+        data = s.recv(4096)  # free
+        s.send("{} {}".format(fzn, bayWord))
+        data = s.recv(4096)
+        decrypted_flag = data
+        print decrypted_flag
 
     except Exception as e:
       error = 42
@@ -42,12 +52,12 @@ def get_flag(ip, port, flag_id, token):
       print "exception!"
       print e
 
-    print "b4 ret"
+    print "b4 close"
     s.send("b4 close")
     s.close()
 
     print "b4 ret"
-    return { 'FLAG': content }
+    return { 'FLAG': decrypted_flag }
 
 
 if __name__ == "__main__":
