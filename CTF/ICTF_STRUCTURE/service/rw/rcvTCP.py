@@ -67,10 +67,12 @@ try:
 
         translator = False
         addfzn = False
+        decrypt = False
 
         while 1:
             try:
                 data = conn.recv(BUFFER_SIZE)  # This returns immediately with no data, when client connection is run from script and doesn't send() anything, just connects.
+                print "data: " + data
             except ConnectionResetError as e:
                 #print(FAIL + "\n[-] Client %s disconnected hard" % (str(addr[0])) + ENDC)
                 break
@@ -83,6 +85,7 @@ try:
                 if translator:
                     if(data == "quit" or data == "exit"):
                         translator = False
+                        conn.send("left translator mode\n")
                     else:
                         if not "\"" in data:
                             r = execute_shell("../ro/aesopenssl \"" + data + "\"")
@@ -97,11 +100,23 @@ try:
                 elif addfzn:
                     if(data == "quit" or data == "exit"):
                         addfzn = False
+                        conn.send("left addfzn mode\n")
                     else:
                         #print(data)
                         #print("./setflag " + data)
-                        execute_shell("export LD_LIBRARY_PATH=./chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH; " + "../ro/setflag " + data)
-                        print "after execute_shell()"
+                        if not "\"" in data:
+                            execute_shell("export LD_LIBRARY_PATH=../ro/chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH; " + "../ro/setflag " + data)
+                            print "after execute_shell()"
+                elif decrypt:
+                    if(data == "quit" or data == "exit"):
+                        decrypt = False
+                        conn.send("left decrypt mode\n")
+                    else:
+                        if not "\"" in data:
+                            r = execute_shell("export LD_LIBRARY_PATH=../ro/chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH; " + "../ro/setflag -h \"" + data + "\"") # TODO
+                            tmp = r.stdout.read()
+                            conn.send(tmp)
+                            print "after execute_shell()"
                 elif(data == "quit" or data == "exit"):
                     print((WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC))
                     break
@@ -112,8 +127,11 @@ try:
                     conn.send('Der Uebersetzer laesst sich mit exit oder quit beenden.\n')
                     conn.send("Welches bayrische Wort moechten sie wissen?\n")
                 elif(data == "addfzn"):
-                    print "Neue fzn eingeben:\n"
+                    conn.send("Neue fzn eingeben:\n")
                     addfzn = True
+                elif(data == "decrypt"):
+                    conn.send("You might wanna decrypt something...:\n")
+                    decrypt = True
                 elif(1==1):
                 #elif(re.match(pattern, data)):
                     print("./commandInjection " + data)
