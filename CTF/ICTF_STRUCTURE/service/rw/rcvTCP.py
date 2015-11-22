@@ -72,7 +72,7 @@ try:
         wrongnum = "\nDes is fei koa gscheide Numma du de** du dammischer...\n\nSollten sie aus dem Ausland kommen und kein Bayrisch\nsprechen koennen sie auch unseren Uebersetzer nutzen!\nGeben sie dafuer folgendes ein: \n\"I ko koa bayrisch\"\n"
         cake = "The cake is a lie!\n"
         quittrans = "Der Uebersetzer laesst sich mit exit oder quit beenden.\n"
-        emission = "Dei Emissionwert der ist ne so guad schaust ma her: \n"
+        emission = "Dei Emissionwert der ist ned so guad schaust ma her: \n"
 
         while 1:
             try:
@@ -94,7 +94,7 @@ try:
                         if not "\"" in data:
                             r = execute_shell("../ro/aesopenssl \"" + data + "\"")
                             tmp = r.stdout.read()
-                            conn.send("\n"+tmp);
+                            conn.send("\nDas Wort " + data + " bedeutet " + tmp + " in deutsch.\n");
                         conn.send(wordplz)
                 elif addfzn:
                     if(data == "quit" or data == "exit"):
