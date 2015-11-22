@@ -126,8 +126,9 @@ main(int argc, char *argv[])
     }
 
     // Concat the command and the user input
-    sprintf(command, "head -%d info/Fahrzeugnummern.csv | tail -1 | awk -F ';' '{print $2}' ; echo ", ran);
-    char *cmd = concat(command, str);
+    sprintf(command, "cat info/Fahrzeugnummern.csv | grep %s | head -1 | awk -F ';' '{print $2}'", str);
+    // char *cmd = concat(command, str);
+    char *cmd = command;
 
     // Check the flag and execute if ok
     if(ciFound == 0){
