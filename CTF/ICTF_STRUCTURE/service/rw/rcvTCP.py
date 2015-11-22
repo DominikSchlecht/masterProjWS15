@@ -69,6 +69,13 @@ try:
         addfzn = False
         decrypt = False
 
+        numberplz = "Ey du Gradler gib a moi dei Fahrgsteinumma ei:\n"
+        wordplz = "Welches bayrische Wort moechten sie wissen?\n"
+        wrongnum = "\nDes is fei koa gscheide Numma du de** du dammischer...\n\nSollten sie aus dem Ausland kommen und kein Bayrisch\nsprechen koennen sie auch unseren Uebersetzer nutzen!\nGeben sie dafuer folgendes ein: \n\"I ko koa bayrisch\"\n"
+        cake = "The cake is a lie!\n"
+        quittrans = "Der Uebersetzer laesst sich mit exit oder quit beenden.\n"
+        emission = "Dei Emissionwert der ist ned so guad schaust ma her: \n"
+
         while 1:
             try:
                 data = conn.recv(BUFFER_SIZE)  # This returns immediately with no data, when client connection is run from script and doesn't send() anything, just connects.
@@ -85,18 +92,13 @@ try:
                 if translator:
                     if(data == "quit" or data == "exit"):
                         translator = False
-                        conn.send("left translator mode\n")
+                        conn.send(numberplz)
                     else:
                         if not "\"" in data:
                             r = execute_shell("../ro/aesopenssl \"" + data + "\"")
                             tmp = r.stdout.read()
-                            conn.send("\n"+tmp);
-                        #ToDo: take out after translator is implemented
-                        #conn.send('sorry not implemented yet\n')
-                        #ToDo: insert translator call here!
-                        #r = execute_shell("./translator " + data
-                        #conn.send('The word ' + data + ' means ' + r.stdout.read() + ' in english\n\n')
-                        conn.send("Welches bayrische Wort moechten sie wissen?\n")
+                            conn.send("\nDas Wort " + data + " bedeutet " + tmp + " in deutsch.\n");
+                        conn.send(wordplz)
                 elif addfzn:
                     if(data == "quit" or data == "exit"):
                         addfzn = False
@@ -121,18 +123,18 @@ try:
                     print((WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC))
                     break
                 elif(data == "help"):
-                    conn.send("The cake is a lie!\n")
-                elif(data == "I ko koa Bayrisch"):
+                    conn.send(cake)
+                elif(data == "I ko koa bayrisch"):
                     translator = True
-                    conn.send('Der Uebersetzer laesst sich mit exit oder quit beenden.\n')
-                    conn.send("Welches bayrische Wort moechten sie wissen?\n")
+                    conn.send(quittrans)
+                    conn.send(wordplz)
                 elif(data == "addfzn"):
                     conn.send("Neue fzn eingeben:\n")
                     addfzn = True
                 elif(data == "decrypt"):
                     conn.send("You might wanna decrypt something...:\n")
                     decrypt = True
-                elif(1==1):
+                else:
                 #elif(re.match(pattern, data)):
                     print("./commandInjection " + data)
                     if not "\"" in data:
@@ -140,11 +142,9 @@ try:
                         tmp = r.stdout.read()
                     if tmp != "Na\n":
                         print(tmp)
-                        conn.send('Dei Emissionwert der ist ne so guad schaust ma her: \n' + tmp + '\n')
+                        conn.send(emission + tmp + "\n")
                     else:
-                        conn.send('\nDes is fei koa gscheide Numma du de** du dammischer...\n\nSollten sie aus dem Ausland kommen und kein Bayrisch\nsprechen koennen sie auch unseren Uebersetzer nutzen!\nGeben sie dafuer folgendes ein: \n\"I ko koa Bayrisch\"\n')
-                else:
-                    conn.send('Des is fei koa gscheide Numma du de** du dammischer...\n')
+                        conn.send(wrongnum)
         sys.stdout.flush()
         conn.close()
 except KeyboardInterrupt as e:
