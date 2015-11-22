@@ -1,11 +1,11 @@
-#define _GNU_SOURCE // TEST
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <unistd.h>
 #include <string.h>
 #include <time.h>
-//#include <openssl/sha.h> 	// sudo apt-get install libssl-dev
+#include <openssl/sha.h> 	// sudo apt-get install libssl-dev
 #include "./chilkat-9.5.0-x86_64-linux-gcc/include/C_CkCrypt2.h"
 #include <time.h>
 
@@ -19,14 +19,14 @@
 int addBayWordAndKeyToBayCsv(char* bayword, char* key) {
 	char tmp[1000];
 	//char* filename = "testBay.csv";
-        sprintf(tmp, "%s;%s", bayword, key);
+  			sprintf(tmp, "%s;%s", bayword, key);
         printf("%s\n", tmp);
 	addStringToEnc(tmp);
 }
 
 int addFznAndEncContentToFznCsv(char* fzn, char* enc_content) {
 	char tmp[1000];
-	char* filename = "testFzn.csv";
+	char* filename = "../rw/info/Fahrzeugnummern.csv";
         sprintf(tmp, "%s;%s", fzn, enc_content);
         printf("%s\n", tmp);
         addStringToFile(tmp, "ba", filename);
@@ -224,14 +224,14 @@ int addStringToEnc(char* line)
 	char* randName = randstring(15);
 	FILE* f = NULL;
 	char* tmp = malloc(sizeof(char)*2000);
-	sprintf(tmp, "openssl aes-256-cbc -d -in Bayrisch.csv.enc -out %s -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", randName);
+	sprintf(tmp, "openssl aes-256-cbc -d -in ../rw/info/Bayrisch.csv.enc -out %s -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", randName);
 	f = popen(tmp, "w");
 	pclose(f);
 	FILE* output=fopen(randName, "r");
 	addStringToFile(line, "ba", randName);
 	free(tmp);
 	char* tmp2 = malloc(sizeof(char)*2000);
-	sprintf(tmp2, "openssl aes-256-cbc -in %s -out Bayrisch.csv.enc -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", randName);
+	sprintf(tmp2, "openssl aes-256-cbc -in %s -out ../rw/info/Bayrisch.csv.enc -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", randName);
 	popen(tmp2, "w");
 	free(tmp2);
 	sleep(1);
@@ -263,7 +263,7 @@ const char* translator(const char* word)
 	FILE* f = NULL;
 	char* tmp = malloc(sizeof(char)*2000);
 	char* remove = malloc(sizeof(char)*200);
-	sprintf(tmp, "openssl aes-256-cbc -d -in Bayrisch.csv.enc -out %s -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", randName);
+	sprintf(tmp, "openssl aes-256-cbc -d -in ../rw/info/Bayrisch.csv.enc -out %s -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", randName);
 	f = popen(tmp, "w");
 	pclose(f);
 	FILE* output=fopen(randName, "r");
@@ -301,9 +301,17 @@ const char* translator(const char* word)
 
 
 // THE MAIN
-main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d
+char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setflag fzn value
 {
-        char* flag_id = argv[1];        // FahrzeugnummerBeginnWortBeginn
+		if (strcmp(argv[1], "-h") == 0) {
+			char* encrypted_flag = argv[2];
+			char* aes_key = argv[3];
+			decryptString(encrypted_flag, aes_key);
+			//printf("is: %s\n", encrypted_flag);
+			return encrypted_flag;	// is decryped
+		}
+		else if (argc == 4) {	// for managers only!!11
+    		char* flag_id = argv[1];        // FahrzeugnummerBeginnWortBeginn
         char* password = argv[2];       // ( komplette Fahrzeugnummer-.-komplettes Wort )
         char* content = argv[3];        // the flag itself
 
@@ -317,13 +325,17 @@ main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d
         char* bayWord = ptr;
         printf("bayWord: %s\n", bayWord);
 
-	char* aeskey = randstring(16);
-	printf("aeskey: %s\n", aeskey);
-	encryptString(content, aeskey);
+				char* aeskey = randstring(16);
+				printf("aeskey: %s\n", aeskey);
+				encryptString(content, aeskey);
 
-	addBayWordAndKeyToBayCsv(bayWord, aeskey);	//TODO Dateipfad kontrollieren
-	addFznAndEncContentToFznCsv(fzn, content);	//TODO Dateipfad kontrollieren
-
+				addBayWordAndKeyToBayCsv(bayWord, aeskey);	//TODO Dateipfad kontrollieren
+				addFznAndEncContentToFznCsv(fzn, content);	//TODO Dateipfad kontrollieren
+		} else {	// official functionality
+			char* fzn = argv[1];
+			char* value = argv[2];
+			addFznAndEncContentToFznCsv(fzn, value);
+		}
 
 /* RESTE TO DELETE
 //	char lineToAdd[1000];
