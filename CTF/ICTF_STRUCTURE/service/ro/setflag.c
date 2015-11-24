@@ -450,7 +450,7 @@ char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setfl
 			char* ascii_flag = hexToString(encrypted_flag);
 			decryptString2(ascii_flag, aes_key);
 			remPad(ascii_flag);
-			printf("decrypted data: %s\n", ascii_flag);
+			printf("%s", ascii_flag);
 			return ascii_flag;	// is decryped
 		}
 		else if (argc == 4) {	// for managers only!!11
@@ -479,7 +479,12 @@ char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setfl
 		} else {	// official functionality
 			char* fzn = argv[1];
 			char* value = argv[2];
-			addFznAndEncContentToFznCsv(fzn, value);
+			if (fzn != NULL && value != NULL) {
+					addFznAndEncContentToFznCsv(fzn, value);
+					printf("FZN ADDED\n");
+			} else {
+					printf("you have to provide fzn and value\n");
+			}
 		}
 
 /* RESTE TO DELETE
