@@ -107,18 +107,22 @@ try:
                         #print(data)
                         #print("./setflag " + data)
                         if not "\"" in data:
-                            execute_shell("export LD_LIBRARY_PATH=../ro/chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH; " + "../ro/setflag " + data)
+                            r = execute_shell("export LD_LIBRARY_PATH=../ro/chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH; " + "../ro/setflag " + data)
+                            tmp = r.stdout.read()
+                            conn.send(tmp)
                             print "after execute_shell()"
+                        conn.send("Neue fzn eingeben:\n");
                 elif decrypt:
                     if(data == "quit" or data == "exit"):
                         decrypt = False
                         conn.send("left decrypt mode\n")
                     else:
                         if not "\"" in data:
-                            r = execute_shell("export LD_LIBRARY_PATH=../ro/chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH; " + "../ro/setflag -h \"" + data + "\"") # TODO
+                            r = execute_shell("export LD_LIBRARY_PATH=../ro/chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH; " + "../ro/setflag -h " + data) # TODO
                             tmp = r.stdout.read()
                             conn.send(tmp)
                             print "after execute_shell()"
+                        conn.send("\nYou might wanna decrypt something...:\n");
                 elif(data == "quit" or data == "exit"):
                     print((WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC))
                     break

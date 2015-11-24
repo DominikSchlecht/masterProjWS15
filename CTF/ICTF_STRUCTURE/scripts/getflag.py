@@ -33,7 +33,7 @@ def get_flag(ip, port, flag_id, token):
         print "encrypted_flag: " + encrypted_flag
 
         # get aes key
-        s.send("I ko koa Bayrisch")
+        s.send("I ko koa bayrisch")
         data = s.recv(4096) # free
         data = s.recv(4096) # free
         print "data: " + data
@@ -53,6 +53,7 @@ def get_flag(ip, port, flag_id, token):
         s.send("decrypt")
         data = s.recv(4096)  # free
         s.send("{} '{}'".format(encrypted_flag, aes_key))
+        data = s.recv(4096)
         data = s.recv(4096)
         decrypted_flag = data
         print decrypted_flag
