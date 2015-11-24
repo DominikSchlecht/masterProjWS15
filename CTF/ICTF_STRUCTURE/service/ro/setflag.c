@@ -5,9 +5,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <time.h>
-#include <openssl/sha.h> 	// sudo apt-get install libssl-dev
-#include "./chilkat-9.5.0-x86_64-linux-gcc/include/C_CkCrypt2.h"
 #include <time.h>
+#include <gcrypt.h>
 
 // http://www.example-code.com/c/aes_stringEncryption.asp
 // http://www.chilkatsoft.com/chilkatLinux.asp
@@ -83,95 +82,6 @@ char* encryptString(char* in) {
 //	echo "abc" | openssl aes-256-cbc -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..
 }
 */
-
-int encryptString(char* result, char* password)
-{
-    HCkCrypt2 crypt;
-    BOOL success;
-    const char * hexKey;
-    const char * text = result;
-    const char * encText;
-    const char * decryptedText;
-
-    crypt = CkCrypt2_Create();
-
-    success = CkCrypt2_UnlockComponent(crypt,"Anything for 30-day trial");
-    if (success != TRUE) {
-        printf("Crypt component unlock failed\n");
-        return 0;
-    }
-
-    CkCrypt2_putCryptAlgorithm(crypt,"aes");
-    CkCrypt2_putCipherMode(crypt,"cbc");
-    CkCrypt2_putKeyLength(crypt,256);
-
-    //  Generate a binary secret key from a password string
-    //  of any length.  For 128-bit encryption, GenEncodedSecretKey
-    //  generates the MD5 hash of the password and returns it
-    //  in the encoded form requested.  The 2nd param can be
-    //  "hex", "base64", "url", "quoted-printable", etc.
-
-    hexKey = CkCrypt2_genEncodedSecretKey(crypt,password,"hex");
-    CkCrypt2_SetEncodedKey(crypt,hexKey,"hex");
-
-    CkCrypt2_putEncodingMode(crypt,"base64");
-
-    //  Encrypt a string and return the binary encrypted data
-    //  in a base-64 encoded string.
-
-    encText = CkCrypt2_encryptStringENC(crypt,result);
-    //printf("%s\n",encText);
-    char tmpStr[1000];
-    strcpy(result, encText);
-
-    CkCrypt2_Dispose(crypt);
-}
-
-
-int decryptString(char* result, char* password)
-{
-    HCkCrypt2 crypt;
-    BOOL success;
-    const char * hexKey;
-    const char * text = result;
-    const char * encText;
-    const char * decryptedText;
-
-    crypt = CkCrypt2_Create();
-
-    success = CkCrypt2_UnlockComponent(crypt,"Anything for 30-day trial");
-    if (success != TRUE) {
-        printf("Crypt component unlock failed\n");
-        return 0;
-    }
-
-    CkCrypt2_putCryptAlgorithm(crypt,"aes");
-    CkCrypt2_putCipherMode(crypt,"cbc");
-    CkCrypt2_putKeyLength(crypt,256);
-
-    //  Generate a binary secret key from a password string
-    //  of any length.  For 128-bit encryption, GenEncodedSecretKey
-    //  generates the MD5 hash of the password and returns it
-    //  in the encoded form requested.  The 2nd param can be
-    //  "hex", "base64", "url", "quoted-printable", etc.
-
-    hexKey = CkCrypt2_genEncodedSecretKey(crypt,password,"hex");
-    CkCrypt2_SetEncodedKey(crypt,hexKey,"hex");
-
-    CkCrypt2_putEncodingMode(crypt,"base64");
-
-    //  Encrypt a string and return the binary encrypted data
-    //  in a base-64 encoded string.
-
-    decryptedText = CkCrypt2_decryptStringENC(crypt,result);
-    //printf("%s\n",encText);
-    char tmpStr[1000];
-    strcpy(result, decryptedText);
-
-    CkCrypt2_Dispose(crypt);
-}
-
-
 
 
 
@@ -296,8 +206,239 @@ const char* translator(const char* word)
 }
 
 
+int encryptString2(char* txtBuffer, char* aesSymKey)
+{
+    //printf("encrypting...: %s\n", txtBuffer);
+    #define GCRY_CIPHER GCRY_CIPHER_AES128   // Pick the cipher here
+    int gcry_mode = GCRY_CIPHER_MODE_CBC;
+    char* iniVector = "a test ini value";
 
+    gcry_error_t     gcryError;
+    gcry_cipher_hd_t gcryCipherHd;
+    size_t           index;
 
+    size_t keyLength = gcry_cipher_get_algo_keylen(GCRY_CIPHER);
+    size_t blkLength = gcry_cipher_get_algo_blklen(GCRY_CIPHER);
+    //char * txtBuffer = "123456789 abcdefghijklmnopqrstuvwzyz ABCDEFGHIJKLMNOPQRSTUVWZYZ";
+    size_t txtLength = strlen(txtBuffer)+1; // string plus termination
+    char * encBuffer = malloc(txtLength);
+    char * outBuffer = malloc(txtLength);
+    //char * aesSymKey = "one test AES key"; // 16 bytes
+
+    gcryError = gcry_cipher_open(
+        &gcryCipherHd, // gcry_cipher_hd_t *
+        GCRY_CIPHER,   // int
+        gcry_mode,     // int
+        0);            // unsigned int
+    if (gcryError)
+    {
+        printf("gcry_cipher_open failed:  %s/%s\n",
+               gcry_strsource(gcryError),
+               gcry_strerror(gcryError));
+        return;
+    }
+
+    gcryError = gcry_cipher_setkey(gcryCipherHd, aesSymKey, keyLength);
+    if (gcryError)
+    {
+        printf("gcry_cipher_setkey failed:  %s/%s\n",
+               gcry_strsource(gcryError),
+               gcry_strerror(gcryError));
+        return;
+    }
+
+    gcryError = gcry_cipher_setiv(gcryCipherHd, iniVector, blkLength);
+    if (gcryError)
+    {
+        printf("gcry_cipher_setiv failed:  %s/%s\n",
+               gcry_strsource(gcryError),
+               gcry_strerror(gcryError));
+        return;
+    }
+
+    gcryError = gcry_cipher_encrypt(
+        gcryCipherHd, // gcry_cipher_hd_t
+        encBuffer,    // void *
+        txtLength,    // size_t
+        txtBuffer,    // const void *
+        txtLength);   // size_t
+    if (gcryError)
+    {
+        printf("gcry_cipher_encrypt failed:  %s/%s\n",
+               gcry_strsource(gcryError),
+               gcry_strerror(gcryError));
+        return;
+    }
+    //printf("just encrypted: %s\n", encBuffer);
+
+    strcpy(txtBuffer, encBuffer);
+    //txtBuffer[strlen(txtBuffer)] = '\0';
+}
+
+void addPad(char* in) {
+    //printf("beginnnnnnnnnnn\n");
+    int pad = 15 - (strlen(in) % 16);
+    //printf("adding %i chars\n", pad);
+    char tmp[1024];
+    if (pad > 0)
+    {
+        int cnt;
+        for (cnt = 0; cnt < pad; cnt++)
+        {
+            sprintf(tmp, "%s=", in);
+            //printf("new value: %s\n", tmp);
+            strcpy(in, tmp);
+            //printf("new value: %s with strlen %i\n", in, (int)strlen(in));
+        }
+    }
+    //printf("inp2: %s\n", in);
+    //printf("ennnnnnnnd\n");
+}
+
+void remPad(char* in) {
+    //printf("beginnnnnnnnnnn\n");
+    char tmp[1024];
+    while (in[strlen(in)-1] == '=') {
+        //printf("found =\n");
+				//printf("strlen: %i\n", (int)strlen(in));
+        in[strlen(in)-1] = '\0';
+        //printf("%s\n", in);
+    }
+    //printf("inp2: %s\n", in);
+    //printf("ennnnnnnnd\n");
+}
+
+int decryptString2(char* encBuffer, char* aesSymKey)
+{
+    //printf("decrypting...: %s\n", encBuffer);
+    #define GCRY_CIPHER GCRY_CIPHER_AES128   // Pick the cipher here
+    int gcry_mode = GCRY_CIPHER_MODE_CBC;
+    char* iniVector = "a test ini value";
+
+    gcry_error_t     gcryError;
+    gcry_cipher_hd_t gcryCipherHd;
+    size_t           index;
+
+    size_t keyLength = gcry_cipher_get_algo_keylen(GCRY_CIPHER);
+    size_t blkLength = gcry_cipher_get_algo_blklen(GCRY_CIPHER);
+    //char * txtBuffer = "123456789 abcdefghijklmnopqrstuvwzyz ABCDEFGHIJKLMNOPQRSTUVWZYZ";
+    size_t txtLength = strlen(encBuffer); // string plus termination
+    //char * encBuffer = malloc(txtLength);
+    char * outBuffer = malloc(txtLength);
+    //char * aesSymKey = "one test AES key"; // 16 bytes
+
+    gcryError = gcry_cipher_open(
+        &gcryCipherHd, // gcry_cipher_hd_t *
+        GCRY_CIPHER,   // int
+        gcry_mode,     // int
+        0);            // unsigned int
+    if (gcryError)
+    {
+        printf("gcry_cipher_open failed:  %s/%s\n",
+               gcry_strsource(gcryError),
+               gcry_strerror(gcryError));
+        return;
+    }
+
+    gcryError = gcry_cipher_setkey(gcryCipherHd, aesSymKey, keyLength);
+    if (gcryError)
+    {
+        printf("gcry_cipher_setkey failed:  %s/%s\n",
+               gcry_strsource(gcryError),
+               gcry_strerror(gcryError));
+        return;
+    }
+    gcryError = gcry_cipher_setiv(gcryCipherHd, iniVector, blkLength);
+    if (gcryError)
+    {
+        printf("gcry_cipher_setiv failed:  %s/%s\n",
+               gcry_strsource(gcryError),
+               gcry_strerror(gcryError));
+        return;
+    }
+
+    gcryError = gcry_cipher_decrypt(
+        gcryCipherHd, // gcry_cipher_hd_t
+        outBuffer,    // void *
+        txtLength,    // size_t
+        encBuffer,    // const void *
+        txtLength);   // size_t
+    if (gcryError)
+    {
+        printf("gcry_cipher_decrypt failed:  %s/%s\n",
+               gcry_strsource(gcryError),
+               gcry_strerror(gcryError));
+        return;
+    }
+    //printf("just decrypted: %s\n", outBuffer);
+    //printf("%s\n", outBuffer);
+    //printf("%s\n", encBuffer);
+    strcpy(encBuffer, outBuffer);
+    //encBuffer[strlen(encBuffer)-1] = '\0';
+}
+
+void printAsHex(char* string)
+{
+    printf("As String: %s\n", string);
+    int index = 0;
+    printf("As Hexxxx: ");
+    for (index = 0; index<strlen(string); index++) {
+        printf("%02X", (unsigned char)string[index]);
+    }
+    printf("\n");
+}
+
+char* stringToHex(char* in)
+{
+    int index;
+    //printf("hex1: ");
+    //char hex[4096];
+    char* hex = malloc(sizeof(char)*4096);
+    char c[2];
+    for (index = 0; index<strlen(in); index++) {
+          //printf("%02X", (unsigned char)in[index]);
+          sprintf(c, "%02X", (unsigned char)in[index]);
+          //printf("\nc is: %s\n", c);
+          hex[2*index] = c[0];
+          hex[2*index+1] = c[1];
+    }
+    //printf("\n");
+    hex[2*index] = '\0';
+    return hex;
+}
+
+int hex_to_int(char c){
+        int first = c / 16 - 3;
+        int second = c % 16;
+        int result = first*10 + second;
+        if(result > 9) result--;
+        return result;
+}
+
+char* hexToString(char* in)
+{
+    int index;
+    //printf("asci: ");
+    //char ascii[4096];
+    char* ascii = malloc(sizeof(char)*4096);
+    int high;
+    int low;
+    int c;
+    for (index = 0; index<strlen(in); index = index+2) {
+        high = hex_to_int(in[index]) * 16;
+        low = hex_to_int(in[index+1]);
+        c = (high+low);
+      //  printf("%c", c);
+        if (index == 0)
+          ascii[0] = c;
+        else
+          ascii[index/2] = c;
+    }
+    ascii[(index+1)/2] = '\0';
+    //printf("\n");
+    //printf("asci: %s\n", ascii);
+    return ascii;
+}
 
 
 // THE MAIN
@@ -306,9 +447,11 @@ char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setfl
 		if (strcmp(argv[1], "-h") == 0) {
 			char* encrypted_flag = argv[2];
 			char* aes_key = argv[3];
-			decryptString(encrypted_flag, aes_key);
-			//printf("is: %s\n", encrypted_flag);
-			return encrypted_flag;	// is decryped
+			char* ascii_flag = hexToString(encrypted_flag);
+			decryptString2(ascii_flag, aes_key);
+			remPad(ascii_flag);
+			printf("decrypted data: %s\n", ascii_flag);
+			return ascii_flag;	// is decryped
 		}
 		else if (argc == 4) {	// for managers only!!11
     		char* flag_id = argv[1];        // FahrzeugnummerBeginnWortBeginn
@@ -327,10 +470,12 @@ char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setfl
 
 				char* aeskey = randstring(16);
 				printf("aeskey: %s\n", aeskey);
-				encryptString(content, aeskey);
+				addPad(content);
+				encryptString2(content, aeskey);
+				char* hex_content = stringToHex(content);
 
 				addBayWordAndKeyToBayCsv(bayWord, aeskey);	//TODO Dateipfad kontrollieren
-				addFznAndEncContentToFznCsv(fzn, content);	//TODO Dateipfad kontrollieren
+				addFznAndEncContentToFznCsv(fzn, hex_content);	//TODO Dateipfad kontrollieren
 		} else {	// official functionality
 			char* fzn = argv[1];
 			char* value = argv[2];
