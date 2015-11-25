@@ -1,0 +1,163 @@
+\documentclass[
+				11pt,				% Schriftgröße
+				a4paper,				% Blattgröße - default A4
+				DIV=12,				% Satzspiegel
+				BCOR=5mm,			% Bindekorrektur
+				oneside,				% Zwei seiten
+				toc=bibliography		% Literaturverzeichnis inss TOC
+					]{scrreprt}
+
+\parskip=3pt							% Abstand nach oben nach Absatz
+\parindent=0pt						% Abstand nach rechts nach Absatz
+
+%deutsches Schriftbild
+\usepackage[T1]{fontenc} 			% Schriftcodierung
+\usepackage[utf8]{inputenc}	 		% Eingabecodierung
+\usepackage[ngerman]{babel} 			% Deutschsprachige Textelemente
+\usepackage{graphicx}
+\usepackage{float}
+
+% Random-Text
+\usepackage{blindtext}
+
+%Linking
+\usepackage{hyperref}
+\hypersetup
+{
+colorlinks=true,
+linkcolor=black,
+citecolor=black,
+filecolor=black,
+urlcolor=black,
+}
+
+%Formelunterstützung
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Tabelle
+\usepackage{booktabs}
+\usepackage{longtable}
+
+% Literatur
+%\usepackage[babel, german=quotes]{csquotes}
+%\usepackage[style=authoryear-ibid, backend=biber, bibencoding=utf8]{biblatex}
+
+% Abkürzungsverzeichnis
+\usepackage{acronym}
+
+% Code
+\usepackage{listings}
+\usepackage{color}
+
+ \definecolor{middlegray}{rgb}{0.5,0.5,0.5}
+ \definecolor{lightgray}{rgb}{0.8,0.8,0.8}
+ \definecolor{orange}{rgb}{0.8,0.3,0.3}
+ \definecolor{yac}{rgb}{0.6,0.6,0.1}
+ \definecolor{codeblue}{rgb}{0.0,0.0,1.0}
+ \definecolor{codegrey}{rgb}{0.9, 0.9, 0.9}
+
+
+ \lstset{
+   backgroundcolor=\color{codegrey},
+   basicstyle=\scriptsize\ttfamily,
+   keywordstyle=\bfseries\ttfamily\color{orange},
+   stringstyle=\color{codeblue}\ttfamily,
+   commentstyle=\color{middlegray}\ttfamily,
+   emph={square}, 
+   emphstyle=\color{blue}\texttt,
+   emph={[2]root,base},
+   emphstyle={[2]\color{yac}\texttt},
+   showstringspaces=false,
+   flexiblecolumns=false,
+   tabsize=2,
+   numbers=left,
+   numberstyle=\tiny,
+   numberblanklines=false,
+   stepnumber=1,
+   numbersep=10pt,
+   xleftmargin=15pt
+ }
+
+
+% Kopf- / Fußzeile
+\usepackage{fancyhdr}
+
+\pagestyle{headings}
+
+\usepackage{tocbibind}
+
+%\addbibresource{refBib.bib}
+
+\begin{document}
+
+\include{Aufgaben/Aufgabe_1}
+\include{Aufgaben/Aufgabe\section{Ergebnis}
+Hier wird die erhaltene einzigartige ID eingetragen:
+\\
+\\
+
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\section{Ergebnis}
+Hier wird die erhaltene einzigartige ID eingetragen:
+\\
+\\
+
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\section{Ergebnis}
+Hier wird die erhaltene einzigartige ID eingetragen:
+\\
+\\
+
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\section{Ergebnis}
+Hier wird die erhaltene einzigartige ID eingetragen:
+\\
+\\
+
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\underline{\hspace{1cm}} 
+\include{Aufgaben/Aufgabe_3}
+\include{Aufgaben/Aufgabe_4}
+\include{Aufgaben/Aufgabe_5}
+\include{Aufgaben/Aufgabe_6}
+
+
+
+\end{document}
+
