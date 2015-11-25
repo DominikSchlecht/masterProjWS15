@@ -42,7 +42,7 @@ def get_flag(ip, port, flag_id, token):
         print "data: " + data
         aes_key = data.splitlines()[1]
         print "aes_key: " + aes_key
-        aes_key = aes_key[aes_key.find('means')+6:]
+        aes_key = aes_key[aes_key.find('bedeutet')+6:aes_key.find('in deutsch')-1] + '\n'
         print "aes_key: " + aes_key
         print "----"
 
