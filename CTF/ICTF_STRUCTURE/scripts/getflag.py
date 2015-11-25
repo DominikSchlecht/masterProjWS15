@@ -2,7 +2,7 @@ import socket
 import sys
 import pexpect
 import pexpect.fdpexpect
-
+import time
 def get_flag(ip, port, flag_id, token):
     # We read that note, knowing the password (in other words, we're benign traffic)
     # Whatever the patch, this must still work!
@@ -23,6 +23,7 @@ def get_flag(ip, port, flag_id, token):
         s.connect((ip,port))
 
         # get encrypted flag
+        time.sleep(1)
         data = s.recv(4096)  # free
         s.send(fzn)
         print "fzn sent"
@@ -65,7 +66,8 @@ def get_flag(ip, port, flag_id, token):
       print e
 
     print "b4 close"
-    s.send("b4 close")
+    sys.stdin.flush()
+    sys.stdout.flush()
     s.close()
 
     print "b4 ret"

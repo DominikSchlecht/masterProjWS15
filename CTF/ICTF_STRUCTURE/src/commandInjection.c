@@ -54,7 +54,7 @@ int test_regex(char* vin){
   char fahrzeugtypen[4096];
   strcpy(fahrzeugtypen,"(");
 
-  FILE* stream = fopen("info/Fahrzeugtypen.csv", "r");
+  FILE* stream = fopen("../rw/info/Fahrzeugtypen.csv", "r");
 
   char line[1024];
   while (fgets(line, 1024, stream))
@@ -125,7 +125,7 @@ main(int argc, char *argv[])
   }
 
   // Concat the command and the user input
-  sprintf(command, "cat info/Fahrzeugnummern.csv | grep %s | head -1 | awk -F ';' '{print $2}'", str);
+  sprintf(command, "cat ../rw/info/Fahrzeugnummern.csv | grep %s | head -1 | awk -F ';' '{print $2}'", str);
   // char *cmd = concat(command, str);
   char *cmd = command;
 
