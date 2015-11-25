@@ -42,7 +42,7 @@ def get_flag(ip, port, flag_id, token):
         print "data: " + data
         aes_key = data.splitlines()[1]
         print "aes_key: " + aes_key
-        aes_key = aes_key[aes_key.find('bedeutet')+6:aes_key.find('in deutsch')-1] + '\n'
+        aes_key = aes_key[aes_key.find('bedeutet')+9:aes_key.find('in deutsch')-1] + '\n'
         print "aes_key: " + aes_key
         print "----"
 
@@ -73,4 +73,4 @@ def get_flag(ip, port, flag_id, token):
 
 
 if __name__ == "__main__":
-    print get_flag("127.0.0.1", 1337, sys.argv[3], sys.argv[4])
+    print get_flag(sys.argv[1], int(sys.argv[2]), sys.argv[3], sys.argv[4])
