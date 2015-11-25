@@ -100,46 +100,43 @@ main(int argc, char *argv[])
   char command[100]; // yes I know..
   int ran = rand_lim(100);
   int ciFound = 0;
-  if (ran != 42){
 
-    // Read the command
-    //scanf("%[^\n]", str);
-    strcpy(str, argv[1]);
+  // Read the command
+  //scanf("%[^\n]", str);
+  strcpy(str, argv[1]);
 
-    // Check the user input for bad characters
+  // Check the user input for bad characters
 
-    if(test_regex(str) == -1){
-      printf("Na\n");
-      return -1;
-    }
-
-    char *c = str;
-    while (*c)
-    {
-      if (strchr(invalid_characters, *c))
-      {
-         printf("Na\n");
-         // Set flag if found
-         ciFound = 1;
-      }
-      c++;
-    }
-
-    // Concat the command and the user input
-    sprintf(command, "head -%d info/Fahrzeugnummern.csv | tail -1 | awk -F ';' '{print $2}' ; echo ", ran);
-    char *cmd = concat(command, str);
-
-    // Check the flag and execute if ok
-    if(ciFound == 0){
-      FILE *ls = popen(cmd, "r");
-      char buf[256];
-      while (fgets(buf, sizeof(buf), ls) != 0) {
-        printf(buf);
-      }
-      pclose(ls);
-    }
-  } else {
+  if(test_regex(str) == -1){
     printf("Na\n");
+    return -1;
+  }
+
+  char *c = str;
+  while (*c)
+  {
+    if (strchr(invalid_characters, *c))
+    {
+       printf("Na\n");
+       // Set flag if found
+       ciFound = 1;
+    }
+    c++;
+  }
+
+  // Concat the command and the user input
+  sprintf(command, "cat info/Fahrzeugnummern.csv | grep %s | head -1 | awk -F ';' '{print $2}'", str);
+  // char *cmd = concat(command, str);
+  char *cmd = command;
+
+  // Check the flag and execute if ok
+  if(ciFound == 0){
+    FILE *ls = popen(cmd, "r");
+    char buf[256];
+    while (fgets(buf, sizeof(buf), ls) != 0) {
+      printf(buf);
+    }
+    pclose(ls);
   }
   return 1;
 }
