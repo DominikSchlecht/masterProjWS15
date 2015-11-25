@@ -175,7 +175,7 @@ if __name__ == "__main__":
     serversocket.listen(2)
 
     while 1:
-        print "Server is listening for connections\n"
+        print OKBLUE + "[*] Server is listening for connections\n" + ENDC
 
         clientsocket, clientaddr = serversocket.accept()
         thread.start_new_thread(runService, (clientsocket, clientaddr))
