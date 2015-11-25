@@ -35,7 +35,7 @@ def set_flag(ip, port, flag):
 
 
     try:
-        s = socket.socket()
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((ip,port))
 
      #   c.expect("1")
@@ -52,12 +52,18 @@ def set_flag(ip, port, flag):
         #c.sendline("{} {} {}".format(note_id, password, content))
         s.send(a)
         print "after send"
+        data = s.recv(4096)
+        s.send("exit")
+        data = s.recv(4096)
 
     except Exception as e:
-      error = 42
-      error_msg = str(e)
+        error = 42
+        error_msg = str(e)
+        print (error_msg)
 #    c.expect("Your note is safe with us! Bye!")
     #c.close()
+    sys.stdin.flush()
+    sys.stdout.flush()
     s.close()
     #if ip: conn.close()
 
@@ -81,4 +87,4 @@ def generateRandomBayWord2():   # nicht ähnlich genug auf die ersten 4 Zeichen?
     return random.choice(wordlist)
 
 if __name__ == "__main__":
-    print set_flag("127.0.0.1", 1337, "FLG_just_testing")
+    print set_flag(sys.argv[1], int(sys.argv[2]), sys.argv[3])
