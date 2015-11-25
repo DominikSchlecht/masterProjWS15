@@ -1,6 +1,8 @@
 import socket
 import sys
 import time
+import random
+import string
 
 test = False
 
@@ -79,7 +81,8 @@ def benign(ip, port):
         if test:
             print(data)
 
-        output = "setflag=\"flg184753\""
+        flaggenr = random.randint(10000000, 99999999)
+        output = "setflag=\"flg" + str(flaggenr) + "\""
         if test:
             print(output)
             raw_input()
@@ -99,7 +102,48 @@ def benign(ip, port):
         if test:
             print(data)
 
-        output = "getflag=\"12646GRAD\""
+        output = "addfzn"
+        if test:
+            print(output)
+            raw_input()
+        s.send(output)
+        time.sleep(0.1)
+        data = s.recv(4096)
+        if test:
+            print(data)
+
+        output = "quit"
+        if test:
+            print(output)
+            raw_input()
+        s.send(output)
+        time.sleep(0.1)
+        data = s.recv(4096)
+        if test:
+            print(data)
+
+        output = "decrypt"
+        if test:
+            print(output)
+            raw_input()
+        s.send(output)
+        time.sleep(0.1)
+        data = s.recv(4096)
+        if test:
+            print(data)
+
+        output = "quit"
+        if test:
+            print(output)
+            raw_input()
+        s.send(output)
+        time.sleep(0.1)
+        data = s.recv(4096)
+        if test:
+            print(data)
+
+        flaggenID = str(random.randint(100000, 999999)) + ''.join(random.choice(string.uppercase) for i in range(4))
+        output = "getflag=\"" + flaggenID + "\""
         if test:
             print(output)
             raw_input()
