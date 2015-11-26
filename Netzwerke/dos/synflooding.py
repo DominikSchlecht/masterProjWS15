@@ -18,7 +18,7 @@ import os
 import subprocess
 import attackBase
 
-class DNSSpoofing(attackBase.Attack):
+class SYNFlooding(attackBase.Attack):
 	
 	host = "127.0.0.1"
 	interface = "eth0"
@@ -27,6 +27,7 @@ class DNSSpoofing(attackBase.Attack):
 
 	def start():
 
+		print "### SNY-Flooding ### \n\n"
 		print "Available interfaces: \n"
 		subprocess.call(["ls", "/sys/class/net"])
                 interface = raw_input("\nSelect interface: ")
