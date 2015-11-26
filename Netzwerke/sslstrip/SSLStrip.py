@@ -89,4 +89,6 @@ class SSLStrip:
 			"\n 1st step: \n", \
 			"Select available interface, (default is eth0 or wlan0). Then network of selected interface will be scanned for hosts.", \
                         "\n 2nd step: \n", \
-			"When host-scan finished, please enter victim-ip that should be arp-spoofed", \
+			"When host-scan finished, please enter victim-ip that should be arp-spoofed and gateway-ip for mitm (man in the middle). \n", \
+			"After that arp-spoof is running and https-links will rewrited to http-links without encryption."
+			
