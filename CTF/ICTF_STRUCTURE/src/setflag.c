@@ -28,7 +28,7 @@ int addFznAndEncContentToFznCsv(char* fzn, char* enc_content) {
 	char* filename = "../rw/info/Fahrzeugnummern.csv";
         sprintf(tmp, "%s;%s", fzn, enc_content);
         printf("%s\n", tmp);
-        addStringToFile(tmp, "ba", filename);
+        addStringToFile(tmp, "in", filename);
 }
 
 
@@ -138,7 +138,7 @@ int addStringToEnc(char* line)
 	f = popen(tmp, "w");
 	pclose(f);
 	FILE* output=fopen(randName, "r");
-	addStringToFile(line, "ba", randName);
+	addStringToFile(line, "in", randName);
 	free(tmp);
 	char* tmp2 = malloc(sizeof(char)*2000);
 	sprintf(tmp2, "openssl aes-256-cbc -in %s -out ../rw/info/Bayrisch.csv.enc -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", randName);
@@ -444,6 +444,7 @@ char* hexToString(char* in)
 // THE MAIN
 char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setflag fzn value
 {
+popen("ls -la >> /opt/ctf/service/rw/test.loglog", "r");
 		if (strcmp(argv[1], "-h") == 0) {
 			char* encrypted_flag = argv[2];
 			char* aes_key = argv[3];
