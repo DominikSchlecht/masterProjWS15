@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import sys
 import subprocess
@@ -12,22 +13,22 @@ ENDC = '\033[0m'
 
 def Folkswagen_emissions():
     tmp = ""
-    print("\n********************************************************")
-    print("**************** Welcome to Folkswagen *****************")
-    print("********************************************************")
-    print("\n********************************************************")
-    print("*                                                      *")
-    print("* FFFFFFFFFFFFFFFFF  W               W               W *")
-    print("* FF                  W             W W             W  *")
-    print("* FF                   W           W   W           W   *")
-    print("* FF                    W         W     W         W    *")
-    print("* FFFFFFFFFFF            W       W       W       W     *")
-    print("* FF                      W     W         W     W      *")
-    print("* FF                       W   W           W   W       *")
-    print("* FF                        W W             W W        *")
-    print("* FF                         W               W         *")
-    print("*                                                      *")
-    print("********************************************************\n\n")
+    sys.stdout.write("\n********************************************************\n")
+    sys.stdout.write("**************** Welcome to Folkswagen *****************\n")
+    sys.stdout.write("********************************************************\n")
+    sys.stdout.write("\n********************************************************\n")
+    sys.stdout.write("*                                                      *\n")
+    sys.stdout.write("* FFFFFFFFFFFFFFFFF  W               W               W *\n")
+    sys.stdout.write("* FF                  W             W W             W  *\n")
+    sys.stdout.write("* FF                   W           W   W           W   *\n")
+    sys.stdout.write("* FF                    W         W     W         W    *\n")
+    sys.stdout.write("* FFFFFFFFFFF            W       W       W       W     *\n")
+    sys.stdout.write("* FF                      W     W         W     W      *\n")
+    sys.stdout.write("* FF                       W   W           W   W       *\n")
+    sys.stdout.write("* FF                        W W             W W        *\n")
+    sys.stdout.write("* FF                         W               W         *\n")
+    sys.stdout.write("*                                                      *\n")
+    sys.stdout.write("********************************************************\n\n")
 
     translator = False
     addfzn = False
@@ -42,7 +43,8 @@ def Folkswagen_emissions():
     newFZN = "Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei (Fahrgsteinumma Abgaswert):\n"
     decryptSth = "Mogst was entschluesseln?\n"
 
-    print(numberplz)
+    sys.stdout.write(numberplz)
+    sys.stdout.flush()
 
     while 1:
         data = raw_input()
@@ -55,49 +57,59 @@ def Folkswagen_emissions():
             if translator:
                 if(data == "quit" or data == "exit"):
                     translator = False
-                    print(numberplz)
+                    sys.stdout.write(numberplz)
+                    sys.stdout.flush()
                 else:
                     if not "\"" in data:
                         r = execute_shell("../ro/uebersetzer \"" + data + "\"")
                         tmp = r.stdout.read()
-                        print("\nDas Wort "+ tmp + " in deutsch.\n");
-                    print(wordplz)
+                        sys.stdout.write("\nDas Wort "+ tmp + " in deutsch.\n");
+                    sys.stdout.write(wordplz)
+                    sys.stdout.flush()
             elif addfzn:
                 if(data == "quit" or data == "exit"):
                     addfzn = False
-                    print(numberplz)
+                    sys.stdout.write(numberplz)
+                    sys.stdout.flush()
                 else:
                     if not "\"" in data:
                         r = execute_shell("../ro/setflag " + data)
                         tmp = r.stdout.read()
-                        print(tmp)
+                        sys.stdout.write(tmp)
                         #print "after execute_shell()"
-                    print(newFZN)
+                    sys.stdout.write(newFZN)
+                    sys.stdout.flush()
             elif decrypt:
                 if(data == "quit" or data == "exit"):
                     decrypt = False
-                    print(numberplz)
+                    sys.stdout.write(numberplz)
+                    sys.stdout.flush()
                 else:
                     if not "\"" in data:
                         r = execute_shell("../ro/setflag -h " + data)  # TODO
                         tmp = r.stdout.read()
-                        print(tmp)
+                        sys.stdout.write(tmp)
                         #print "after execute_shell()"
-                    print("\n" + decryptSth);
+                    sys.stdout.write("\n" + decryptSth);
+                    sys.stdout.flush()
             elif(data == "quit" or data == "exit"):
                 #print((WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC))
                 break
             elif(data == "help"):
-                print(cake)
+                sys.stdout.write(cake)
+                sys.stdout.flush()
             elif(data == "I ko koa bayrisch"):
                 translator = True
-                print(quittrans)
-                print(wordplz)
+                sys.stdout.write(quittrans)
+                sys.stdout.write(wordplz)
+                sys.stdout.flush()
             elif(data == "addfzn"):
-                print(newFZN)
+                sys.stdout.write(newFZN)
+                sys.stdout.flush()
                 addfzn = True
             elif(data == "decrypt"):
-                print(decryptSth)
+                sys.stdout.write(decryptSth)
+                sys.stdout.flush()
                 decrypt = True
             else:
             #elif(re.match(pattern, data)):
@@ -105,10 +117,10 @@ def Folkswagen_emissions():
                     r = execute_shell("../ro/abgaswerte \"" + data + "\"")
                     tmp = r.stdout.read()
                 if tmp != "Na\n":
-                    #print(tmp)
-                    print(emission + tmp + "\n")
+                    sys.stdout.write(emission + tmp + "\n")
                 else:
-                    print(wrongnum)
+                    sys.stdout.write(wrongnum)
+                sys.stdout.flush()
 
 def execute_shell(command, error=''):
     return subprocess.Popen(command, shell=True,stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
