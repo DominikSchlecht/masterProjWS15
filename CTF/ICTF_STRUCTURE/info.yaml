@@ -1,13 +1,7 @@
-{
-  "name":"Folkswagen_Emmissionscontrolle",
-  "authors":["in23canation"],
-  "port":1337,
-  "getflag":"getflag.py",
-  "setflag":"setflag.py",
-  "benign":["benign.py"],
-  "exploit":["exploit.py"],
-  "is_working":1,
-  "flag_id_description" : "Format Fahrzeugnummer erster Teil + Bayrisches Wort zweiter Teil",
-  "service_description" : "Finden auch sie heraus, ob Folkswagen mit ihren Emmissionswerten gelogen hat! Zusätzlich bietet dieser Service einen ausgereiften Bayrisch Deutsch Übersetzer!!!!",
-  "id": 9
-}
+architecture: x86_64
+service_name: Folkswagen_emissions
+type: console
+description: This service offers two functions. The first is a tool to check if your Folkswagen car has issues with its emmission values, by entering a frame number. How Folkswagenframenumbers have to be formed can be found on http://www.nininet.de/fahrgestellnummer.html. Here is an example WVWZZZ1JZXW000001. Since Folkswagen is a bavarian company, this service is in bavarian, a german dialect. But we offer a translator that translates bavarian words to german though it might not be that helpful.
+flag_id_description: The first 6 caracters of the flag id are the first 6 caracters of a car frame number, the following 4 caracters are the first 4 caracters of a word from the translator.
+pip_dependencies: 
+    - rstr
