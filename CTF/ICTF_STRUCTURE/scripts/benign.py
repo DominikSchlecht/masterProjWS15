@@ -1,198 +1,119 @@
 import socket
 import sys
-import time
 import random
 import string
+import pexpect
+import pexpect.fdpexpect
+import time
 
 test = False
 
 
 def benign(ip, port):
-    if test:
-        print("Hi!")
+    if ip:
+        conn = socket.create_connection((ip, port))
+        c = pexpect.fdpexpect.fdspawn(conn.fileno())
+    else:
+        # Makes it easier to test locally
+        c = pexpect.spawn("python ../service/ro/Folkswagen_emissions.py")
+        c.logfile = sys.stdout
+    c.expect("")
+    c.expect("/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*")
+    c.expect("/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/* Welcome to Folkswagen /*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*")
+    c.expect("/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*")
+    c.expect("")
+    c.expect("/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*")
+    c.expect("/*                                                      /*")
+    c.expect("/* FFFFFFFFFFFFFFFFF  W               W               W /*")
+    c.expect("/* FF                  W             W W             W  /*")
+    c.expect("/* FF                   W           W   W           W   /*")
+    c.expect("/* FF                    W         W     W         W    /*")
+    c.expect("/* FFFFFFFFFFF            W       W       W       W     /*")
+    c.expect("/* FF                      W     W         W     W      /*")
+    c.expect("/* FF                       W   W           W   W       /*")
+    c.expect("/* FF                        W W             W W        /*")
+    c.expect("/* FF                         W               W         /*")
+    c.expect("/*                                                      /*")
+    c.expect("/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*")
+    c.expect("")
+    c.expect("Ey du Gradler gib a moi dei Fahrgsteinumma ei:")
+    c.sendline("test")
+    c.expect("")
+    c.expect("Des is fei koa gscheide Numma du de\*\* du dammischer...")
+    c.expect("")
+    c.expect("")
+    c.expect("Sollten sie aus dem Ausland kommen und kein Bayrisch")
+    c.expect("sprechen koennen sie auch unseren Uebersetzer nutzen!")
+    c.expect("Geben sie dafuer folgendes ein: ")
+    c.expect("\"I ko koa bayrisch\"")
+    c.sendline("help")
+    c.expect("The cake is a lie!")
+    c.expect("")
+    c.sendline("I ko koa bayrisch")
+    c.expect("Der Uebersetzer laesst sich mit exit oder quit beenden.")
+    c.expect("")
+    c.expect("Welches bayrische Wort moechten sie wissen?")
+    c.sendline("Gradler")
+    c.expect("Das Wort Gradler bedeutet Stinkender Mensch in deutsch.")
+    c.expect("Welches bayrische Wort moechten sie wissen?")
+    c.sendline("quit")
+    c.expect("Ey du Gradler gib a moi dei Fahrgsteinumma ei:")
+    c.sendline("AAVZZZ48294857202")
+    c.expect("")
+    c.expect("Des is fei koa gscheide Numma du de\*\* du dammischer...")
+    c.expect("")
+    c.expect("")
+    c.expect("Sollten sie aus dem Ausland kommen und kein Bayrisch")
+    c.expect("sprechen koennen sie auch unseren Uebersetzer nutzen!")
+    c.expect("Geben sie dafuer folgendes ein: ")
+    c.expect("\"I ko koa bayrisch\"")
+    flaggenr = random.randint(10000000, 99999999)
+    c.sendline("setflag=\"flg" + str(flaggenr) + "\"")
+    c.expect("")
+    c.expect("Des is fei koa gscheide Numma du de\*\* du dammischer...")
+    c.expect("")
+    c.expect("")
+    c.expect("Sollten sie aus dem Ausland kommen und kein Bayrisch")
+    c.expect("sprechen koennen sie auch unseren Uebersetzer nutzen!")
+    c.expect("Geben sie dafuer folgendes ein: ")
+    c.expect("\"I ko koa bayrisch\"")
+    c.sendline("WVWZZZ161NZ331205")
+    c.expect("Dei Emissionwert der ist ned so guad schaust ma her: ")
+    c.expect("10\n")
+    c.sendline("addfzn")
+    c.expect("Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei \(Fahrgsteinumma Abgaswert\)\:")
+    c.sendline("quit")
+    c.expect("Ey du Gradler gib a moi dei Fahrgsteinumma ei:")
+    c.sendline("decrypt")
+    c.expect("Mogst was entschluesseln?")
+    c.sendline("quit")
+    c.expect("Ey du Gradler gib a moi dei Fahrgsteinumma ei:")
+    flaggenID = str(random.randint(100000, 999999)) + ''.join(random.choice(string.uppercase) for i in range(4))
+    c.sendline("getflag=\"" + flaggenID + "\"")
+    c.expect("Dei Emissionwert der ist ned so guad schaust ma her: ")
+    c.expect("10")
+    c.sendline("WVWZZZ1675E166087")
+    c.expect("Dei Emissionwert der ist ned so guad schaust ma her: ")
+    c.expect("10")
+    c.sendline("AAVZZZ86729856822")
+    c.expect("Dei Emissionwert der ist ned so guad schaust ma her: ")
+    c.expect("10")
+    c.sendline("test")
+    c.expect("")
+    c.expect("Des is fei koa gscheide Numma du de\*\* du dammischer...")
+    c.expect("")
+    c.expect("")
+    c.expect("Sollten sie aus dem Ausland kommen und kein Bayrisch")
+    c.expect("sprechen koennen sie auch unseren Uebersetzer nutzen!")
+    c.expect("Geben sie dafuer folgendes ein: ")
+    c.expect("\"I ko koa bayrisch\"")
 
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((ip, port))
-        time.sleep(0.1)
-        if test:
-            print ("conection open")
-        data = s.recv(4096)
-        if test:
-            print(data)
+    c.close()
+    if ip: conn.close()
 
-        output = "test"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
 
-        output = "help"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-            #
-        output = "I ko koa bayrisch"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
+    # Nothing to return, if we got here without exceptions we assume that everything worked :)
 
-        output = "Gradler"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
 
-        output = "quit"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-
-        output = "AAVZZZ48294857202"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-
-        flaggenr = random.randint(10000000, 99999999)
-        output = "setflag=\"flg" + str(flaggenr) + "\""
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-
-        output = "WVWZZZ161NZ331205"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-
-        output = "addfzn"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-
-        output = "quit"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-
-        output = "decrypt"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-
-        output = "quit"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-
-        flaggenID = str(random.randint(100000, 999999)) + ''.join(random.choice(string.uppercase) for i in range(4))
-        output = "getflag=\"" + flaggenID + "\""
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-
-        output = "WVWZZZ1675E166087"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-
-        output = "AAVZZZ86729856822"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-
-        output = "test"
-        if test:
-            print(output)
-            raw_input()
-        s.send(output)
-        time.sleep(0.1)
-        data = s.recv(4096)
-        if test:
-            print(data)
-        sys.stdout.flush()
-        s.close()
-    except Exception as e:
-        print ("Exception!")
-        print (e)
-        sys.stdin.flush()
-        sys.stdout.flush()
-        s.close()
-if sys.argv[1].strip() == "test":
-    test = True
-    benign('127.0.0.1', 1337)
-else:
-    benign(sys.argv[1], int(sys.argv[2]))
-print ("done")
+if __name__ == "__main__":
+    benign(None, None)
