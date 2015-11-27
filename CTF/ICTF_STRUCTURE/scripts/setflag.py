@@ -5,6 +5,8 @@ import socket
 import sys
 import time
 import os
+import pexpect
+import pexpect.fdpexpect
 sys.path.append(os.getcwd())
 import rstr.__init__ 
 
@@ -35,26 +37,57 @@ def set_flag(ip, port, flag):
 
 
     try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((ip,port))
+#        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#        s.connect((ip,port))
+
+	conn = socket.create_connection((ip,port))
+	c = pexpect.fdpexpect.fdspawn(conn.fileno())
+	
+	print "000"
+	print c.expect(".*")
+	print "001"
+	print c.expect(".*")
+	print "1"
+	print c.expect("Ey du Gradler gib a moi dei Fahrgsteinumma ei:")
+	print "2"
+#	while c.expect(".*") != "E":
+#		xvh = 1
+#	c.expect("dei Fahrgsteinumma ei:")
+	print c.sendline("addfzn")
+	print "00010" 
+#	c.expect("Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei (Fahrgsteinumma Abgaswert):")
+#	c.expect("Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei (Fahrgsteinumma Abgaswert):.*")
+	c.expect(".*")
+        a  = "{} {} {}".format(note_id, password, content)
+	print c.sendline(a)
+	print "00020"
+	print c.expect(".*")
+#	c.expect("Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei (Fahrgsteinumma Abgaswert):")
+	print "bla"
+	c.sendline("exit")
+	print "blubb"
+	print c.expect(".*")
+#	c.expect("Ey du Gradler gib a moi dei Fahrgsteinumma ei:")
+	print "bliblablubb"
+	c.sendline("exit")
 
      #   c.expect("1")
     #    c.expect("Want to \(R\)ead or \(W\)rite a note?") # Note: these are RegExps!
-        print "s.sendline(\"addfzn\")"
-        s.send("addfzn")
-        time.sleep(2)
+ #       print "s.sendline(\"addfzn\")"
+  #      s.send("addfzn")
+   #     time.sleep(2)
     #    c.expect("2")
     #    c.expect("The note_id is an number. No extra whitespace!")
-        print "client: " + note_id + " " + password + " " + content
-        print "client: " + "{} {} {}".format(note_id, password, content)
-        #c.send("a" + " b-.-c" + " d")
-        a  = "{} {} {}".format(note_id, password, content)
-        #c.sendline("{} {} {}".format(note_id, password, content))
-        s.send(a)
-        print "after send"
-        data = s.recv(4096)
-        s.send("exit")
-        data = s.recv(4096)
+      #  print "client: " + note_id + " " + password + " " + content
+    #    print "client: " + "{} {} {}".format(note_id, password, content)
+     #   #c.send("a" + " b-.-c" + " d")
+      #  a  = "{} {} {}".format(note_id, password, content)
+      #  #c.sendline("{} {} {}".format(note_id, password, content))
+     #   s.send(a)
+     #   print "after send"
+     #   data = s.recv(4096)
+#	print data
+ #       s.send("exit")
 
     except Exception as e:
         error = 42
@@ -64,7 +97,8 @@ def set_flag(ip, port, flag):
     #c.close()
     sys.stdin.flush()
     sys.stdout.flush()
-    s.close()
+#    s.close()
+    c.close()
     #if ip: conn.close()
 
     return {
