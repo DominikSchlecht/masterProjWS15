@@ -4,9 +4,6 @@ import random
 import string
 import pexpect
 import pexpect.fdpexpect
-import time
-
-test = False
 
 
 def benign(ip, port):
