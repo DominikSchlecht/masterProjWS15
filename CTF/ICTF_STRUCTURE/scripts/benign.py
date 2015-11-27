@@ -79,7 +79,7 @@ def benign(ip, port):
     c.expect("\"I ko koa bayrisch\"")
     c.sendline("WVWZZZ161NZ331205")
     c.expect("Dei Emissionwert der ist ned so guad schaust ma her: ")
-    c.expect("10\n")
+    c.expect("10")
     c.sendline("addfzn")
     c.expect("Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei \(Fahrgsteinumma Abgaswert\)\:")
     c.sendline("quit")
