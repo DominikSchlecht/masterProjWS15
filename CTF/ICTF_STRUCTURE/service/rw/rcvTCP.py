@@ -92,7 +92,7 @@ def runService(conn, addr):
                                 conn.send(numberplz)
                             else:
                                 if not "\"" in data:
-                                    r = execute_shell("../ro/aesopenssl \"" + data + "\"")
+                                    r = execute_shell("../ro/uebersetzer \"" + data + "\"")
                                     tmp = r.stdout.read()
                                     conn.send("\nDas Wort "+ tmp + " in deutsch.\n");
                                 conn.send(wordplz)

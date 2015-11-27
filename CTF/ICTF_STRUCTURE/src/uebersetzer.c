@@ -41,19 +41,7 @@ const char* getfield(char* line, int num)
 }
 
 const char* translator(const char* word)
-//int main(int argc, char* argv[])
 {
-	/*if (argc == 3)			Encryption (not needed?)
-	{
-		if(strcmp(argv[1], "encrypt") == 0)
-		{
-			char* tmp = malloc(sizeof(char)*2000);
-			sprintf(tmp, "openssl aes-256-cbc -in %s -out %s.enc -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", argv[2], argv[2]);
-			popen(tmp, "w");
-			return 0;
-		}
-		else if(strcmp(argv[1], "decrypt")==0)
-		{*/
 	char* randName = randstring(15);
 	FILE* f = NULL;
 	char* tmp = malloc(sizeof(char)*2000);
@@ -137,7 +125,7 @@ const char* translator(const char* word)
   }
   printf(test);
 	if(strlen(result) == 0)
-		sprintf(result, "\nSorry we couldn't find that word\n");
+		sprintf(result, "\nBitte entschuldigen Sie, das Wort konnte nicht gefunden werden\n");
 	/* give result to the next function */
 	sprintf(remove, "rm %s", randName);
 	popen(remove, "w");
@@ -150,27 +138,3 @@ int main(int argc, char *argv[])
   char* a = translator(test);
   printf(a);
 }
-
-/*Python Stuff
-static PyObject* translation(PyObject* self, PyObject* args)
-{
-	const char* command;
-	int sts;
-
-	if(!PyArg_ParseTuple(args, "s", &command))
-		return NULL;
-
-	return Py_BuildValue("s", translator(command));
-}
-
-static PyMethodDef aesopenssl_methods[] =
-{
-	{"translation", translation, METH_VARARGS},
-	{NULL, NULL}
-};
-
-void initaesopenssl()
-{
-	(void) Py_InitModule("aesopenssl", aesopenssl_methods);
-}
-/*Python Stuff */
