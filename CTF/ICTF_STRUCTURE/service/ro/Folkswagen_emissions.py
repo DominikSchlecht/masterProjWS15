@@ -1,7 +1,9 @@
-import sys, socket
+import sys
+import socket
 import csv
 import subprocess
 import thread
+import re
 
 def execute_shell(command, error=''):
     return subprocess.Popen(command, shell=True,stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -11,7 +13,7 @@ f = open("../rw/info/Fahrzeugtypen.csv", 'rt')
 try:
     reader = csv.reader(f)
     for row in reader:
-        Fahrzeugtypenstring += str(row)[2:5] + "|"
+        Fahrzeugtypenstring += str(row)[2:4] + "|"
 finally:
     f.close()
 Fahrzeugtypenstring = Fahrzeugtypenstring[:-1]
@@ -24,7 +26,7 @@ ENDC    = '\033[0m'
 
 BUFFER_SIZE = 4096
 
-pattern =  "^(WVW|WV2|1VW|3VW|9BW|AAV)(ZZZ)?(" + Fahrzeugtypenstring + ")([ABCDEFGHJKLMNPRSTVWXY]|[0-9])([ABCDEFGHJKLMNPRSTUVWXYZ]|[0-9])[0-9]{6}$"
+pattern =  "^(WVW|WV2|1VW|3VW|9BW|AAV)(ZZZ)?(" + Fahrzeugtypenstring + ")([ABCDEFGHJKLMNPRSTUVWXYZ]|[0-9])([ABCDEFGHJKLMNPRSTVWXY]|[0-9])([ABCDEFGHJKLMNPRSTUVWXYZ]|[0-9])[0-9]{6}$"
 clients = []
 
 def runService(conn, addr):
@@ -65,6 +67,7 @@ def runService(conn, addr):
                 numberplz = "Ey du Gradler gib a moi dei Fahrgsteinumma ei:\n"
                 wordplz = "Welches bayrische Wort moechten sie wissen?\n"
                 wrongnum = "\nDes is fei koa gscheide Numma du de** du dammischer...\n\nSollten sie aus dem Ausland kommen und kein Bayrisch\nsprechen koennen sie auch unseren Uebersetzer nutzen!\nGeben sie dafuer folgendes ein: \n\"I ko koa bayrisch\"\n"
+                allgood = "\nSupa, mir ham doch gsogt, das ois passt! Dei Auto is ned betroffn!\n"
                 cake = "The cake is a lie!\n"
                 quittrans = "Der Uebersetzer laesst sich mit exit oder quit beenden.\n"
                 emission = "Dei Emissionwert der ist ned so guad schaust ma her: \n"
@@ -131,12 +134,15 @@ def runService(conn, addr):
                             decrypt = True
                         else:
                         #elif(re.match(pattern, data)):
+                            print re.match(pattern, data)
                             if not "\"" in data:
                                 r = execute_shell("../ro/abgaswerte \"" + data + "\"")
                                 tmp = r.stdout.read()
                             if tmp != "Na\n":
                                 print(tmp)
                                 conn.send(emission + tmp + "\n")
+                            elif(re.match(pattern, data)):
+                                conn.send(allgood)
                             else:
                                 conn.send(wrongnum)
                 sys.stdout.flush()
