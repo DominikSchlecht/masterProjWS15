@@ -2,13 +2,9 @@ import sys, socket
 import csv
 import subprocess
 import thread
-#import aesopenssl
 
 def execute_shell(command, error=''):
     return subprocess.Popen(command, shell=True,stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
-    #print 'verb: ' + str(arguments.verbose)
-    #if arguments.verbose: print 'command: ' + command
-
 
 Fahrzeugtypenstring = ""
 f = open("../rw/info/Fahrzeugtypen.csv", 'rt')
@@ -78,7 +74,7 @@ def runService(conn, addr):
                 conn.send(numberplz)
 
                 while 1:
-                    data = conn.recv(BUFFER_SIZE)  # This returns immediately with no data, when client connection is run from script and doesn't send() anything, just connects.
+                    data = conn.recv(BUFFER_SIZE)
                     print "data: " + data
                     if not data:
                         print((WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC))
@@ -92,7 +88,7 @@ def runService(conn, addr):
                                 conn.send(numberplz)
                             else:
                                 if not "\"" in data:
-                                    r = execute_shell("../ro/aesopenssl \"" + data + "\"")
+                                    r = execute_shell("../ro/uebersetzer \"" + data + "\"")
                                     tmp = r.stdout.read()
                                     conn.send("\nDas Wort "+ tmp + " in deutsch.\n");
                                 conn.send(wordplz)
@@ -101,8 +97,6 @@ def runService(conn, addr):
                                 addfzn = False
                                 conn.send(numberplz)
                             else:
-                                #print(data)
-                                #print("./setflag " + data)
                                 if not "\"" in data:
                                     r = execute_shell("../ro/setflag " + data)
                                     tmp = r.stdout.read()
@@ -137,9 +131,8 @@ def runService(conn, addr):
                             decrypt = True
                         else:
                         #elif(re.match(pattern, data)):
-                            print("./commandInjection " + data)
                             if not "\"" in data:
-                                r = execute_shell("../ro/commandInjection \"" + data + "\"")
+                                r = execute_shell("../ro/abgaswerte \"" + data + "\"")
                                 tmp = r.stdout.read()
                             if tmp != "Na\n":
                                 print(tmp)
