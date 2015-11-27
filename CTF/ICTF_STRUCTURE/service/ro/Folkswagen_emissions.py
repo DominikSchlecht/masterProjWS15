@@ -1,22 +1,10 @@
 import sys
 import socket
-import csv
 import subprocess
 import thread
-import re
 
 def execute_shell(command, error=''):
     return subprocess.Popen(command, shell=True,stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
-
-Fahrzeugtypenstring = ""
-f = open("../rw/info/Fahrzeugtypen.csv", 'rt')
-try:
-    reader = csv.reader(f)
-    for row in reader:
-        Fahrzeugtypenstring += str(row)[2:4] + "|"
-finally:
-    f.close()
-Fahrzeugtypenstring = Fahrzeugtypenstring[:-1]
 
 OKBLUE  = '\033[94m'
 OKGREEN = '\033[92m'
@@ -26,7 +14,6 @@ ENDC    = '\033[0m'
 
 BUFFER_SIZE = 4096
 
-pattern =  "^(WVW|WV2|1VW|3VW|9BW|AAV)(ZZZ)?(" + Fahrzeugtypenstring + ")([ABCDEFGHJKLMNPRSTUVWXYZ]|[0-9])([ABCDEFGHJKLMNPRSTVWXY]|[0-9])([ABCDEFGHJKLMNPRSTUVWXYZ]|[0-9])[0-9]{6}$"
 clients = []
 
 def runService(conn, addr):
@@ -134,15 +121,12 @@ def runService(conn, addr):
                             decrypt = True
                         else:
                         #elif(re.match(pattern, data)):
-                            print re.match(pattern, data)
                             if not "\"" in data:
                                 r = execute_shell("../ro/abgaswerte \"" + data + "\"")
                                 tmp = r.stdout.read()
                             if tmp != "Na\n":
                                 print(tmp)
                                 conn.send(emission + tmp + "\n")
-                            elif(re.match(pattern, data)):
-                                conn.send(allgood)
                             else:
                                 conn.send(wrongnum)
                 sys.stdout.flush()
