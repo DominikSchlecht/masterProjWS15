@@ -1,7 +1,7 @@
 architecture: x86_64
 service_name: Folkswagen_emissions
 type: console
-description: This service offers two functions. The first is a tool to check if your Folkswagen car has issues with its emmission values, by entering a frame number. How Folkswagenframenumbers have to be formed can be found on http://www.nininet.de/fahrgestellnummer.html. Here is an example WVWZZZ1JZXW000001. Since Folkswagen is a bavarian company, this service is in bavarian, a german dialect. But we offer a translator that translates bavarian words to german though it might not be that helpful.
+description: This service offers two functions. The first is a tool to check if your Folkswagen car has issues with its emmission values, by entering a frame number. Folkswagen frame numbers have to be formed in a specific way. Here is an example WVWZZZ161NZ331205. The first three caracters are the the WMI from the manufacture. These are always followed by ZZZ. The next three caracters are the car typ followed by the modelyear. The 11. caracter is the manufacturing plant valid caracters are(A-Z|0-9). The last 6 caracters are a number from 000000 to 999999. Since Folkswagen is a bavarian company, this service is in bavarian, a german dialect. But we offer a translator that translates bavarian words to german, though it might not be that helpful.
 flag_id_description: The first 6 caracters of the flag id are the first 6 caracters of a car frame number, the following 4 caracters are the first 4 caracters of a word from the translator.
 pip_dependencies: 
     - rstr
