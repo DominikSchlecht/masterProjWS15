@@ -1,7 +1,5 @@
 import socket
 import sys
-import pexpect
-import pexpect.fdpexpect
 import time
 def get_flag(ip, port, flag_id, token):
     # We read that note, knowing the password (in other words, we're benign traffic)

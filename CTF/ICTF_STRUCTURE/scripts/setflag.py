@@ -3,11 +3,11 @@ import random
 import string
 import socket
 import sys
-import pexpect
-import pexpect.fdpexpect
 import time
-import rstr
-import random
+import os
+sys.path.append(os.getcwd())
+import rstr.__init__ 
+
 
 # To create random strings
 POSSIBILITIES = string.ascii_uppercase + string.digits + string.ascii_lowercase
