@@ -381,7 +381,7 @@ char* hexToString(char* in)
 
 
 // THE MAIN
-char* main(int argc, char *argv[]) 	
+char* main(int argc, char *argv[])
 // param options:
 // decrypt some aes encrypted string:			enc_string key
 // set a new flag d with id=a and token='b-.-c':	a 'b-.-c' d
@@ -444,7 +444,7 @@ char* main(int argc, char *argv[])
 		printf("content4: ||%s||\n", hex_content);
 		printf("Alles: ||%s|| ; ||%s|| ; ||%s|| ; ||%s||\n", bayWord, aeskey, fzn, hex_content);
 
-	if ((strlen(hex_content) > 0) && ((strlen(hex_content) % 16) == 0 || tries > 2)) {
+	if ((( strlen(hex_content) > 0 && strlen(content) > 0 && (strlen(hex_content) % 16) == 0 && (strlen(content) % 16) == 0) ) || tries > 2 ) {
 		done = 1;
 		addBayWordAndKeyToBayCsv(bayWord, aeskey);
 		addFznAndEncContentToFznCsv(fzn, hex_content);
