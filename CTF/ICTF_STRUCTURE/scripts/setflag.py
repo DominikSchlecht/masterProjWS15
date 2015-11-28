@@ -32,14 +32,9 @@ def set_flag(ip, port, flag):
     password = fzn + "-.-" + bayword
     print "password: " + str(password)
 
-
     content = flag
 
-
     try:
-#        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#        s.connect((ip,port))
-
 	conn = socket.create_connection((ip,port))
 	c = pexpect.fdpexpect.fdspawn(conn.fileno())
 	
@@ -50,9 +45,6 @@ def set_flag(ip, port, flag):
 	print "1"
 	print c.expect("Ey du Gradler gib a moi dei Fahrgsteinumma ei:")
 	print "2"
-#	while c.expect(".*") != "E":
-#		xvh = 1
-#	c.expect("dei Fahrgsteinumma ei:")
 	print c.sendline("addfzn")
 	print "00010" 
 #	c.expect("Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei (Fahrgsteinumma Abgaswert):")
