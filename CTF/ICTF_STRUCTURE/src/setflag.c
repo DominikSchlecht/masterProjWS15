@@ -444,13 +444,13 @@ char* main(int argc, char *argv[])
 		printf("content4: ||%s||\n", hex_content);
 		printf("Alles: ||%s|| ; ||%s|| ; ||%s|| ; ||%s||\n", bayWord, aeskey, fzn, hex_content);
 
-	if ((strlen(content) % 16) == 0 || tries > 2) {
+	if ((strlen(hex_content) > 0) && ((strlen(hex_content) % 16) == 0 || tries > 2)) {
 		done = 1;
 		addBayWordAndKeyToBayCsv(bayWord, aeskey);
 		addFznAndEncContentToFznCsv(fzn, hex_content);
 	}
 //		char tmpstr[8096];
-//		sprintf(tmpstr, "echo 'tries: %i || done: %i || strlen content: %i || strlen hex_content: %i || strlen content_arg: %i || ' >> setflaglog.log", tries, done, (int)(strlen(content)), (int)(strlen(hex_content)), (int)(strlen(content_arg)));
+//		sprintf(tmpstr, "echo 'tries: %i || done: %i || strlen content: (%i) || hex_content: %s (%i) || content_arg: %s (%i) || ' >> setflaglog.log", tries, done, (int)(strlen(content)), hex_content, (int)(strlen(hex_content)), content_arg, (int)(strlen(content_arg)));
 //		popen(tmpstr, "r");
 
 	}
