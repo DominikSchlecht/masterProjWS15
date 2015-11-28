@@ -220,6 +220,8 @@ int encryptString2(char* txtBuffer, char* aesSymKey)
     size_t keyLength = gcry_cipher_get_algo_keylen(GCRY_CIPHER);
     size_t blkLength = gcry_cipher_get_algo_blklen(GCRY_CIPHER);
     //char * txtBuffer = "123456789 abcdefghijklmnopqrstuvwzyz ABCDEFGHIJKLMNOPQRSTUVWZYZ";
+//	char txtBuffer[4096]; // TESTING
+//	strcpy(txtBuffer, txtBuffer_in);
     size_t txtLength = strlen(txtBuffer)+1; // string plus termination
     char * encBuffer = malloc(txtLength);
     char * outBuffer = malloc(txtLength);
@@ -271,7 +273,10 @@ int encryptString2(char* txtBuffer, char* aesSymKey)
     }
     //printf("just encrypted: %s\n", encBuffer);
 
+//   	txtBuffer = malloc(sizeof(char)*4096); /// TESTTING BUFFER OVERFLOWS
+
     strcpy(txtBuffer, encBuffer);
+
     //txtBuffer[strlen(txtBuffer)] = '\0';
 }
 
@@ -457,7 +462,10 @@ char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setfl
 		else if (argc == 4) {	// for managers only!!11
     		char* flag_id = argv[1];        // FahrzeugnummerBeginnWortBeginn
         char* password = argv[2];       // ( komplette Fahrzeugnummer-.-komplettes Wort )
-        char* content = argv[3];        // the flag itself
+        char* content_arg = argv[3];        // the flag itself
+	char content[4096];
+	strcpy(content, content_arg);
+	printf("content1: %s\n", content);
 
         char delimiter[] = "-.-";
         char *ptr;
@@ -470,10 +478,30 @@ char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setfl
         printf("bayWord: %s\n", bayWord);
 
 				char* aeskey = randstring(16);
-				printf("aeskey: %s\n", aeskey);
+				printf("aeskey: ||%s||\n", aeskey);
 				addPad(content);
+				printf("content2: ||%s||\n", content);
 				encryptString2(content, aeskey);
+				printf("content3: ||%s||\n", content);
+				if (strlen(content) < 32) {
+					printf("strlen %i\n", (int)(strlen(content)));
+					int rofl = 0;
+					printf("As s: ||");
+					for (rofl = 0; rofl < 32; rofl++)
+					{
+						printf("%c", content[rofl]);
+					}
+					printf("||\nAs x02: ||");
+					for (rofl = 0; rofl < 32; rofl = rofl+2) {
+						printf("%02X", content[rofl]);
+					}
+					printf("||\n");
+				}
+				printAsHex(content);
 				char* hex_content = stringToHex(content);
+				printf("content4: ||%s||\n", hex_content);
+				printf("Alles: ||%s|| ; ||%s|| ; ||%s|| ; ||%s||\n", bayWord, aeskey, fzn, hex_content);
+
 
 				addBayWordAndKeyToBayCsv(bayWord, aeskey);	//TODO Dateipfad kontrollieren
 				addFznAndEncContentToFznCsv(fzn, hex_content);	//TODO Dateipfad kontrollieren
