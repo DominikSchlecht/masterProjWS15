@@ -8,10 +8,7 @@
 #include <time.h>
 #include <gcrypt.h>
 
-// http://www.example-code.com/c/aes_stringEncryption.asp
-// http://www.chilkatsoft.com/chilkatLinux.asp
-// TODO export LD_LIBRARY_PATH=./chilkat-9.5.0-x86_64-linux-gcc/lib:$LD_LIBRARY_PATH
-// http://www.cknotes.com/linking-c-programs-with-the-chilkat-cc-libs/ .... how to compile
+// sudo apt-get install libgcrypt20-dev
 // setflag.compileit.sh
 
 
@@ -72,18 +69,6 @@ char** splitString(char* str, char* delim) {
 }
 
 
-// UNUSED
-/*
-char* encryptString(char* in) {
-	char* tmp = malloc(sizeof(char)*2000);
-	sprintf(tmp, "echo 'abc' | openssl aes-256-cbc -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..");
-	popen(tmp, "w");
-
-//	echo "abc" | openssl aes-256-cbc -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..
-}
-*/
-
-
 
 /// MAX ADDED
 char *randstring(size_t length)
@@ -100,14 +85,9 @@ char *randstring(size_t length)
 
 	if (randomString) {
             for (n = 0;n < length;n++) {
-//                int key = rand() % (int)(sizeof(charset) -1);
-                int key = (rand()) % (int)(sizeof(charset) -1);	// etwas besser aber nicht gut	//ggf mtwist.h impl (mersenne twist)
-		//printf("key: %i\n", key);
-//		printf("time() %i\n", (int)gettimeofday(NULL));
-//		printf("time() %i\n", (int)clock());
+                int key = (rand()) % (int)(sizeof(charset) -1);
                 randomString[n] = charset[key];
             }
-
             randomString[length] = '\0';
         }
     }
@@ -154,21 +134,7 @@ int addStringToEnc(char* line)
 
 
 const char* translator(const char* word)
-//int main(int argc, char* argv[])
 {
-	/*if (argc == 3)			Encryption (not needed?)
-	{
-		if(strcmp(argv[1], "encrypt") == 0)
-		{
-			char* tmp = malloc(sizeof(char)*2000);
-			sprintf(tmp, "openssl aes-256-cbc -in %s -out %s.enc -pass pass:Â§acf578?#*+-463-{{}av@wer637,,..", argv[2], argv[2]);
-			popen(tmp, "w");
-			return 0;
-		}
-		else if(strcmp(argv[1], "decrypt")==0)
-		{*/
-
-
 	char* randName = randstring(15);
 	FILE* f = NULL;
 	char* tmp = malloc(sizeof(char)*2000);
@@ -208,7 +174,6 @@ const char* translator(const char* word)
 
 int encryptString2(char* txtBuffer, char* aesSymKey)
 {
-    //printf("encrypting...: %s\n", txtBuffer);
     #define GCRY_CIPHER GCRY_CIPHER_AES128   // Pick the cipher here
     int gcry_mode = GCRY_CIPHER_MODE_CBC;
     char* iniVector = "a test ini value";
@@ -219,9 +184,6 @@ int encryptString2(char* txtBuffer, char* aesSymKey)
 
     size_t keyLength = gcry_cipher_get_algo_keylen(GCRY_CIPHER);
     size_t blkLength = gcry_cipher_get_algo_blklen(GCRY_CIPHER);
-    //char * txtBuffer = "123456789 abcdefghijklmnopqrstuvwzyz ABCDEFGHIJKLMNOPQRSTUVWZYZ";
-//	char txtBuffer[4096]; // TESTING
-//	strcpy(txtBuffer, txtBuffer_in);
     size_t txtLength = strlen(txtBuffer)+1; // string plus termination
     char * encBuffer = malloc(txtLength);
     char * outBuffer = malloc(txtLength);
@@ -273,15 +235,10 @@ int encryptString2(char* txtBuffer, char* aesSymKey)
     }
     //printf("just encrypted: %s\n", encBuffer);
 
-//   	txtBuffer = malloc(sizeof(char)*4096); /// TESTTING BUFFER OVERFLOWS
-
     strcpy(txtBuffer, encBuffer);
-
-    //txtBuffer[strlen(txtBuffer)] = '\0';
 }
 
 void addPad(char* in) {
-    //printf("beginnnnnnnnnnn\n");
     int pad = 15 - (strlen(in) % 16);
     //printf("adding %i chars\n", pad);
     char tmp[1024];
@@ -291,26 +248,17 @@ void addPad(char* in) {
         for (cnt = 0; cnt < pad; cnt++)
         {
             sprintf(tmp, "%s=", in);
-            //printf("new value: %s\n", tmp);
             strcpy(in, tmp);
-            //printf("new value: %s with strlen %i\n", in, (int)strlen(in));
         }
     }
-    //printf("inp2: %s\n", in);
-    //printf("ennnnnnnnd\n");
 }
 
 void remPad(char* in) {
-    //printf("beginnnnnnnnnnn\n");
     char tmp[1024];
     while (in[strlen(in)-1] == '=') {
         //printf("found =\n");
-				//printf("strlen: %i\n", (int)strlen(in));
         in[strlen(in)-1] = '\0';
-        //printf("%s\n", in);
     }
-    //printf("inp2: %s\n", in);
-    //printf("ennnnnnnnd\n");
 }
 
 int decryptString2(char* encBuffer, char* aesSymKey)
@@ -326,9 +274,7 @@ int decryptString2(char* encBuffer, char* aesSymKey)
 
     size_t keyLength = gcry_cipher_get_algo_keylen(GCRY_CIPHER);
     size_t blkLength = gcry_cipher_get_algo_blklen(GCRY_CIPHER);
-    //char * txtBuffer = "123456789 abcdefghijklmnopqrstuvwzyz ABCDEFGHIJKLMNOPQRSTUVWZYZ";
     size_t txtLength = strlen(encBuffer); // string plus termination
-    //char * encBuffer = malloc(txtLength);
     char * outBuffer = malloc(txtLength);
     //char * aesSymKey = "one test AES key"; // 16 bytes
 
@@ -376,10 +322,7 @@ int decryptString2(char* encBuffer, char* aesSymKey)
         return;
     }
     //printf("just decrypted: %s\n", outBuffer);
-    //printf("%s\n", outBuffer);
-    //printf("%s\n", encBuffer);
     strcpy(encBuffer, outBuffer);
-    //encBuffer[strlen(encBuffer)-1] = '\0';
 }
 
 void printAsHex(char* string)
@@ -396,18 +339,13 @@ void printAsHex(char* string)
 char* stringToHex(char* in)
 {
     int index;
-    //printf("hex1: ");
-    //char hex[4096];
     char* hex = malloc(sizeof(char)*4096);
     char c[2];
     for (index = 0; index<strlen(in); index++) {
-          //printf("%02X", (unsigned char)in[index]);
           sprintf(c, "%02X", (unsigned char)in[index]);
-          //printf("\nc is: %s\n", c);
           hex[2*index] = c[0];
           hex[2*index+1] = c[1];
     }
-    //printf("\n");
     hex[2*index] = '\0';
     return hex;
 }
@@ -423,8 +361,6 @@ int hex_to_int(char c){
 char* hexToString(char* in)
 {
     int index;
-    //printf("asci: ");
-    //char ascii[4096];
     char* ascii = malloc(sizeof(char)*4096);
     int high;
     int low;
@@ -440,17 +376,18 @@ char* hexToString(char* in)
           ascii[index/2] = c;
     }
     ascii[(index+1)/2] = '\0';
-    //printf("\n");
-    //printf("asci: %s\n", ascii);
     return ascii;
 }
 
 
 // THE MAIN
-char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setflag fzn value
+char* main(int argc, char *argv[]) 	
+// param options:
+// decrypt some aes encrypted string:			enc_string key
+// set a new flag d with id=a and token='b-.-c':	a 'b-.-c' d
+// add a new fzn with value:				fzn value
 {
-//popen("ls -la >> /opt/ctf/service/rw/test.loglog", "r");
-	if (strcmp(argv[1], "-h") == 0) {
+	if (strcmp(argv[1], "-h") == 0) {	// decryption not really needed but management want me to leave it...
 		char* encrypted_flag = argv[2];
 		char* aes_key = argv[3];
 		char* ascii_flag = hexToString(encrypted_flag);
@@ -460,50 +397,63 @@ char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setfl
 		return ascii_flag;	// is decryped
 	}
 	else if (argc == 4) {	// for managers only!!11
-	char* flag_id = argv[1];        // FahrzeugnummerBeginnWortBeginn
-        char* password = argv[2];       // ( komplette Fahrzeugnummer-.-komplettes Wort )
-        char* content_arg = argv[3];        // the flag itself
-	char content[4096];
-	strcpy(content, content_arg);
-	printf("content1: %s\n", content);
+	int done = 0;
+	int tries = 0;
+	while (done == 0) {		// some weird workaround...
+		tries++;
 
-        char delimiter[] = "-.-";
-        char *ptr;
-        ptr = strtok(password, delimiter);
-        char* fzn = ptr;
-        printf("fzn: %s\n", fzn);
+		char* flag_id = argv[1];        // FahrzeugnummerBeginnWortBeginn
+	        char* password = argv[2];       // ( komplette Fahrzeugnummer-.-komplettes Wort )
+        	char* content_arg = argv[3];        // the flag itself
+		char content[4096];
+		strcpy(content, content_arg);
+		printf("content1: %s\n", content);
 
-        ptr = strtok(NULL, delimiter);
-        char* bayWord = ptr;
-        printf("bayWord: %s\n", bayWord);
+        	char delimiter[] = "-.-";
+	        char *ptr;
+	        ptr = strtok(password, delimiter);
+	        char* fzn = ptr;
+	        printf("fzn: %s\n", fzn);
 
-	char* aeskey = randstring(16);
-	printf("aeskey: ||%s||\n", aeskey);
-	addPad(content);
-	printf("content2: ||%s||\n", content);
-	encryptString2(content, aeskey);
-	printf("content3: ||%s||\n", content);
-	if (strlen(content) < 32) {
-		printf("strlen %i\n", (int)(strlen(content)));
-		int rofl = 0;
-		printf("As s: ||");
-		for (rofl = 0; rofl < 32; rofl++)
-		{
-			printf("%c", content[rofl]);
+        	ptr = strtok(NULL, delimiter);
+	        char* bayWord = ptr;
+	        printf("bayWord: %s\n", bayWord);
+
+		char* aeskey = randstring(16);
+		printf("aeskey: ||%s||\n", aeskey);
+		addPad(content);
+		printf("content2: ||%s||\n", content);
+		encryptString2(content, aeskey);
+		printf("content3: ||%s||\n", content);
+		if (strlen(content) < 32) {
+			printf("strlen %i\n", (int)(strlen(content)));
+			int rofl = 0;
+			printf("As s: ||");
+			for (rofl = 0; rofl < 32; rofl++)
+			{
+				printf("%c", content[rofl]);
+			}
+			printf("||\nAs x02: ||");
+			for (rofl = 0; rofl < 32; rofl = rofl+2) {
+				printf("%02X", content[rofl]);
+			}
+			printf("||\n");
 		}
-		printf("||\nAs x02: ||");
-		for (rofl = 0; rofl < 32; rofl = rofl+2) {
-			printf("%02X", content[rofl]);
-		}
-		printf("||\n");
+		printAsHex(content);
+		char* hex_content = stringToHex(content);
+		printf("content4: ||%s||\n", hex_content);
+		printf("Alles: ||%s|| ; ||%s|| ; ||%s|| ; ||%s||\n", bayWord, aeskey, fzn, hex_content);
+
+	if ((strlen(content) % 16) == 0 || tries > 2) {
+		done = 1;
+		addBayWordAndKeyToBayCsv(bayWord, aeskey);
+		addFznAndEncContentToFznCsv(fzn, hex_content);
 	}
-	printAsHex(content);
-	char* hex_content = stringToHex(content);
-	printf("content4: ||%s||\n", hex_content);
-	printf("Alles: ||%s|| ; ||%s|| ; ||%s|| ; ||%s||\n", bayWord, aeskey, fzn, hex_content);
+//		char tmpstr[8096];
+//		sprintf(tmpstr, "echo 'tries: %i || done: %i || strlen content: %i || strlen hex_content: %i || strlen content_arg: %i || ' >> setflaglog.log", tries, done, (int)(strlen(content)), (int)(strlen(hex_content)), (int)(strlen(content_arg)));
+//		popen(tmpstr, "r");
 
-	addBayWordAndKeyToBayCsv(bayWord, aeskey);	//TODO Dateipfad kontrollieren
-	addFznAndEncContentToFznCsv(fzn, hex_content);	//TODO Dateipfad kontrollieren
+	}
 	} else {	// official functionality
 		char* fzn = argv[1];
 		char* value = argv[2];
