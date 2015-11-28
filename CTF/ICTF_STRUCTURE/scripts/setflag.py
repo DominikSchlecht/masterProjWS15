@@ -59,7 +59,8 @@ def set_flag(ip, port, flag):
 #	c.expect("Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei (Fahrgsteinumma Abgaswert):.*")
 	c.expect(".*")
         a  = "{} {} {}".format(note_id, password, content)
-	print c.sendline(a)
+	print "sending: " + str(a)
+	print c.sendline(str(a)+"\n")
 	print "00020"
 	print c.expect(".*")
 #	c.expect("Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei (Fahrgsteinumma Abgaswert):")
