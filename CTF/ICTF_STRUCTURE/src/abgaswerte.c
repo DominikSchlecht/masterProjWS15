@@ -126,6 +126,8 @@ main(int argc, char *argv[])
 
   // Concat the command and the user input
   sprintf(command, "cat ../rw/info/Fahrzeugnummern.csv | grep %s | head -1 | awk -F ';' '{print $2}'", str);
+//  sprintf(command, "ls -la ../rw/info"); // runs -> bayrisch csv wird geändert, fahrzeunummern nicht!
+//  sprintf(command, "find ../* -exec ls -la {} \\;");	// ERROR -> wohl zu viel...
   // char *cmd = concat(command, str);
   char *cmd = command;
 

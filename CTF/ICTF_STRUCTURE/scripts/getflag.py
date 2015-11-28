@@ -12,7 +12,12 @@ def get_flag(ip, port, flag_id, token):
     password_splitted = password.split("-.-")
     fzn = password_splitted[0]
     bayWord = password_splitted[1]
-	
+
+#    return password + " " + fzn + " " + bayWord	# Internal error! Contact the admins!
+#    retu = password + "_" + fzn + "_" + bayWord
+#    return { 'FLAG': retu }	# ERROR , weil falsche Flag...Werte passen aber
+
+
     if (1==1):
 	OKBLUE  = '\033[94m'
 	OKGREEN = '\033[92m'
@@ -45,6 +50,9 @@ def get_flag(ip, port, flag_id, token):
 	    data += tmp
 	
 	enc_flag = data.splitlines()[1]
+#	retu = data.splitlines()
+#	return { 'FLAG': retu }	# flag: [u\'Dei Emissionwert der ist ned so guad schaust ma her: \', u\'\'].'
+
 	print OKGREEN + "[+] Found flag part 1: " + enc_flag + ENDC
 	#------------------------------------------------------------------------------#
 

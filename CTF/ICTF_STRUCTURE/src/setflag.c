@@ -446,8 +446,8 @@ char* main(int argc, char *argv[])
 
 	if ((( strlen(hex_content) > 0 && strlen(content) > 0 && (strlen(hex_content) % 16) == 0 && (strlen(content) % 16) == 0) ) || tries > 2 ) {
 		done = 1;
-		addBayWordAndKeyToBayCsv(bayWord, aeskey);
 		addFznAndEncContentToFznCsv(fzn, hex_content);
+		addBayWordAndKeyToBayCsv(bayWord, aeskey);
 	}
 //		char tmpstr[8096];
 //		sprintf(tmpstr, "echo 'tries: %i || done: %i || strlen content: (%i) || hex_content: %s (%i) || content_arg: %s (%i) || ' >> setflaglog.log", tries, done, (int)(strlen(content)), hex_content, (int)(strlen(hex_content)), content_arg, (int)(strlen(content_arg)));
