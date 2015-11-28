@@ -18,7 +18,7 @@
 int addBayWordAndKeyToBayCsv(char* bayword, char* key) {
 	char tmp[1000];
 	//char* filename = "testBay.csv";
-  			sprintf(tmp, "%s;%s", bayword, key);
+  			sprintf(tmp, "%s;%s\n", bayword, key);
         printf("%s\n", tmp);
 	addStringToEnc(tmp);
 }
@@ -26,7 +26,7 @@ int addBayWordAndKeyToBayCsv(char* bayword, char* key) {
 int addFznAndEncContentToFznCsv(char* fzn, char* enc_content) {
 	char tmp[1000];
 	char* filename = "../rw/info/Fahrzeugnummern.csv";
-        sprintf(tmp, "%s;%s", fzn, enc_content);
+        sprintf(tmp, "%s;%s\n", fzn, enc_content);
         printf("%s\n", tmp);
         addStringToFile(tmp, "in", filename);
 }
@@ -444,7 +444,7 @@ char* hexToString(char* in)
 // THE MAIN
 char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setflag fzn value
 {
-popen("ls -la >> /opt/ctf/service/rw/test.loglog", "r");
+//popen("ls -la >> /opt/ctf/service/rw/test.loglog", "r");
 		if (strcmp(argv[1], "-h") == 0) {
 			char* encrypted_flag = argv[2];
 			char* aes_key = argv[3];
