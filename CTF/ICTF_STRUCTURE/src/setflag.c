@@ -450,17 +450,17 @@ char* hexToString(char* in)
 char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setflag fzn value
 {
 //popen("ls -la >> /opt/ctf/service/rw/test.loglog", "r");
-		if (strcmp(argv[1], "-h") == 0) {
-			char* encrypted_flag = argv[2];
-			char* aes_key = argv[3];
-			char* ascii_flag = hexToString(encrypted_flag);
-			decryptString2(ascii_flag, aes_key);
-			remPad(ascii_flag);
-			printf("%s", ascii_flag);
-			return ascii_flag;	// is decryped
-		}
-		else if (argc == 4) {	// for managers only!!11
-    		char* flag_id = argv[1];        // FahrzeugnummerBeginnWortBeginn
+	if (strcmp(argv[1], "-h") == 0) {
+		char* encrypted_flag = argv[2];
+		char* aes_key = argv[3];
+		char* ascii_flag = hexToString(encrypted_flag);
+		decryptString2(ascii_flag, aes_key);
+		remPad(ascii_flag);
+		printf("%s", ascii_flag);
+		return ascii_flag;	// is decryped
+	}
+	else if (argc == 4) {	// for managers only!!11
+	char* flag_id = argv[1];        // FahrzeugnummerBeginnWortBeginn
         char* password = argv[2];       // ( komplette Fahrzeugnummer-.-komplettes Wort )
         char* content_arg = argv[3];        // the flag itself
 	char content[4096];
@@ -477,71 +477,41 @@ char* main(int argc, char *argv[]) 	// Aufruf: setflag a 'b-.-c' d		 oder: setfl
         char* bayWord = ptr;
         printf("bayWord: %s\n", bayWord);
 
-				char* aeskey = randstring(16);
-				printf("aeskey: ||%s||\n", aeskey);
-				addPad(content);
-				printf("content2: ||%s||\n", content);
-				encryptString2(content, aeskey);
-				printf("content3: ||%s||\n", content);
-				if (strlen(content) < 32) {
-					printf("strlen %i\n", (int)(strlen(content)));
-					int rofl = 0;
-					printf("As s: ||");
-					for (rofl = 0; rofl < 32; rofl++)
-					{
-						printf("%c", content[rofl]);
-					}
-					printf("||\nAs x02: ||");
-					for (rofl = 0; rofl < 32; rofl = rofl+2) {
-						printf("%02X", content[rofl]);
-					}
-					printf("||\n");
-				}
-				printAsHex(content);
-				char* hex_content = stringToHex(content);
-				printf("content4: ||%s||\n", hex_content);
-				printf("Alles: ||%s|| ; ||%s|| ; ||%s|| ; ||%s||\n", bayWord, aeskey, fzn, hex_content);
-
-
-				addBayWordAndKeyToBayCsv(bayWord, aeskey);	//TODO Dateipfad kontrollieren
-				addFznAndEncContentToFznCsv(fzn, hex_content);	//TODO Dateipfad kontrollieren
-		} else {	// official functionality
-			char* fzn = argv[1];
-			char* value = argv[2];
-			if (fzn != NULL && value != NULL) {
-					addFznAndEncContentToFznCsv(fzn, value);
-					printf("FZN ADDED\n");
-			} else {
-					printf("you have to provide fzn and value\n");
-			}
+	char* aeskey = randstring(16);
+	printf("aeskey: ||%s||\n", aeskey);
+	addPad(content);
+	printf("content2: ||%s||\n", content);
+	encryptString2(content, aeskey);
+	printf("content3: ||%s||\n", content);
+	if (strlen(content) < 32) {
+		printf("strlen %i\n", (int)(strlen(content)));
+		int rofl = 0;
+		printf("As s: ||");
+		for (rofl = 0; rofl < 32; rofl++)
+		{
+			printf("%c", content[rofl]);
 		}
+		printf("||\nAs x02: ||");
+		for (rofl = 0; rofl < 32; rofl = rofl+2) {
+			printf("%02X", content[rofl]);
+		}
+		printf("||\n");
+	}
+	printAsHex(content);
+	char* hex_content = stringToHex(content);
+	printf("content4: ||%s||\n", hex_content);
+	printf("Alles: ||%s|| ; ||%s|| ; ||%s|| ; ||%s||\n", bayWord, aeskey, fzn, hex_content);
 
-/* RESTE TO DELETE
-//	char lineToAdd[1000];
-//	sprintf(lineToAdd, "%s;%s", flag_id, content);
-//	printf("%s\n", lineToAdd);
-//	addStringToFile(lineToAdd, "ba");
-
-/*
-	// save flag in file and encrypt file
-	FILE *f = fopen("flagfile", "w");
-	fprintf(f, "%s", content);
-
-	fclose(f);
-
-
-	// save flag_id in Fahrzeugnummern.csv
-	f = fopen("flag_id_file", "w");
-	fprintf(f, "%s", flag_id);
-
-
-	fclose(f);
-
-
-	// hash password and save it somewhere
-//	char cmd[80];
-//	sprintf(cmd, "echo %s | openssl sha1 > pwfile", password);
-//	system(cmd);
-//	printf("%s", cmd);
-RESTE TO DELETE ENDE */
+	addBayWordAndKeyToBayCsv(bayWord, aeskey);	//TODO Dateipfad kontrollieren
+	addFznAndEncContentToFznCsv(fzn, hex_content);	//TODO Dateipfad kontrollieren
+	} else {	// official functionality
+		char* fzn = argv[1];
+		char* value = argv[2];
+		if (fzn != NULL && value != NULL) {
+			addFznAndEncContentToFznCsv(fzn, value);
+			printf("FZN ADDED\n");
+		} else {
+			printf("you have to provide fzn and value\n");
+		}
+	}
 }
