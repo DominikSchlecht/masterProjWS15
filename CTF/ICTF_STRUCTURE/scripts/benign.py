@@ -108,9 +108,8 @@ def benign(ip, port):
     c.close()
     if ip: conn.close()
 
-
     # Nothing to return, if we got here without exceptions we assume that everything worked :)
 
 
 if __name__ == "__main__":
-    benign(None, None)
+    benign(sys.argv[1], sys.argv[2])
