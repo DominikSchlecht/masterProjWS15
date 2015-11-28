@@ -8,7 +8,6 @@ def execute_shell(command, error=''):
 
 def get_flag(ip, port, flag_id, token):
     password = token
-    
 
     password_splitted = password.split("-.-")
     fzn = password_splitted[0]
@@ -72,8 +71,16 @@ def get_flag(ip, port, flag_id, token):
         data = s.recv(BUFFER_SIZE)
 	flag = data.splitlines()[0]
 
-	
-        return { 'FLAG': flag }
+        if data.startswith("gcry_cipher_decrypt failed:"):
+            print FAIL + "[-] Found false flag"+ data + ENDC
+        else:
+            print OKGREEN + "[+] Possible Flag: " + data + ENDC
+		
 	s.close()
-	sys.exit()
+        return { 'FLAG': flag }
+
+
+
+if __name__ == "__main__":
+    print get_flag(sys.argv[1], int(sys.argv[2]), sys.argv[3], sys.argv[4])
 
