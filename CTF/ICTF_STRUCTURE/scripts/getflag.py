@@ -8,15 +8,11 @@ def execute_shell(command, error=''):
 
 def get_flag(ip, port, flag_id, token):
     password = token
-    print "flag_id: " + flag_id
-    print "token: " + password
+    
 
     password_splitted = password.split("-.-")
-#    print "fzn: " + str(password_splitted)
     fzn = password_splitted[0]
-    print "fzn: " + fzn
     bayWord = password_splitted[1]
-    print "bayWord: " + bayWord
 	
     if (1==1):
 	OKBLUE  = '\033[94m'
@@ -40,7 +36,6 @@ def get_flag(ip, port, flag_id, token):
 	        loop = False
 	    data += tmp
 
-	print OKBLUE + "[*] Trying to get flag part 1" + ENDC
 	s.send(fzn+"\n")
 	data = ""
 	loop = True
@@ -50,15 +45,9 @@ def get_flag(ip, port, flag_id, token):
 	        loop = False
 	data += tmp
 	enc_flag = data.splitlines()[1]
-	print "enc_flag: " + enc_flag
 
-#	for line in data.splitlines():
-#		print "line: " + line
-#   	    if line.startswith(flagID1):
-#        	keys.append(line.split(";")[1])
-#	print OKGREEN + "[+] Found " + str(len(keys)) + " possible parts" + ENDC
 	#------------------------------------------------------------------------------#
-	print OKBLUE + "[*] Trying to get flag part 2" + ENDC
+
 	s.send("I ko koa bayrisch\n")
 	data = s.recv(BUFFER_SIZE)
 	s.send(bayWord+"\n")
@@ -70,62 +59,21 @@ def get_flag(ip, port, flag_id, token):
                 loop = False
         data += tmp
 	aes_key = data[data.find('bedeutet')+9:data.find('in deutsch')-1] + '\n'
-	print "aes_key: " + aes_key
 
 	#entries = data.splitlines()[1].split("ASDASD")[1].split("32343234")
 	#entries.remove(entries[0])
 
-#	chunks, chunk_size = len(entries[0]), 2#len(entries[0])//4
-#	tmp = []
-#
-#	for ent in entries:
-#	    tmp2 = [ ent[i:i+chunk_size] for i in range(0, chunks, chunk_size) ]
-#	    tmp.append(tmp2)
-#
-#	lines = []
-#	for elem in tmp:
- #   	tmp2 = ""
-#	    for c in elem:
-  #  	    try:
- #       	    tmp2 = chr(int(c, 16)) + tmp2
-#	        except ValueError:
-#	            pass
-#	    lines.append(tmp2)
-#	
-#	for line in lines:
-#	    if line.startswith(flagID2):
-#    	    encr.append(line.split(";")[1][:-1])
-#
-#	print OKGREEN + "[+] Found " + str(len(encr)) + " possible parts" + ENDC
-#
-#	print(keys)
-#	print(encr)
 
 	s.send("exit\n")
 	data = s.recv(BUFFER_SIZE)
         s.send("decrypt\n")
         data = s.recv(BUFFER_SIZE)
-#        data = s.recv(BUFFER_SIZE)
-	print "enc_flag to send: " + enc_flag
-	print "aes_key to send: " + aes_key
         s.send(enc_flag + " " + aes_key + "\n")
         data = s.recv(BUFFER_SIZE)
 	flag = data.splitlines()[0]
-	print "flag: " + flag
-#	for line in data.splitlines():
-#		print "line: " + line
 
-        if data.startswith("gcry_cipher_decrypt failed:"):
-            print FAIL + "[-] Found false flag"+ data + ENDC
-        else:
-            print OKGREEN + "[+] Possible Flag: " + data + ENDC
 	
         return { 'FLAG': flag }
 	s.close()
 	sys.exit()
-
-
-
-if __name__ == "__main__":
-    print get_flag(sys.argv[1], int(sys.argv[2]), sys.argv[3], sys.argv[4])
 
