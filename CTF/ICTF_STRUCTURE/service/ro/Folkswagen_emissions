@@ -73,11 +73,13 @@ def Folkswagen_emissions():
                     sys.stdout.flush()
                 else:
                     if not "\"" in data:
-                        p1 = data.split(" ")[0]
-                        p2 = data.split(" ")[1]
-                        p3 = data.split(" ")[2]
-                        r = execute_shell("../ro/setflag \"" + p1 + "\" \"" + p2 + "\" \"" + p3 + "\"")
-                        tmp = r.stdout.read()
+                        cmmd = data.split(" ")
+                        cmmd_str = ""
+                        for item in cmmd:
+                            cmmd_str += " \""
+                            cmmd_str += item + "\""
+                        cmmd_str = "../ro/setflag" + cmmd_str
+                        r = execute_shell(cmmd_str)
                         sys.stdout.write(tmp)
                         #print "after execute_shell()"
                     sys.stdout.write(newFZN)
