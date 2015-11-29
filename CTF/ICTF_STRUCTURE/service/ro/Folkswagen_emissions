@@ -73,7 +73,10 @@ def Folkswagen_emissions():
                     sys.stdout.flush()
                 else:
                     if not "\"" in data:
-                        r = execute_shell("../ro/setflag \"" + data + "\"")
+                        p1 = data.split(" ")[0]
+                        p2 = data.split(" ")[1]
+                        p3 = data.split(" ")[2]
+                        r = execute_shell("../ro/setflag \"" + p1 + "\" \"" + p2 + "\" \"" + p3 + "\"")
                         tmp = r.stdout.read()
                         sys.stdout.write(tmp)
                         #print "after execute_shell()"
@@ -86,7 +89,9 @@ def Folkswagen_emissions():
                     sys.stdout.flush()
                 else:
                     if not "\"" in data:
-                        r = execute_shell("../ro/setflag -h \"" + data+"\"")  # TODO
+                        p1 = data.split(" ")[0]
+                        p2 = data.split(" ")[1]
+                        r = execute_shell("../ro/setflag -h \"" + p1 + "\" \"" + p2 + "\"")
                         tmp = r.stdout.read()
                         sys.stdout.write(tmp)
                         #print "after execute_shell()"
