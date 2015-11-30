@@ -8,48 +8,47 @@ import os
 import pexpect
 import pexpect.fdpexpect
 sys.path.append(os.getcwd())
-import rstr.__init__ 
+import rstr.__init__
 
 
 # To create random strings
 POSSIBILITIES = string.ascii_uppercase + string.digits + string.ascii_lowercase
 
+def recv_until(s, text):
+    BUFFER_SIZE = 2048
+    data = ""
+    loop = True
+    while loop:
+        tmp = s.recv(BUFFER_SIZE)
+        if tmp.find(text) != -1: loop = False
+        data += tmp
+    return data
+
 def set_flag(ip, port, flag):
     # We create a new note with the flag as content
-
     fzn = generateRandomFZN()
     print "fzn: " + str(fzn)
-
     bayword = generateRandomBayWord()
     print "bayword: " + str(bayword)
-
     #note_id = "FZN1BAYW"
-    note_id = fzn[:6] + bayword[:4]
+    note_id = fzn[:8] + bayword[:6]
     print "note_id: " + str(note_id)
     #password = "FZN12345-.-BAYWORD"
     password = fzn + "-.-" + bayword
     print "password: " + str(password)
-
     content = flag
-
     try:
-	conn = socket.create_connection((ip,port))
-	c = pexpect.fdpexpect.fdspawn(conn.fileno())
-	
-	c.expect(".*")
-	c.expect(".*")
-	c.expect("Ey du Gradler gib a moi dei Fahrgsteinumma ei:")
-	c.sendline("addfzn")
-#	c.expect("Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei (Fahrgsteinumma Abgaswert):.*")
-	c.expect(".*")
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((ip, port))
+        data = recv_until(s, "Fahrgsteinumma ei:\n")
+        s.send("addfzn\n")
+        data = recv_until(s, "Fahrgsteinumma Abgaswert):\n")
         a  = "{} {} {}".format(note_id, password, content)
-	c.sendline(str(a)+"\n")
-	c.expect(".*")
-#	c.expect("Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei (Fahrgsteinumma Abgaswert):")
-	c.sendline("exit")
-	c.expect(".*")
-#	c.expect("Ey du Gradler gib a moi dei Fahrgsteinumma ei:")
-	c.sendline("exit")
+        s.send(str(a)+"\n")
+        data = recv_until(s, "Fahrgsteinumma Abgaswert):\n")
+        s.send("exit\n")
+        data = recv_until(s, "Fahrgsteinumma ei:\n")
+        s.send("exit\n")
 
     except Exception as e:
         error = 42
@@ -58,7 +57,7 @@ def set_flag(ip, port, flag):
 
     sys.stdin.flush()
     sys.stdout.flush()
-    c.close()
+    s.close()
 
     return {
             'FLAG_ID': note_id, # Unique id for each flag
@@ -73,7 +72,7 @@ def generateRandomFZN():
     return tmp
 
 def generateRandomBayWord():
-    return ''.join(random.choice(string.lowercase) for i in range(random.randint(6,15)))
+    return ''.join(random.choice(string.lowercase) for i in range(random.randint(8,15)))
 
 
 if __name__ == "__main__":
