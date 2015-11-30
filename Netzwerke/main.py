@@ -5,6 +5,7 @@ import time
 #import ettercap
 import colors
 from ettercap import ettercap
+from dnsspoofing import DNSSpoofing
 
 # ToDo:
 #	add default interface eth0 if selected is empty or not existend
@@ -38,6 +39,28 @@ def arpMenu():
 		else:
 			print "Not valid"
 
+def dnsMenu():
+	shellCols = colors.ShellColors
+	showMenu = True
+	while(showMenu):
+		subprocess.call(["clear"])
+		print shellCols.UNDERLINE + shellCols.HEADER + "DNS Spoofing Menu" + shellCols.ENDC
+		print shellCols.WARNING + "1.\tStart DNS Spoofing Attack" + shellCols.ENDC
+		print shellCols.WARNING + "2.\tShow Help" + shellCols.ENDC
+		print shellCols.WARNING + "0.\tBack to main menu" + shellCols.ENDC
+		selection = input(shellCols.BLUE + "\nYour selection: " + shellCols.ENDC)
+		dnsSpoof = DNSSpoofing.DNSSpoofing()
+		if(selection == 1):
+			dnsSpoof.start()
+		elif(selection == 2):
+			dnsSpoof.help()
+			raw_input(shellCols.BLUE + "\nPress Enter to continue " + shellCols.ENDC)
+		elif(selection == 0):
+			print "\nBack to main menu...\n"
+			showMenu = False
+		else:
+			print "Not valid"
+
 ##########################################
 # Show Menu
 #########################################
@@ -55,7 +78,7 @@ while(showMenu):
 	if(mainSelection == 1):
 		arpMenu()
 	elif(mainSelection == 2):
-		print "DNS Spoofing Menu"
+		dnsMenu()
 	elif(mainSelection == 0):
 		print "\nExiting\n"
 		showMenu = False
