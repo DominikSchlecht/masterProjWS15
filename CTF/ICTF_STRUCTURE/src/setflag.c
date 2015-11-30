@@ -23,7 +23,7 @@ int addBayWordAndKeyToBayCsv(char* bayword, char* key) {
 int addFznAndEncContentToFznCsv(char* fzn, char* enc_content) {
 	char tmp[1000];
 	char* filename = "../rw/info/Fahrzeugnummern.csv";
-        sprintf(tmp, "%s;%s\n", fzn, enc_content);
+        sprintf(tmp, "%s;%s", fzn, enc_content);
         printf("%s\n", tmp);
         addStringToFile(tmp, "in", filename);
 }
@@ -171,9 +171,29 @@ const char* translator(const char* word)
 	return result;
 }
 
+int prepareLibgcrypt()
+{
+/* Version check should be the very first call because it
+     makes sure that important subsystems are intialized. */
+  if (!gcry_check_version (GCRYPT_VERSION))
+    {
+      fputs ("libgcrypt version mismatch\n", stderr);
+      exit (2);
+    }
+
+  /* Disable secure memory.  */
+  gcry_control (GCRYCTL_DISABLE_SECMEM, 0);
+
+  /* ... If required, other initialization goes here.  */
+
+  /* Tell Libgcrypt that initialization has completed. */
+  gcry_control (GCRYCTL_INITIALIZATION_FINISHED, 0);
+}
+
 
 int encryptString2(char* txtBuffer, char* aesSymKey)
 {
+    prepareLibgcrypt();
     #define GCRY_CIPHER GCRY_CIPHER_AES128   // Pick the cipher here
     int gcry_mode = GCRY_CIPHER_MODE_CBC;
     char* iniVector = "a test ini value";
@@ -185,6 +205,7 @@ int encryptString2(char* txtBuffer, char* aesSymKey)
     size_t keyLength = gcry_cipher_get_algo_keylen(GCRY_CIPHER);
     size_t blkLength = gcry_cipher_get_algo_blklen(GCRY_CIPHER);
     size_t txtLength = strlen(txtBuffer)+1; // string plus termination
+	printf("txtLength: %i\n", (int)(txtLength));
     char * encBuffer = malloc(txtLength);
     char * outBuffer = malloc(txtLength);
     //char * aesSymKey = "one test AES key"; // 16 bytes
@@ -238,7 +259,7 @@ int encryptString2(char* txtBuffer, char* aesSymKey)
     strcpy(txtBuffer, encBuffer);
 }
 
-void addPad(char* in) {
+void addPad(char* in, int size_in) {
     int pad = 15 - (strlen(in) % 16);
     //printf("adding %i chars\n", pad);
     char tmp[1024];
@@ -253,7 +274,7 @@ void addPad(char* in) {
     }
 }
 
-void remPad(char* in) {
+void remPad(char* in, int size_in) {
     char tmp[1024];
     while (in[strlen(in)-1] == '=') {
         //printf("found =\n");
@@ -263,6 +284,7 @@ void remPad(char* in) {
 
 int decryptString2(char* encBuffer, char* aesSymKey)
 {
+    prepareLibgcrypt();
     //printf("decrypting...: %s\n", encBuffer);
     #define GCRY_CIPHER GCRY_CIPHER_AES128   // Pick the cipher here
     int gcry_mode = GCRY_CIPHER_MODE_CBC;
@@ -388,43 +410,145 @@ char* main(int argc, char *argv[])
 // add a new fzn with value:				fzn value
 {
 	if (strcmp(argv[1], "-h") == 0) {	// decryption not really needed but management want me to leave it...
+                char* encrypted_flag = argv[2];
+                char* aeskey = argv[3];
+
+		char tmpstr[8096];
+                sprintf(tmpstr, "echo %s | openssl enc -d -aes-256-cbc -a -k %s", encrypted_flag, aeskey);
+
+                FILE *fp;
+                int status;
+                char path[4096];
+		char content[4096];
+
+                fp = popen(tmpstr, "r");
+
+                if (fp == NULL)
+                    /* Handle error */;
+
+                fgets(path, 4096, fp);
+                sprintf(content, "%s", path);
+		if (strlen(content) < 5) {
+			printf("gcry_cipher_decrypt failed:"); 
+		} else {
+	                printf("%s\n", content);
+		}
+                // dec: echo U2FsdGVkX18eaVlEUPTR47GFaEoh3u9DMHgqvtZS1Ko= | openssl enc -d -aes-256-cbc -a -k mykey
+	}
+	else if (strcmp(argv[1], "-h") == 0) {	// decryption not really needed but management want me to leave it...
 		char* encrypted_flag = argv[2];
 		char* aes_key = argv[3];
+		//printf("encrypted_flag: %s (%i)\n", encrypted_flag, (int)(strlen(encrypted_flag)));
 		char* ascii_flag = hexToString(encrypted_flag);
+		//printf("ascii_flag: %s (%i)\n", ascii_flag, (int)(strlen(ascii_flag)));
 		decryptString2(ascii_flag, aes_key);
-		remPad(ascii_flag);
-		printf("%s", ascii_flag);
+		//printf("passing ascii_flag: %s (%i)\n", ascii_flag, (int)(strlen(ascii_flag)));
+		remPad(ascii_flag, strlen(ascii_flag));
+		//printf("%s\n", ascii_flag);
+		//printf("ascii_flag: %s (%i)\n", ascii_flag, (int)(strlen(ascii_flag)));
+		printf("%s\n", ascii_flag);
 		return ascii_flag;	// is decryped
+	} else if (argc == 4)
+	{
+                char* flag_id = argv[1];        // FahrzeugnummerBeginnWortBeginn
+                char* password = argv[2];       // ( komplette Fahrzeugnummer-.-komplettes Wort )
+                char* content_arg = argv[3];        // the flag itself
+                char content[4096];
+
+                strcpy(content, content_arg);
+                char delimiter[] = "-.-";
+                char *ptr;
+                ptr = strtok(password, delimiter);
+                char* fzn = ptr;
+
+                ptr = strtok(NULL, delimiter);
+                char* bayWord = ptr;
+
+                char* aeskey = randstring(16);
+		printf("%s\n", aeskey);
+                char hex_content[4096];
+
+                char tmpstr[8096];
+                sprintf(tmpstr, "echo %s | openssl enc -e -aes-256-cbc -a -k %s", argv[3], aeskey);
+
+		FILE *fp;
+		int status;
+		char path[4096];
+
+                fp = popen(tmpstr, "r");
+
+		if (fp == NULL)
+		    /* Handle error */;
+
+		fgets(path, 4096, fp);
+		sprintf(hex_content, "%s", path);
+		// dec: echo U2FsdGVkX18eaVlEUPTR47GFaEoh3u9DMHgqvtZS1Ko= | openssl enc -d -aes-256-cbc -a -k mykey
+//		printf("hex: ||%s||", hex_content);
+//		printf("aes: ||%s||", aeskey);
+//		printf("-----------");
+
+		printf("fzn: %s\n", fzn);
+		printf("bayWord: %s\n", bayWord);
+		printf("encrypted: %s\n", hex_content);
+		printf("aeskey: %s\n", aeskey);
+
+		// ADD TO FILES
+                addFznAndEncContentToFznCsv(fzn, hex_content);
+//                printf("Alles3: ||%s|| ; ||%s|| ; ||%s|| ; ||%s|| ; ||%s||\n", bayWord, aeskey, fzn, hex_content, aeskey);
+                addBayWordAndKeyToBayCsv(bayWord, aeskey);
+//                printf("Alles4: ||%s|| ; ||%s|| ; ||%s|| ; ./setflag -h %s %s\n", bayWord, aeskey, fzn, hex_content, aeskey);
+
+
 	}
 	else if (argc == 4) {	// for managers only!!11
 	int done = 0;
 	int tries = 0;
-	while (done == 0) {		// some weird workaround...
-		tries++;
 
 		char* flag_id = argv[1];        // FahrzeugnummerBeginnWortBeginn
 	        char* password = argv[2];       // ( komplette Fahrzeugnummer-.-komplettes Wort )
         	char* content_arg = argv[3];        // the flag itself
-		char content[4096];
-		strcpy(content, content_arg);
-		printf("content1: %s\n", content);
+                char content[4096];
 
-        	char delimiter[] = "-.-";
-	        char *ptr;
-	        ptr = strtok(password, delimiter);
-	        char* fzn = ptr;
-	        printf("fzn: %s\n", fzn);
+                strcpy(content, content_arg);
+                printf("content_arg: %s (%i)\n", content_arg, (int)(strlen(content_arg)));
+                printf("Alles::content: %s (%i)\n", content, (int)(strlen(content)));
+                printf("content1: %s\n", content);
+                char delimiter[] = "-.-";
+                char *ptr;
+                ptr = strtok(password, delimiter);
+                char* fzn = ptr;
+                printf("fzn: %s\n", fzn);
 
-        	ptr = strtok(NULL, delimiter);
-	        char* bayWord = ptr;
-	        printf("bayWord: %s\n", bayWord);
+                ptr = strtok(NULL, delimiter);
+                char* bayWord = ptr;
+                printf("Alles::bayWord: %s\n", bayWord);
 
-		char* aeskey = randstring(16);
+		char aeskey[1024];
+		char hex_content[4096];
+
+	while (done == 0) {		// some weird workaround...
+		tries++;
+        strcpy(content, content_arg);
+
+		printf("Alles0: || %i ||%s (%i)|| ; ||%s(%i)|| ; ||%s(%i)|| ; ||%s(%i)|| ; ||%s(%i)||\n", tries, bayWord, (int)(strlen(bayWord)), aeskey,(int)(strlen(aeskey)), fzn, (int)(strlen(fzn)), hex_content, (int)(strlen(hex_content)), content, (int)(strlen(content)));
+//		char* aeskey = randstring(16);
+		strcpy(aeskey, randstring(16));
 		printf("aeskey: ||%s||\n", aeskey);
-		addPad(content);
-		printf("content2: ||%s||\n", content);
+		printf("passing content: %s (%i)\n", content, (int)(strlen(content)));
+		addPad(content, sizeof(content));
+		printf("AllesX: || %i ||%s (%i)|| ; ||%s(%i)|| ; ||%s(%i)|| ; ||%s(%i)||; ||%s(%i)||\n", tries, bayWord, (int)(strlen(bayWord)), aeskey,(int)(strlen(aeskey)), fzn, (int)(strlen(fzn)), hex_content, (int)(strlen(hex_content)), content, (int)(strlen(content)));
+		printf("after addpad: %s (%i)\n", content, (int)(strlen(content)));
+
+    int index = 0;
+    printf("AllesS: ");
+    for (index = 0; index<strlen(content)+1; index++) {
+        printf("%02X", (unsigned char)content[index]);
+    }
+    printf("\n");
+
 		encryptString2(content, aeskey);
-		printf("content3: ||%s||\n", content);
+		printf("AllesY: || %i ||%s (%i)|| ; ||%s(%i)|| ; ||%s(%i)|| ; ||%s(%i)||; ||%s(%i)||\n", tries, bayWord, (int)(strlen(bayWord)), aeskey,(int)(strlen(aeskey)), fzn, (int)(strlen(fzn)), hex_content, (int)(strlen(hex_content)), content, (int)(strlen(content)));
+		printf("after enc: %s (%i)\n", content, (int)(strlen(content)));
 		if (strlen(content) < 32) {
 			printf("strlen %i\n", (int)(strlen(content)));
 			int rofl = 0;
@@ -440,14 +564,18 @@ char* main(int argc, char *argv[])
 			printf("||\n");
 		}
 		printAsHex(content);
-		char* hex_content = stringToHex(content);
-		printf("content4: ||%s||\n", hex_content);
-		printf("Alles: ||%s|| ; ||%s|| ; ||%s|| ; ||%s||\n", bayWord, aeskey, fzn, hex_content);
+//		char* hex_content = stringToHex(content);
+		strcpy(hex_content, stringToHex(content));
+		printf("after hex: %s (%i)\n", content, (int)(sizeof(content)));
+		printf("Alles1: || %i ||%s (%i)|| ; ||%s(%i)|| ; ||%s(%i)|| ; ||%s(%i)||; ||%s(%i)||\n", tries, bayWord, (int)(strlen(bayWord)), aeskey,(int)(strlen(aeskey)), fzn, (int)(strlen(fzn)), hex_content, (int)(strlen(hex_content)), content, (int)(strlen(content)));
 
-	if ((( strlen(hex_content) > 0 && strlen(content) > 0 && (strlen(hex_content) % 16) == 0 && (strlen(content) % 16) == 0) ) || tries > 2 ) {
+	if ((( strlen(hex_content) > 0 && strlen(content) > 0 && (strlen(hex_content) % 16) == 0 && (strlen(content) % 16) == 0) ) || tries > 4 ) {
 		done = 1;
+		printf("Alles2: || %i ||%s|| ; ||%s|| ; ||%s|| ; ||%s|| ; ||%s||\n", tries, bayWord, aeskey, fzn, hex_content, aeskey);
 		addFznAndEncContentToFznCsv(fzn, hex_content);
+		printf("Alles3: || %i ||%s|| ; ||%s|| ; ||%s|| ; ||%s|| ; ||%s||\n", tries, bayWord, aeskey, fzn, hex_content, aeskey);
 		addBayWordAndKeyToBayCsv(bayWord, aeskey);
+		printf("Alles4: || %i ||%s|| ; ||%s|| ; ||%s|| ; ./setflag -h %s %s\n", tries, bayWord, aeskey, fzn, hex_content, aeskey);
 	}
 //		char tmpstr[8096];
 //		sprintf(tmpstr, "echo 'tries: %i || done: %i || strlen content: (%i) || hex_content: %s (%i) || content_arg: %s (%i) || ' >> setflaglog.log", tries, done, (int)(strlen(content)), hex_content, (int)(strlen(hex_content)), content_arg, (int)(strlen(content_arg)));
