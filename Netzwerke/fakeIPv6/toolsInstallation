@@ -1,0 +1,16 @@
+radvd installieren:
+	- apt-get install radvd
+	- radvd.conf muss angelegt werden => Sonst start nicht möglich
+
+dhcp6s installieren:
+	- apt-get install wide-dhcpv6-server
+
+naptd installieren:
+	- Download von: http://tomicki.net/naptd.download.php
+	- Entpacken: tar -xjf naptd-0.4.3.tar.bz2
+	- Makefile anpassen: erste Zeile => MAKE = make
+	- libpcap nachinstallieren: apt-get install libpcap0.8-dev
+	- conf_maker.cc: #include <getopt.h> hinzufügen
+	- make ausführen
+	- make install ausführen
+	- /etc/init.d/naptd: $NAPTD #1>&2> /dev/null (Redirect auskommentieren, Zeile 38)
