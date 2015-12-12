@@ -12,7 +12,25 @@ ENDC = '\033[0m'
 
 
 def Folkswagen_emissions():
+    # tmp returned by uebersetzer or abgaswerte
     tmp = ""
+
+    #status translator/addfzn/decrypt/standard
+    translator = False
+    addfzn = False
+    decrypt = False
+
+    #text
+    numberplz = "Ey du Gradler gib a moi dei Fahrgsteinumma ei:\n"
+    wordplz = "Welches bayrische Wort moechten sie wissen?\n"
+    wrongnum = "\nDes is fei koa gscheide Numma du de** du dammischer...\n\nSollten sie aus dem Ausland kommen und kein Bayrisch\nsprechen koennen sie auch unseren Uebersetzer nutzen!\nGeben sie dafuer folgendes ein: \n\"I ko koa bayrisch\"\n"
+    cake = "The cake is a lie!\n"
+    quittrans = "Der Uebersetzer laesst sich mit exit oder quit beenden.\n"
+    emission = "Dei Emissionwert der ist ned so guad schaust ma her: \n"
+    newFZN = "Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei (Fahrgsteinumma Abgaswert):\n"
+    decryptSth = "Mogst was entschluesseln?\n"
+
+    #welcome text
     sys.stdout.write("\n********************************************************\n")
     sys.stdout.write("**************** Welcome to Folkswagen *****************\n")
     sys.stdout.write("********************************************************\n")
@@ -29,23 +47,10 @@ def Folkswagen_emissions():
     sys.stdout.write("* FF                         W               W         *\n")
     sys.stdout.write("*                                                      *\n")
     sys.stdout.write("********************************************************\n\n")
-
-    translator = False
-    addfzn = False
-    decrypt = False
-
-    numberplz = "Ey du Gradler gib a moi dei Fahrgsteinumma ei:\n"
-    wordplz = "Welches bayrische Wort moechten sie wissen?\n"
-    wrongnum = "\nDes is fei koa gscheide Numma du de** du dammischer...\n\nSollten sie aus dem Ausland kommen und kein Bayrisch\nsprechen koennen sie auch unseren Uebersetzer nutzen!\nGeben sie dafuer folgendes ein: \n\"I ko koa bayrisch\"\n"
-    cake = "The cake is a lie!\n"
-    quittrans = "Der Uebersetzer laesst sich mit exit oder quit beenden.\n"
-    emission = "Dei Emissionwert der ist ned so guad schaust ma her: \n"
-    newFZN = "Ey du Gradler gib a moi a naie Fahrgsteinumma ei ond an Abgaswert ei (Fahrgsteinumma Abgaswert):\n"
-    decryptSth = "Mogst was entschluesseln?\n"
-
     sys.stdout.write(numberplz)
     sys.stdout.flush()
 
+    #while connection exists
     while 1:
         data = raw_input()
         #print "data: " + data
@@ -53,78 +58,107 @@ def Folkswagen_emissions():
             #print((WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC))
             break
         else:
+            #remove endsign
             data = (str(data)).strip()
+            #status translator
             if translator:
+                #end translator
                 if(data == "quit" or data == "exit"):
                     translator = False
                     sys.stdout.write(numberplz)
                     sys.stdout.flush()
+                #translator
                 else:
+                    #" is denied
                     if not "\"" in data:
+                        #call uebersetzer
                         r = execute_shell("../ro/uebersetzer \"" + data + "\"")
+                        #save return value
                         tmp = r.stdout.read()
                         sys.stdout.write("\nDas Wort "+ tmp + " in deutsch.\n");
                     sys.stdout.write(wordplz)
                     sys.stdout.flush()
+            #status add FZN
             elif addfzn:
+                #end add FZN
                 if(data == "quit" or data == "exit"):
                     addfzn = False
                     sys.stdout.write(numberplz)
                     sys.stdout.flush()
+                #add FZN
                 else:
+                    #" is denied
                     if not "\"" in data:
+                        #change string for setflag
                         cmmd = data.split(" ")
                         cmmd_str = ""
                         for item in cmmd:
                             cmmd_str += " \""
                             cmmd_str += item + "\""
                         cmmd_str = "../ro/setflag" + cmmd_str
+                        #call setflag
                         r = execute_shell(cmmd_str)
                         sys.stdout.write(tmp)
                         #print "after execute_shell()"
                     sys.stdout.write(newFZN)
                     sys.stdout.flush()
+            #status decrypt
             elif decrypt:
+                #end decrypt
                 if(data == "quit" or data == "exit"):
                     decrypt = False
                     sys.stdout.write(numberplz)
                     sys.stdout.flush()
+                #decrypt
                 else:
+                    #" is denied
                     if not "\"" in data:
+                        #change string for decrypt
                         p1 = data.split(" ")[0]
                         p2 = data.split(" ")[1]
+                        #call decrypt
                         r = execute_shell("../ro/setflag -h \"" + p1 + "\" \"" + p2 + "\"")
                         tmp = r.stdout.read()
                         sys.stdout.write(tmp)
                         #print "after execute_shell()"
                     sys.stdout.write("\n" + decryptSth);
                     sys.stdout.flush()
+            #end
             elif(data == "quit" or data == "exit"):
                 #print((WARNING + "\n[-] Client %s disconnected nicely" % (str(addr[0])) + ENDC))
                 break
+            #call help
             elif(data == "help"):
                 sys.stdout.write(cake)
                 sys.stdout.flush()
+            #call translator
             elif(data == "I ko koa bayrisch"):
                 translator = True
                 sys.stdout.write(quittrans)
                 sys.stdout.write(wordplz)
                 sys.stdout.flush()
+            #call add FZN
             elif(data == "addfzn"):
                 sys.stdout.write(newFZN)
                 sys.stdout.flush()
                 addfzn = True
+            #call decrypt
             elif(data == "decrypt"):
                 sys.stdout.write(decryptSth)
                 sys.stdout.flush()
                 decrypt = True
+            #get emission for FZN
             else:
             #elif(re.match(pattern, data)):
+                #" is denied
                 if not "\"" in data:
+                    #call abgaswerte
                     r = execute_shell("../ro/abgaswerte \"" + data + "\"")
                     tmp = r.stdout.read()
+                #give emissions
                 if tmp != "Na\n":
                     sys.stdout.write(emission + tmp + "\n")
+                #wrong number
                 else:
                     sys.stdout.write(wrongnum)
                 sys.stdout.flush()
