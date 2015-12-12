@@ -101,7 +101,7 @@ kann überprüft werden, ob die gespoofte MAC-Adresse auch aktiv ist.\\
 
 {\Large 3. Das Interface in den Monitor Mode versetzen}\\
 
-Damit mit dem WLAN Adapter Pakete aufgezeichnet werden können, muss sich der Adapter im Monitor Mode, oder auch Packet Injection Mode genannt, befinden. Dies wird mit folgendem Befehl erreicht.
+Damit mit dem WLAN Adapter Pakete aufgezeichnet werden können, muss sich der Adapter im Monitoring Mode, oder auch Packet Injection Mode genannt, befinden. Dies wird mit folgendem Befehl erreicht.
 
 $$airmon\text{-}ng~start~wlanX~$$
 
@@ -304,6 +304,57 @@ Letztendlich kann nun auch mit einer einzelnen GPU dieser Standard Key nicht gek
 
 \section{WPS}
 
-\section{Sicherungsmaßnahmen}
+Falls alle vorherigen Angriffe gegen ein WPA/WPA2 gesichertes Netzwerk fehlgeschlagen sind, kann ein weiterer spezieller Angriff durchgeführt werden. Dieser Angriff kann durchgeführt werden, falls WPS (Wi-Fi Protected Setup) auf dem anzugreifenden Netzwerkgerät aktiviert ist. Das Netz kann so gehackt werden, ohne den PSK direkt anzugreifen. WPS wurde entwickelt um das Hinzufügen von Geräten zu einem Netzwerk zu vereinfachen ohne die Sicherheit der Verschlüsselung zu umgehen. Dazu stehen verschiedene Modi zur Verfügung. Zwei davon sind sehr beliebt. Zum Einen kann über die Eingabe eines PIN, der fest in dem Gerät hinterlegt ist ein Client hinzugefügt werden. Bei der zweiten Variante musst WPS auf dem Client als Verbindungsmethode gewählt werden und gleichzeitig wird dazu ein Hardware Button auf dem Netzwerkgerät gedrückt. Bei diesem Hack wird der feste 8-stellige PIN angegriffen. \\
+
+Bei 8 Stellen gibt es 100.000.000 verschiedene Kombinationen. Zu unserem Glück kann durch das Ausnutzen von Lücken in dem Standard der Aufwand auf 11.000 Kombinationen eingegrenzt werden. Zieht man einige Statistiken zu Rate, dann zeigen diese, dass das Cracken des WPA/WPA2 Passworts statistisch gesehen im Durchschnitt in der Hälfte der Zeit dieses Angriffes durchgeführt werden kann. Natürlich gibt es keine Garantie dafür. Weshalb dieser Angriff auf WPS auf jeden Fall erwähnt werden sollte. 
+
+Um diesen Angriff auszuführen, wird wie bei den anderen Angriffen meist auch der WLAN Adapter vorbereitet.\\
+
+Dieser wird zu Beginn mit nachfolgendem Befehl in den Monitoring Mode versetzt.\\
+
+$$airmon\text{-}ng~start~wlanX~$$
+
+\textit{X = NUM für das interface}\\
+
+
+Anschließend werden wieder mit airodump die Pakete aufgezeichnet. \\
+
+$$airodump\text{-}ng~\text{-}b~a~wlanXmon$$\\
+	 
+	\textit{X = NUM für das interface}\\
+	\textit{-b a = Scan im 5GHz Band}\\	
+
+In der angezeigten Liste den anzugreifenden Access Point identifizieren. Von diesem wird im Weiteren die MAC Adresse(BSSID) benötigt.
+Mit Strg+C kann nun das Aufzeichnen wieder beendet werden. Ab hier kann der WPS Angriff gestartet werden. Dazu wird das Cracking Tool Reaver verwendet. Dieses kleine Programm versucht den WPS PIN des Access Points herauszufinden. Voraussetzung für den Angriff ist natürlich, dass WPS auf dem Target aktiviert ist. \\
+
+Der Befehl sieht dann wie folgt aus:\\
+
+
+$$reaver~\text{-}i~wlanXmon~\text{-}b~MAC\text{-}AP$$
+
+\textit{X = NUM für das interface}\\ 
+\textit{MAC-AP = Die MAC-Adresse des APs}\\ 
+
+Nun sollte Reaver den beginnen den 8-stelligen PIN zu knacken. Dieser Vorgang dauert zwischen 4 und 5 Stunden. Im Gegensatz zum Cracken eines WPA/WPA2 Passworts, wird hier der PIN garantiert gefunden, was einen deutlichen Vorteil darstellt. \\
+
+\textit{Troubleshooting:}\\
+
+Beim WPS PIN cracken kann es in Einzelfällen zu Timeouts oder anderen Fehlern kommen. Oft hilft es danach zu googlen, da dies sehr spezielle Ursachen haben kann. \\
+
+Wird nach ca. 10 Versuchen eine Warnung angezeigt, kann es sein, dass der AP die Connections limitiert, falls er zu viele Anfragen bekommt. Oder er kommt mit der Vielzahl an Anfragen nicht zurecht. In diesen Fällen kann eine kurze Wartezeit zwischen den Anfragen weiter helfen. Dazu den obigen Befehl mit dem Parameter\\
+
+$$\text{-}fail\text{-}wait\text{=}300$$\\
+
+erweitern. Der Wert muss nicht fest sein, sonder kann variiert werden um optimale Ergebnisse zu erzielen. 
+
+
+
+\section{Sicherungsmaßnahmen und Bewertung}
+
+Nachdem nun die gängigsten Angriffsarten und ihre Durchführung erläutert wurden, soll hier abschließend eine kurze Bewertung abgegeben werden. Wie in den ersten Sektionen des Kapitels zu erkennen ist, bietet WEP als Verschlüsselung keinen nennenswerten Schutz mehr und kann ohne viel Aufwand geknackt werden. Daher ist es ratsam nur noch WPA2, da WPA ebenfalls bereits veraltet ist, zu verwenden. Zu beachten ist dabei, einen ausreichend langen und komplexen Key zu hinterlegen. Solange es keine Schwachstelle in der Umsetzung des Herstellers gibt, ist der Schlüssel der einzige Angriffspunkt auf die WPA2 Verschlüsselung. \\
+
+Weiter wurde gezeigt, dass WPS eine weitere Schwachstelle darstellt und ein Angreifer so die Sicherheit einer starken Verschlüsselung vollkommen umgehen kann. Daher ist es ratsam WPS nur in Ausnahmefällen zu verwenden und ansonsten dieses Feature zu deaktivieren. \\
+
+Ein weit verbreiteter Irrtum ist auch, dass das Verstecken des Netzwerknamens, auch SSID genannt, die Sicherheit verbessert. Jedoch haben wir gesehen wie einfach nach WLAN Netzwerken in der Umgebung gescannt werden kann. Dabei alle Netzwerke, auch diejenigen mit versteckter SSID, angezeigt. Damit verbessert dieses Feature, was viele Netzwerkgeräte unterstützen, definitiv nicht. 
 
 
