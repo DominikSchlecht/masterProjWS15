@@ -1,0 +1,7 @@
+\chapter{Tweety\_bird}
+
+The service tweety\_bird was a console service, which saved a secret in a file and stored a password for it in another file. This was done by selecting write("'X"') and entering "'\textless filename\textgreater \textless secret\textgreater \textless password\textgreater"'. 
+
+The secret could be retrieved by selecting read("'R"') and entering "'\textless filename\textgreater \textless password\textgreater"'. The flag was the stored secret. After decompiling of the c-code and checking it, it was determined, that the password was written in an array of size 50. After that the password is compared with the right password or if its not empty. 
+
+In case of a bufferoverflow the compare value for empty will be overwritten and any password will be accepted. A first try with the Passwort 51 times "'A"' already was accepted and the secred was retrieved because the files were unencrypted. Closing the found security gap was not tried, because of the missing original c-code and time issues.

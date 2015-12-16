@@ -1,0 +1,9 @@
+\chapter{Text\_File\_Store}
+If you open the site you can see a form where you can login with a username and password or you can enter a short message you want to store.
+After storing some text you get the username and the password to look for that text later. The username and the password are calculated at runtime of the service. 
+
+Every parameter of the service are passed in the URL via GET. In the viewFile.php file you can find a parameter called "file". This parameter is used to access a file in the directory where all textfiles are stored. 
+
+But if you modify this parameter you can read the content of the access.log file without any verification. 
+In this file you can see every connection to this service. At last you have to filter for the flags and read them. 
+Also it is possible to inject a command with an adjusted url call. It generates a file on the server with the filenames in the service-directory. With this information it is possible to open the files containing the flags. 
