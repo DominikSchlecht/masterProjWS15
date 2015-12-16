@@ -1,6 +1,14 @@
 \chapter{Wireless Security}
 
-\section{Einleitung}
+\section{Szenario}
+
+In der folgenden Abbildung ist das Szenario so abgebildet, wie es in den meisten nachfolgenden Angriffen angenommen wird. Es gibt ein Netzwerkgerät (Access Point), welches das Netzwerk aufbaut und mindestens einen Client, der mit diesem Netzwerk verbunden ist. Wir befinden uns in der Rolle des Angreifers und versuchen im Großteil der Anwendungsfälle Zugriff auf das Netzwerk zu bekommen.
+
+\includegraphics[width=0.7\textwidth]{bilder/wlan/WLANSzenario.png}\\
+
+Angriffe auf ein Wireless Network laufen häufig nach einem bestimmten Schema ab. 
+Dazu werden Daten, die zwischen Client und Netzwerkgerät hin- und hergeschickt werden, gesammelt. Diese Informationen werden dann beim Angreifer in einer gewissen Art und Weise verarbeitet.
+Ist diese Verarbeitung, egal wie komplex diese ist, erfolgreich, so hat der Angreifer häufig Zugriff auf das Netz. 
 
 \section{Vorbereitungen}
 
@@ -23,11 +31,14 @@ Kali Linux in Virtual Box starten (user: root, passwort: toor)\\
 Sobald die VM hochgefahren ist, den Adapter einstecken.\\
 USB Icon im Fenster der Maschine sollte rot/grün blinken.\\ %(evtl screenshot)\\
 
+In einigen Fällen, kann es zu Problemen in der Kommunikation von der virtuellen Maschine zu dem Adapter kommen. 
+Dann kann es helfen entweder den Adapter aus- und wieder anzustecken oder die Einstellung für das Durchreichen des USB-Adapters aus- und wieder anzuschalten.
+
+
 \section{WEP}
 
 \section{WPA/WPA2}
-%Teilweise aus:
-%http://www.elektronik-kompendium.de/sites/raspberry-pi/2008101.htm
+
 
 WPA bzw. WPA2 (WiFi Protected Access) ist eine Kombination aus Authentifizierung und Verschlüsselung, um ein WLAN sicher zu betreiben. Die Authentifizierung erfolgt in der Regel mit einem Passwort, um den Zugriff durch unberechtigte Personen zu verhindern. Möchte ein Angreifer nun in das Netzwerk eindringen, muss er dieses Passwort herausfinden.\\
 
