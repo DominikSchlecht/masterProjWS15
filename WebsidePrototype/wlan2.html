@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 <head>
     <title>Security Work Bench</title>
     <link rel="stylesheet" type"text/css" href="design2.css">
@@ -23,6 +23,173 @@
                 </ul>
             </div>
             <div id="content">
+				<h3>WEP</h3>
+
+				
+				
+				<h3>WPA/WPA2</h3>
+WPA bzw. WPA2 (WiFi Protected Access) ist eine Kombination aus Authentifizierung und
+Verschlüsselung, um ein WLAN sicher zu betreiben. Die Authentifizierung erfolgt in der
+Regel mit einem Passwort, um den Zugriff durch unberechtigte Personen zu verhindern.
+Möchte ein Angreifer nun in das Netzwerk eindringen, muss er dieses Passwort herausfinden.
+Grundsätzlich gibt es beim Hacken keine Unterschiede zwischen WPA- und WPA2-gesicherte
+WLANs. Die Authentifizierungsmethode ist im Prinzip identisch. Der Unterschied liegt im
+Verschlüsselungsverfahren, welche für die typischen Hacking-Methoden auf WPA-gesicherte
+WLANs nicht relevant ist.
+Grund dafür ist, dass WPA2 derzeitig noch als nicht zu knackendes Verschlüsselungsverfahren
+gilt und daher ein Angriff auf die Verschlüsselung vergebene Mühe wäre.
+Der typische Angriff gegen ein WPA-/WPA2-gesichertes WLAN läuft über reines Bruteforcing
+oder einer sogenannten Wörterbuch-Attacke (engl. dictionary-attack). Bei Ersterem
+werden einfach alle Kombinationen bestehend aus Buchstaben, Ziffern und Sonderzeichen,
+oder nur einem Ausschnitt davon, bis zur gewünschten Länge getestet. Je nach Länge und
+Komplexität des Passworts kann sich dieser Vorgang über viele Stunden, bis zu Tagen
+und sogar mehreren Jahren hinziehen. Häufig wird bei einer Bruteforce-Attacke zuvor eine
+Wordlist, wie bei einem Dictionary-Angriff, mit allen zu testenden Kombinationen erstellt.
+Bei einem Wörterbuch-Angriff wird somit durch die Passwortkandidaten in einer riesigen
+Wordlist iteriert und mit dem herauszufindenden Passwort abgeglichen. Stimmen beide
+überein, wurde das Passwort gefunden. Diese Wörterlisten können entweder selber generiert
+werden oder sind auch im Internet zu finden. Wie wir später noch sehen werden, gibt es
+auch hybride Ansätze, die beide Angriffsarten verknüpfen.
+Ein WPA-Handshake findet zwischen Access Point und WLAN-Client statt, wenn der WLANClient
+sich mit dem WLAN verbinden will. Dieser WPA-Handshake muss aufgezeichnet
+werden. Anschließend wird bei einem Wörterbuch-Angriff mit Hilfe der Wordlist das WLAN Passwort
+erraten. Ein erfolgreicher Angriff steht und fällt mit einer guten Wordlist, in der
+das WLAN-Passwort enthalten sein muss. Darin besteht die eigentliche Schwierigkeit bei
+einem WPA/WPA2-WLAN-Hack.			
+
+<h1>Cracking des WPA Keys</h1>
+<p>1. Check des WLAN Adapter</p>
+Zuerst muss geprüft werden, ob der eingesteckte USB WLAN-Adapter erkannt wird und
+somit einsatzbereit ist. Dazu das Terminal öffnen in Kali Linux öffnen und folgenden Befehl
+eingeben.
+<p><em>iwconfig</em></p><br/>
+Der Adapter sollte als Interface, meist WLAN0 oder WLAN1, angezeigt werden
+Im Folgenden muss bei allen Befehlen die Interface Bezeichnung mit der hier angezeigten
+ersetzt werden, da sie sich von Rechner zu Rechner unterscheiden kann.<br />
+<p>2. MAC-Spoofing </p>
+Im Sinne von Wireless Security sollte man sich immer im Klaren sein, dass ein Angreifer
+immer in der Lage ist seine MAC-Adresse zu verändern. Dieser Vorgang wird auch Spoofing
+genannt.
+Die MAC-Adresse ist eine herstellerspezifische Kennung, die fest einem Netzwerkgerät zugeordnet
+ist. Jede Adresse ist eindeutig. Findet man die MAC-Adresse eines Angreifers heraus,
+kann mit Hilfe dieser Identifikationskennung festgestellt werden, welchen Typ von Antenne er verwendet.
+Diese Erkenntnis kann helfen einen Angreifer zu identifizieren. Verwendet ein
+Angreifer nun eine gefälschte MAC-Adresse können keine Rückschlüsse auf seine Identität
+gezogen werden, da überall nur seine Fake-Adresse angezeigt wird.
+Zuerst muss dafür das WLAN Interface deaktiviert werden. Danach kann mit dem Kommando
+macchanger die Adresse geändert werden.
+<p><em>ifconfig wlanX down<br/>
+macchanger -r wlanX</em></p>
+X = NUM für das interface<br/></br>
+Beim Bestätigen des Befehls mit Enter, wird die eigene MAC-Adresse in eine zufällige
+generierte MAC-Adresse geändert und auf der Konsole angezeigt. Anschließend kann das
+Interface mit folgendem Befehl wieder aktiv gesetzt werden.
+<p><em>ifconfig wlanX up</em></p>
+X = NUM für das interface<br/><br/>
+Mit dem Befehl
+<p><em>ifconfig wlanX</em></p>
+X = NUM für das interface<br/><br/>
+kann überprüft werden, ob die gespoofte MAC-Adresse auch aktiv ist.
+<p>3. Das Interface in den Monitor Mode versetzen</p>
+Damit mit dem WLAN Adapter Pakete aufgezeichnet werden können, muss sich der Adapter
+im Monitoring Mode, oder auch Packet Injection Mode genannt, befinden. Dies wird mit
+folgendem Befehl erreicht.
+<p><em>airmon-ng start wlanX</em></p>
+X = your number from iwconfig<br/></br>
+Mit dem Befehl
+<p><em>airmon-ng check kill</em></p>
+werden alle andere Prozesse beendet, die auch auf den Netzwerkadapter zugreifen können.
+So können Konflikte beim Zugriff auf die Ressource vermieden werden.
+<h1>4. Aufzeichnen der WLAN Pakete mit airodump</h1>
+Im nächsten Schritt werden die WLAN Pakete aus der Umgebung aufgezeichnet. Damit
+möchte man einen Handshake zwischen dem zu hackenden Access Point und einem Client
+aufzeichnen. Anhand dessen kann anschließend das Passwort herausgefunden werden.
+Mit dem folgenden Befehl können wir in den Aufzeichnungsmodus umschalten.
+<p><em>airodump-ng -b a wlanXmon</em></p>
+X = NUM für das interface</br>
+-b a = Scan im 5GHz Band</br></br>
+Falls wir im im 5GHz Bereich scannen möchten muss der Parameter -b a mitgegeben werden.
+Falls nicht, kann der Parameter einfach weggelassen werden.
+Sollten keine Daten aufgezeichnet werden, dann den Adapter mehrmals aus- und wieder
+einstecken. Nach einem Reconnect muss der Adapter natürlich wieder in den Monitoring
+Modus versetzt werden.
+Hat alles soweit geklappt, sollten alle erreichbaren SSIDS mit ihren jeweiligen Sendern
+angezeigt werden.
+Als nächstes sollte die MAC-Adresse und der verwendete Kanal des zu hackenden APs notiert.
+Anschließend kann durch einen neuen airodump-ng Durchlauf mit der MAC und dem Kanal
+als Parameter (nähere Infos unter man airodump − ng abrufbar) der Scan eingeschränkt
+werden. Zusätzlich kann auch der Name der Ausgabedatei festgelegt werden. Der Befehl
+sieht dann in etwa wie nachfolgend aus.
+<p><em>airodump-ng -c Kanal -b a --bssid MAC-AP -showack -w Filename wlanXmon</em></p>
+X = NUM für das interface</br>
+Kanal = der Kanal auf dem gelauscht werden soll</br>
+MAC-AP = die MAC-Adresse des Access Points</br>
+Filename = in die zu schreibende Datei</br></br>
+Verbindet sich nun ein Client auf den AP, so kann der 4-way-handshake mitgelesen werden,
+was auch in der Konsole, in der rechten oberen Ecke, angezeigt wird. Hat dies funktioniert,
+ist der erste Schritt für das Hacken des Passworts abgeschlossen.
+<h1>5. Cracken des Passworts</h1>
+Ab hier werden verschieden Tools und Angriffsarten für das Cracken des Keys vorgestellt.
+Dictionary Attack mit aircrack
+Dazu wird ein Dictionary File mit allen Passwörtern benötigt, die auf übereinstimmung
+mit dem PSK gecheckt werden sollen. Auf dem Image sollt bereits eine Dictionary Datei im
+Home Verzeichnis vorhanden sein.
+Mit folgendem Befehl kann der Dictionary-Angriff gestartet werden.
+<p><em>aircrack-ng -w dict.f ile -b MAC-AP File.cap</em></p>
+dict.file = Pfad zu dem Dictionary<br/>
+MAC-AP = Die MAC-Adresse des APs<br/>
+File.cap = Pfad zu dem cap file<br/><br/>
+<h2>Brutefore Angriff mit aircrack und crunch</h2>
+<p><em>crunch 8 12 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+| aircrack-ng --bssid 00 : 11 : 22 : 33 : 44 : 55 -w- hack-wif i-01.cap</em></p>
+8 12 = die zu testende Passwortlängen, hier von Länge 8 bis 12<br/>
+abcde.. = die zu testenden Zeichen<br/>
+<h2>Attacken mit hashcat</h2>
+Bei hashcat handelt es sich wohl um den derzeit schnellsten Passwortcracker auf dem Markt.
+Wir verwenden es als Alternative zu crunch.
+Convert the .cap file in a hccap file
+<p><em>aircrack-ng Filename.cap -J newFilename</em></p>
+Filename.cap = Pfad bzw. Name des alten .cap files<br/>
+Pfad bzw. Name des neuen .hccap file<br/><br/>
+Mit <em>hashcat -help</em> kann eine Hilfeseite aufgerufen werden in welcher der Befehl, die Parameter
+und die Verwendung genauer erläutert werden. Falls Probleme auftreten oder detailliertere
+Einstellungen vorgenommen werden sollen, kann die Hilfeseite die erste Anlaufstelle sein.
+<h2>Dictionary Attack mit hashcat</h2>
+<p><em>hashcat -m 2500 capture.hccap dict.txt</em></p>
+-m 2500 = Anweisung, dass ein WPA/WPA2 Key gecrackt werden soll<br/>
+caputre.cap = Pfad bzw. Name des hccap file<br/>
+dict.txt = Pfad bzw. Name des dictionary file<br/><br/>
+Anschließend nutzt hashcat das Dictionary um das Passwort zu finden. Mit Enter kann der
+aktuelle Status des Vorgangs abgefragt werden.
+<h2>Bruteforce Attack mit hashcat</h2>
+<p><em>hashcat -m 2500 -a3 capture.hccap ?d?d?d?d?d?d?d?d (?d = 0-9)</em></p>
+-m 2500 = Anweisung, dass ein WPA/WPA2 Key gecrackt werden soll<br/>
+-a3 = Verwende Bruteforce caputre.cap = Pfad bzw. Name des hccap file<br/>
+?d..?d = definierte Maske für zu testenden Passwortkandidaten, Anzahl entspricht ”bis zu
+Länge”<br/>
+Weitere Optionen:<br/>
+?l = abcdefghi...yz<br/>
+?u = ABCDEFGHI...YZ<br/>
+?s = Sonderzeichen<br/>
+?a = ?l?u?s?<br/><br/>
+Bei der Bruteforce Attacke werden alle Kombinationen von Buchstaben bis zu einer bestimmten
+Länge durchgetestet. Als letzter Parameter kann eine Art Maske angegeben werden, mit
+welcher die Länge und die zu testenden Ziffern, Buchstaben und Zeichen festgelegt werden.
+Im Beispiel werden alle bis zu neunstelligen Zahlenkombinationen von hashcat durchprobiert.
+<h2>rule-based Attack mit hashcat</h2>
+<p><em>hashcat -m 2500 -r /usr/share/hashcat/rules/best64.rule capture.hccap dict.txt</em></p>
+-m 2500 = Anweisung, dass ein WPA/WPA2 Key gecrackt werden soll<br/>
+-r Pfad zum rules file = Verwende rule-based Angriff und Pfad<br/><br/>
+rule-based attacks gehören zu den komplizierteren Angriffsarten. Dabei wird ein nomaler
+Dictionary-Angriff gefahren, aber mit rules erweitert. Die rules, zu deutsch Regeln, sind
+wie eine Art Programmiersprache für die Generierung von Passwörtern. Es gibt Funktionen
+mit denen Passwortkandidaten bearbeitet, mit anderen Wörtern verknüpft oder bestimmte
+Kombinationen übersprungen werden können. Regeln zu schreiben kann sehr aufwendig sein
+und erfordert viel Wissen über Passwörter. Daher kann für die ersten Versuche auch die
+best64.rule Regel verwendet werden, die standardmäßig bei hashcat dabei ist.
+
+
+
             </div>
         </div>
         <div id="footer">

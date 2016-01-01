@@ -98,6 +98,10 @@ li a:hover{
   -moz-border-radius:2px;
   -webkit-border-radius:2px;
   -o-border-radius:2px;
+    text-align:justify;
+	padding-left:10px;
+	padding-right:10px;
+
 }
 #footer {
   width:980px;
