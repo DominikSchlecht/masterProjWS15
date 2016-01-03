@@ -41,9 +41,12 @@ auch regelmäßig. \\
 
 Benutzung von DNS-Spoofing-Skript: \newline
 Um dnsspoof einsetzen zu können, muss initial eine hosts-Datei erstellt werden, die die zu manipulierenden Einträge in folgendem Format enthält: \newline
-<IP-Adresse>		<Domain>   \newline
-<192.168.20.135>	www.thi.de \newline
-(Wichtig ist hierbei die Trennung von IP-Adresse und Domainname durch Tab und keinen Leerzeichen!) \\
+
+\begin{lstlisting}[caption=Beispiel für eine Hosts-Datei]{Name}
+<IP-Adresse>		<Domain>
+<192.168.20.135>	www.thi.de
+(Wichtig ist hierbei die Trennung von IP-Adresse und Domainname durch Tab und keinen Leerzeichen!)
+\end{lstlisting}
 
 Anschließend wird \textit{dnsspoof} mit folgenden Parameter aufgerufen: \newline
 
