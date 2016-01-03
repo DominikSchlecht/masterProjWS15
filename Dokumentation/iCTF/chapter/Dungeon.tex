@@ -1,11 +1,14 @@
 \chapter{Dungeon}
 
-
-\section{Services: Dungeon}
 The Dungeon service was a consoleservice which presented a litte game. The player needs to run through the dungeon to finally kill a dragon in the end. To do this, two items are needed. Firstly a golden sabre and second a magic shield. If either of the items is missing the player will die to the dragon.
+
 To get the sabre the player needs to find a secret room and in there has to get the name of an airplane picture right. If he does he will get the sabre. 
+
 Now the player will get in a room with a dwarf. He says if you get the number i guess you will get my shield. But the number he has is random generated and nearly impossible to get right. Also if you get the number right he will tell you that he gives you the shield but the variable HAVE\_SHIELD will not change. To achive the shield the player has to go to a room with a gnome which asks the player's name and then says Hi! playername. In this function there is an adress returned with the variable HAVE\_SHIELD. So the player need to type in anycharacter than \%n so that the adress will be overwritten with 0x1.
-If the player encounters the dragon with both items he can slay the dragon with the command "'kill dragon"'. After that he will be asked what his name is. Here comes the tricky part. With a Bufferoverflow it is possible to alter the return adress so that the function will jump to the secret treasure room where the flag can be optained. To do this the player have to type 88 random characters followed by 0xDEADBEEF in ASCII than 8 random characters again and then the adress to the storage room. The 0xDEADBEEF is needed because a value is checked for change. If you overwrite it with the bufferoverflow the service will disconnect the player. Both 0xDEADBEEF and the return adress have to be turned because little Endian is used. 
+
+If the player encounters the dragon with both items he can slay the dragon with the command "'kill dragon"'. After that he will be asked what his name is. Here comes the tricky part. With a Bufferoverflow it is possible to alter the return adress so that the function will jump to the secret treasure room where the flag can be optained. 
+
+To do this the player have to type 88 random characters followed by 0xDEADBEEF in ASCII than 8 random characters again and then the adress to the storage room. The 0xDEADBEEF is needed because a value is checked for change. If you overwrite it with the bufferoverflow the service will disconnect the player. Both 0xDEADBEEF and the return adress have to be turned because little Endian is used. 
 
 
 %Der Dungeon Service war ein Consolenservice der ein Spiel darstellt. der Spieler muss dabei durch ein Dungeon laufen und am Ende einen Drachen töten. Um dies zu bewerkstelligen werden 2 Gegenstände gebraucht. Ein goldener Säbel und ein magisches Schild. 

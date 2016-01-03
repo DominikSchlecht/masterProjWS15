@@ -15,7 +15,7 @@
 % -----------------------------------------------------------------
 
 % Dokumentenklasse
-\documentclass[a4paper,11pt,DIV=11,oneside]{scrreprt} % 
+\documentclass[a4paper,11pt,DIV=11,twoside]{scrreprt} % 
 
 % Packages
 %Datum und Uhrzeit
@@ -54,24 +54,39 @@
 % Dokument compiliert wird; den Rest mit % auskommentieren
 \includeonly{
     chapter/Intro,
-    chapter/Setup,
     chapter/Dungeon,
+    chapter/Tweety_bird,
+    chapter/ATM_Machine,
+    chapter/Text_File_Store,
+    chapter/Setup
 }
 
 %-----------------------------------------------------------------
 %---------------Dokumentenbeginn----------------------------------
 %-----------------------------------------------------------------
 \begin{document}
-	\pagenumbering{roman} % Nummerierung
+	%\pagenumbering{roman} % Nummerierung
 %---------------Hauptteil-----------------------------------------
-	\pagenumbering{arabic} 	% Neunummerierung des Hauptteils
-	\setcounter{page}{1}	% Wieder bei 1 Anfangen
+	%\pagenumbering{arabic} 	% Neunummerierung des Hauptteils
+	%\setcounter{page}{1}	% Wieder bei 1 Anfangen
 	
 	%intro
 	\include{chapter/Intro}
 	
+	%setup
 	\include{chapter/Setup}
+	
+	%Dungeon Service
 	\include{chapter/Dungeon}
+	
+	%Tweety Bird Service
+	\include{chapter/Tweety_bird}
+	
+	%Text File Store
+	\include{chapter/Text_File_Store}
+	
+	%ATM Machine
+	\include{chapter/ATM_Machine}
 	
 %---------------Anhang-------------------------------------------
 	%\include{chapter/appendix} % Anhang
