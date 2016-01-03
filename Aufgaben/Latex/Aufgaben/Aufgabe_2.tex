@@ -1,32 +1,23 @@
-\chapter{Aufgabe: TITEL}
+\chapter{Aufgabe: Buffer Overflow}
 
 \section{Ziel}
-Das Ziel dieser Aufgabe ist es eine ID vom Server auszulesen.
-Diese ID ist für jeden Nutzer individuell und muss am Ende dieser Aufgabenblattes eingetragen werden.
+Das Ziel dieser Aufgabe ist es mithilfe eines Buffer Overflows eine Sicherheitsschranke zu umgehen, um ein Lösungswort zu erhalten.
+
 
 \section{Beschreibung}
+Die Aufgabe ist zweigeteilt bei dem ersten teil muss die Datei Buffer1 genutzt werden im zweiten Teil die Datei Buffer2.
+
+Als Hilfestellung ist der Quellcode angegeben jedoch natürlich ohne Lösungswort. 
+
+Nutzen Sie den gdb.
 
 \section{Hilfestellungen}
 Nach einiger Zeit werden auf dem Server Hilfestellungen freizuschalten. Diese können durch die nachfolgenden Befehle ausgelesen werden:
 
 \begin{itemize}
-\item Hilfestellung 1: nach 30 min
-\item Hilfestellung 2: nach 45 min
-\item Hilfestellung 2: nach 60 min
+\item Hilfestellung 1: Es ist möglich Skriptsprachen wie perl zu verwenden um Zeichen effektiv einzugeben. Zum Beispiel: ./Buffer1 \$(perl -e 'print "'A"'x20" . "'123"';') übergibt dem Programm Buffer1 20 mal das "'A"' Zeichen gefolgt von "'123"'. Es ist auch möglich Hex Ziffern einzugeben "'x41"' ist das äquivalent zu "'A"'
+\item Hilfestellung 2: Little Endian bei hex nicht vergessen!
 \end{itemize}
 
 \section{Ergebnis}
-Hier wird die erhaltene einzigartige ID eingetragen:
-\\
-\\
-
-\underline{\hspace{1cm}} 
-\underline{\hspace{1cm}} 
-\underline{\hspace{1cm}} 
-\underline{\hspace{1cm}} 
-\underline{\hspace{1cm}} 
-\underline{\hspace{1cm}} 
-\underline{\hspace{1cm}} 
-\underline{\hspace{1cm}} 
-\underline{\hspace{1cm}} 
-\underline{\hspace{1cm}} 
+Hier wird das Lösungswort sowie der Befehl, der zu dem Lösungswort geführt hat eingetragen: 
