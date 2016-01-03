@@ -18,5 +18,9 @@ def netzwerk():
 def wlan():
     return render_template('wlan.html')
 
+@app.route("/proxychains/")
+def proxychains():
+    return render_template('proxychains.html')
+
 if __name__ == "__main__":
     app.run(debug=True)

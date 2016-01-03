@@ -1,0 +1,44 @@
+{% include 'static/header.html' %}
+<h3>Installation</h3>
+Der Abschnitt soll Studenten helfen, die die Programme auf ihrem privaten Rechner installieren wollen. Die Programm sind in der SecurityWorkBench bereits installiert.
+
+<h4>proxychains-ng</h4>
+<p>Download</p>
+Zuerst muss der Quellcode von GIT (https://github.com/rofl0r/proxychains-ng) heruntergeladen werden. Dies geschieht über das Kommando "git clone https://github.com/rofl0r/proxychains-ng.git". Dabei wird der aktuelle Stand aus dem GIT-Repository heruntergeladen und in einem Unterordner gespeichert.
+
+<p>Installation</p>
+Ausschnitt aus der README.md des GIT-Repositorys:</br>
+# needs a working C compiler, preferably gcc</br>
+./configure --prefix=/usr --sysconfdir=/etc</br>
+make</br>
+[optional] sudo make install</br>
+[optional] sudo make install-config (installs proxychains.conf)</br>
+</br>
+
+<h4>TOR</h4>
+Als Proxy wird TOR verwendet. Weitere Informationen zur Funktionsweise kann man <a href="https://www.torproject.org/">hier</a> nachlesen.
+<p>Installation</p>
+Unter Debian kann TOR über apt installiert werden. Das Kommando hierfür ist: "sudo apt-get install tor". Nach der Installation sollte TOR auf Port 9050 lauschen. Dies kann durch das Kommando "sudo netstat -tulpena | grep 9050" überprüft werden.
+
+<h3>Anwendung</h3>
+Oftmals will man Anfragen an Webseiten anonym stellen. Gründe hierfür müssen nicht umbedingt illegal sein. Das anonyme ansehen von Webinhalten kann über z.B. den Tor-Browser (<a href="https://www.torproject.org/download/download-easy.html.en">Link</a>) relativ einfach durchgeführt werden. Doch wie kann man mit einem Konsolenprogramm, welches keine Proxys unterstützt, eine anonyme Anfrage an einene Server stellen? Hier hilft uns das Programm "proxychains", welche Programme entsprechend manipuliert.<br>
+<br>
+Beispiel anhand von curl:<br>
+Mit curl kann eine Webseite sehr einfach heruntergeladen werden. Leider kann es jedoch nicht per Parameter dazu gebracht werden, einen Proxy wie TOR zu verwenden. So ergibt der Aufruf<br><br>
+┌─[sec@SecurityWorkbench] - [~] - [Sun Jan 03, 02:36]<br>
+└─[$] <> curl icanhazip.com             <br>
+91.63.240.213<br><br>
+was meine "echte" IP ist. Benutzt man proxychains, wird der curl-Aufruf (standartmäßig) durch den TOR-Proxy ausgeführt. Die Ausgabe ist dann wie folgt:<br><br>
+┌─[sec@SecurityWorkbench] - [~] - [Sun Jan 03, 02:36]<br>
+└─[$] <> proxychains4 curl icanhazip.com<br>
+[proxychains] config file found: /etc/proxychains.conf<br>
+[proxychains] preloading /usr/lib/libproxychains4.so<br>
+[proxychains] DLL init: proxychains-ng 4.10-git-20-g672bf76<br>
+[proxychains] Strict chain  ...  127.0.0.1:9050  ...  icanhazip.com:80  ...  OK<br>
+142.4.213.25<br><br>
+Wie man sieht, wurde der Aufruf nun mit einer anderen IP aus dem TOR-Netzwerk ausfgeführt und ist somit nicht (oder nur sehr schwer) auf uns zurückverfolgbar.
+
+<p>Ausblick</p>
+proxychains kann wesentlich mehr, als ein Programm durch eine einzelne Proxy zu schicken. Es unterstützt die Möglichkeit sog. Proxy-Chains zu bilden, also mehrere Proxys hintereinander zu schalten. Dies kann in vielen Situationen brauchbar sein, z.B. bei beschränkten Zugriffen oder bei höhreren Anforderungen an die Anonymität.
+<br><br>
+{% include 'static/footer.html' %}
