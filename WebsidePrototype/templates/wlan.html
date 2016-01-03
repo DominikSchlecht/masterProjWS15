@@ -1,33 +1,8 @@
-﻿<html>
-<head>
-    <title>Security Work Bench</title>
-    <link rel="stylesheet" type"text/css" href="design2.css">
-</head>
-<body>
-    <div id="website">
-        <div id="header">
-            <h1>Security Work Bench</h1>
+{% include 'static/header.html' %}
+<h3>WEP</h3>
+TODO
 
-            <div id="logo">
-            <img src="thi1.png" alt="Logo" height="150" width="300" />
-            </div>
-        </div>
-        <div id="main">
-            <div id="menue">
-              <h3>Themen</h3>
-                <ul>
-                    <li><a href="netzwerk2.html">Netzwerk</a></li>
-                    <li><a href="wlan2.html">WLAN</a></li>
-                    <li><a href="ictf2.html">iCTF</a></li>
-                    <li><a href="thiindex2.html">Home</a></li>
-                </ul>
-            </div>
-            <div id="content">
-				<h3>WEP</h3>
-
-				
-				
-				<h3>WPA/WPA2</h3>
+<h3>WPA/WPA2</h3>
 WPA bzw. WPA2 (WiFi Protected Access) ist eine Kombination aus Authentifizierung und
 Verschlüsselung, um ein WLAN sicher zu betreiben. Die Authentifizierung erfolgt in der
 Regel mit einem Passwort, um den Zugriff durch unberechtigte Personen zu verhindern.
@@ -55,7 +30,7 @@ sich mit dem WLAN verbinden will. Dieser WPA-Handshake muss aufgezeichnet
 werden. Anschließend wird bei einem Wörterbuch-Angriff mit Hilfe der Wordlist das WLAN Passwort
 erraten. Ein erfolgreicher Angriff steht und fällt mit einer guten Wordlist, in der
 das WLAN-Passwort enthalten sein muss. Darin besteht die eigentliche Schwierigkeit bei
-einem WPA/WPA2-WLAN-Hack.			
+einem WPA/WPA2-WLAN-Hack.
 
 <h1>Cracking des WPA Keys</h1>
 <p>1. Check des WLAN Adapter</p>
@@ -187,13 +162,4 @@ mit denen Passwortkandidaten bearbeitet, mit anderen Wörtern verknüpft oder be
 Kombinationen übersprungen werden können. Regeln zu schreiben kann sehr aufwendig sein
 und erfordert viel Wissen über Passwörter. Daher kann für die ersten Versuche auch die
 best64.rule Regel verwendet werden, die standardmäßig bei hashcat dabei ist.
-
-
-
-            </div>
-        </div>
-        <div id="footer">
-        </div>
-    </div>
-</body>
-</html>
+{% include 'static/footer.html' %}

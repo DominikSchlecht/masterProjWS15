@@ -1,0 +1,10 @@
+Gemacht mit Flask
+
+Installation: pip install Flask
+Verwendung:
+  1: run.py starten
+  2: In der run.py die Route eintragen
+  3: Entsprechendes Template unter "templates" anlegen (am besten index.html als
+    Vorlage verwenden)
+  4: In der static/navbar.html den Link einfügen
+  5: localhost:5000 aufraufen und freuen
