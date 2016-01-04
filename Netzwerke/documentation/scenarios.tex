@@ -116,7 +116,7 @@ Mittels eines Intrusion Detecten (IDS) und Prevention System (IPS) kann die Akti
 Minute zugelassen werden. Sollten von der Quell-IP-Adresse dann noch weitere Pakete eintreffen, werden diese bereits an der Firewall verworfen. \footnote{Mehr Informationen zu Umfang und Möglichkeiten von IDS und IPS finden Sie unter folgendem Paper:\cite{differenceipsids}} 
 
 \subsubsection*{SYN-Cookies}
-Mittels SYN-Cookies kann bei Verbindungsaufbau durch den Server überprüft werden, ob der Client bereits versucht hat, eine Verbindung herzustellen. Bei Implementierung von SYN-Cookies reserviert der Server keine Ressourcen bei Eintreffen eines SYN-Paketes von einem Client, sondern speichert nur einen Hashwert mit Informationen des SYN-ACK-Paketes. Wenn der Client im dritten Schritt ein SYN-Paket mit der Bestätigung des SYN-ACKs an den Server übermittelt hat, wird mittels des gespeicherten Hashwertes überprüft, ob dieser Client bereits vorher mit dem Server kommuniziert hat. Falls dies positiv ist, wird eine TCP-Verbindung aufgebaut. \newpage
+Mittels SYN-Cookies kann bei Verbindungsaufbau durch den Server überprüft werden, ob der Client bereits versucht hat, eine Verbindung herzustellen. Bei Implementierung von SYN-Cookies reserviert der Server keine Ressourcen bei Eintreffen eines SYN-Paketes von einem Client, sondern speichert nur einen Hashwert mit Informationen des SYN-ACK-Paketes. Wenn der Client im dritten Schritt ein SYN-Paket mit der Bestätigung des SYN-ACKs an den Server übermittelt hat, wird mittels des gespeicherten Hashwertes überprüft, ob dieser Client bereits vorher mit dem Server kommuniziert hat. Falls diese Überprüfunge positiv ausfällt, wird eine TCP-Verbindung aufgebaut.\newpage
 
 
 \section{SSL-Strip}
@@ -124,8 +124,8 @@ Mittels SYN-Cookies kann bei Verbindungsaufbau durch den Server überprüft werd
 \subsection*{Vorraussetzungen}
 
 \begin{itemize}
-%\item Kali Linux 2.0
-%\item IP_Forward
+\item Kali Linux 2.0
+\item IP Forward
 \item IPtables
 \item ARP-Spoofing
 \item SSLStrip
@@ -143,20 +143,31 @@ Meist wird HTTP verwendet um HTML-Seiten in Webbrowsern darzustellen.
 
 \subsubsection*{HTTPS}
 HTTPS (Hypertext Transfer Protocol Secure) wird dazu verwendet um Dokumente auf Anwendungsschicht über ein sicheres Protokoll übertragen zu können. Syntaktisch ist es wie HTTP aufgebaut,
- wird jedoch um eine Verschlüsselung der Daten umgeben. Zur Verschlüsselung der Daten wird SSL (Secure Socket Layer) bzw. TLS (Transport Layer Security) verwendet. [2]
- (Abbildung x)
- 
-Abbildung x zeigt den Aufbau und Differenz zu HTTP (siehe Abbildung x).
+ wird jedoch um eine Verschlüsselung der Daten umgeben. Zur Verschlüsselung der Daten wird SSL (Secure Socket Layer) bzw. TLS (Transport Layer Security) verwendet.
 
 \subsubsection*{ARP}
 siehe Eintrag Address-Resolution-Protocol
 
 \subsection*{Szenario}
-Eine MITM-Attacke auf eine verschlüsselte HTTPS-Verbindung ist nur mit sehr viel Rechenkapazität zu entschlüsseln. Eine einfachere Möglichkeit des Mitschneiden von übertragenen Datenpaketen ist die Verwendung einer unverschlüsselten HTTP-Verbindung. Da ein Großteil der Benutzer einen Unterschied von https://www.url.de zu http://www.url.de in der URL-Leiste kaum erkennen würden, ist SSLStrip eine gute Möglichkeit Datenpakete mitlesen und verändern zu können. \newline
+Eine MITM-Attacke auf eine verschlüsselte HTTPS-Verbindung ist nur mit sehr viel Rechenkapazität zu entschlüsseln. Eine einfachere Möglichkeit des Mitschneiden von übertragenen Datenpaketen ist die Verwendung einer unverschlüsselten HTTP-Verbindung. Da ein Großteil der Benutzer einen Unterschied von \textit{https://www.url.de} zu \textit{http://www.url.de} in der URL-Leiste kaum erkennen würden, ist SSLStrip eine gute Möglichkeit Datenpakete mitlesen und verändern zu können. \newline
 Das Auslesen von Passwörtern für Online-Banking oder Webmail wären potentielle Ziele eines solchen Angriffs.
 
 \subsection*{Technisches}
-SSLStrip \footnote{ Dieses Tool kann über folgende Links abgerufen werden: \url{https://github.com/graingert/sslstrip/}, \url{http://www.thoughtcrime.org/software/sslstrip/}} wurde von Moxie Marlinspike 2009 entwickelt und ist aktuell in Version 0.9.2 verfügbar. Das Tool durchsucht jeden transparenten HTTP-Verkehr nach https-Links und wandelt diese in http-Links um. Um die Attacke durchführen zu können, wird zusätzlich ARP-Spoofing benötigt. Mittels ARP-Spoofing werden auch die unverschlüsselten HTTP-Links über SSLStrip verschickt. Da mittlerweile viele Webseiten (z.B. Online-Banking, Webmail, ...) nur noch verschlüsselte HTTP(S)-Verbindungen zulassen, baut SSLStrip eine verschlüsselte Verbindung zu diesen Seiten auf, und gibt deren Antwort in einer unverschlüsselten Verbindung an den kompromittierten Client zurück. Folgende Abbildung zeigt den Ablauf der HTTP(S)-Verbindungen zwischen einem Client, Angreifer und dem aufgerufenen (Web-)Server. \\
+SSLStrip \footnote{ Dieses Tool kann über folgende Links abgerufen werden: \url{https://github.com/graingert/sslstrip/}, \url{http://www.thoughtcrime.org/software/sslstrip/}} wurde von Moxie Marlinspike 2009 entwickelt und ist aktuell in Version 0.9.2 verfügbar. Das Tool durchsucht jeden transparenten HTTP-Verkehr nach https-Links und wandelt diese in http-Links um. Um die Attacke durchführen zu können, wird zusätzlich ARP-Spoofing benötigt. Mittels ARP-Spoofing werden auch die unverschlüsselten HTTP-Links über SSLStrip verschickt. Da mittlerweile viele Webseiten (z.B. Online-Banking, Webmail, ...) nur noch verschlüsselte HTTP(S)-Verbindungen zulassen, baut SSLStrip eine verschlüsselte Verbindung zu diesen Seiten auf, und gibt deren Antwort in einer unverschlüsselten Verbindung an den kompromittierten Client zurück. Folgende Abbildung zeigt den Ablauf der HTTP(S)-Verbindungen zwischen einem Client, Angreifer und dem aufgerufenen (Web-)Server. \newpage
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.6\textwidth]{bilder/https.pdf}
+	\caption{Reguläre HTTPS-Verbindung zwischen Client und Server}
+	\label{fig:https}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.65\textwidth]{bilder/sslstrip.pdf}
+	\caption{SSL-Strip Szenario}
+	\label{fig:sslstrip}
+\end{figure}
 
 \subsection*{Tools}
 Um SSLStrip einsetzen zu können sind mehrere Schritte notwendig. Auf Kali Linux 2.0 sind alle benötigten Tools bereits vorinstalliert. \\
