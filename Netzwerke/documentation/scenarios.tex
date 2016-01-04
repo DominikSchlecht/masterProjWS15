@@ -63,11 +63,10 @@ Um dnsspoof einsetzen zu können, muss initial eine hosts-Datei erstellt werden,
 Anschließend wird \textit{dnsspoof} mit folgenden Parameter aufgerufen: \newline
 
 \begin{lstlisting}[caption=Parameter für dnsspoof]
-	\item[-i] Interface in dem sich lokales Netzwerk befindet
-	\item[-f] Hosts-File, absoluter Pfad zu Ort der erstellten hosts-Datei
+	-i Interface in dem sich lokales Netzwerk befindet
+	-f Hosts-File, absoluter Pfad zu Ort der erstellten hosts-Datei
 \end{lstlisting}
 	
-
 
 
 \subsection*{Gegenmaßnahmen}
@@ -78,7 +77,6 @@ der DNS-Antwort, also der DNS-Server, seine Antworten signieren, indem er mit de
 Gegenzug die Antwort mit dem öffentlichen Schlüssel des DNS-Servers überprüfen, ob die Antwort auch von dem richtigen Server war.\newpage
 
 \section{Denial of Service (DoS)}
-
 
 \subsection*{Vorraussetzungen}
 
