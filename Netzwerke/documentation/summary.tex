@@ -1,0 +1,35 @@
+\chapter{Zusammenfassung}
+
+Im Projekt \textit{Security-Workbench} vom Wintersemester 2015/2016 wurden durch Sebastian Schuster und Julian Rieder verschiedene (Angriffs-)szenarien auf ISO/OSI-Layer 1-4 entwickelt.\\
+
+Als Ergebnis können folgende Angriffstechniken vollautomatisiert vorgeführt werden:
+\begin{itemize}
+\item ARP-Spoofing
+	\begin{itemize}
+		\item Mitlesen von Datenpakete
+		\item Manipulation von Inhalten aus Datenpakete
+	\end{itemize}
+\item DNS-Spoofing
+\item SSL-Strip
+\item Fake-IPv6-Netz
+\item Denial of Service
+\end{itemize}
+
+
+Zur leichteren und schnelleren Demonstration der Angriffstechniken wurde in Python eine Applikation entwickelt, welche alle Szenarios automatisiert ausführt und der Benutzer lediglich wenige notwendige Parameter (z.B. Ziel-IP-Adresse, Domains, Gateway) eingeben muss. Im Hintergrund werden dann alle erforderlichen Programme und Skripte mit der richtigen Konfiguration gestartet.\\
+
+Um die Wartbarkeit dieses Tools zu erhöhen, wurde eine abstrakte Basisklasse definiert, welche die beiden Methodenrümpfe start() und help() enthält. Alle Angriffsszenarien wurden
+außerdem in eigene (abgeleitete) Klassen gekapselt. \\
+
+Damit zukünftige Studenten dieses Projekt weiterentwickeln können, wurde großer Wert auf die Dokumentation gelegt. Alle Angriffsszenarien sind nach diesem
+Schema aufgebaut:
+
+\begin{itemize}
+\item Voraussetzungen
+\item Grundlagen
+\item Szenario
+\item Technisches
+\item Erklärung von erforderlichen Tools
+\item Benutzung des Python-Skripts
+\item Gegenmaßnahmen
+\end{itemize}
