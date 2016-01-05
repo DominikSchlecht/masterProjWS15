@@ -17,6 +17,7 @@
 % Dokumentenklasse
 \documentclass[a4paper,11pt,DIV=11,twoside]{scrreprt} % 
 
+
 % Packages
 \input{configs/packages}
 
@@ -40,24 +41,24 @@
 %---------------Dokumentenbeginn----------------------------------
 %-----------------------------------------------------------------
 \begin{document}
-	\include{title_page}
+	\include{chapter/title_page}
 	\pagenumbering{roman} % Nummerierung
 	%\include{chapter/thanks_statement}
 	\tableofcontents % Inhaltsverzeichnigis
 %---------------Hauptteil-----------------------------------------
 	\pagenumbering{arabic} 	% Neunummerierung des Hauptteils
 	\setcounter{page}{0}	% Wieder bei 1 Anfangen
- 	\include{introduction}
- 	\include{requirements}
+ 	\include{chapter/introduction}
+ 	\include{chapter/requirements}
 	
 	%Übersicht Netzwerke
-	\include{summary}
+	\include{chapter/summary}
 	
 	%ausgearbeitete Szenarios
-	\include{scenarios}
+	\include{chapter/scenarios}
 	
 	%Ausblick
-	\include{prospects}
+	\include{chapter/prospects}
 %---------------Anhang-------------------------------------------
 	%%\include{chapter/appendix} % Anhang
 	\newpage
