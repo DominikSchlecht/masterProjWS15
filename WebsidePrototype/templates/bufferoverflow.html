@@ -1,0 +1,57 @@
+{% include 'static/header.html' %}
+<h3>Erklärung</h3>
+Ein Buffer Overflow ist eine anomaly, bei der Daten, die in einen Buffer geschrieben werden, dessen Grenzen sprengen und somit nebengelegene Speicherstellen überschreibt. Auch heute noch ist der Buffer Overflow eine der meistgenutzen Schwachstellen.<br> 
+
+<h4>Buffer Overflow Beispiel</h4>
+Ein einfaches Beispiel für einen Bufferoverflow ist am Besten in C zu realisieren. Dabei wird ein einfacher Buffer angelegt in dem ein Argument geschrieben wird, dass beim Programmaufruf mitgegeben wurde.<br><br>
+
+int main(int argc, char *argv[])<br>
+{<br>
+	char buffer[20];			//buffer for userinput<br>
+	strcpy(buffer, argv[1]);	//write userinput to buffer<br>
+}<br><br>
+
+Da strcpy nicht die größe des mitgegebenen Arguments beschränkt, ist es möglich den Rahmen des Buffers zu sprengen. <br><br>
+
+
+In diesem Beipsiel kann dadurch kein Nutzen gewonnen werden. Ist jedoch eine weitere Variable vorhanden, die beispielsweise bestimmt ob der Nutzer Administrationsrechte besitzt kann diese überschrieben werden.<br><br>
+
+int main(int argc, char *argv[])<br>
+{<br>
+	int isAdmin;				//check if user is admin<br>
+	char buffer[20];			//buffer for userinput<br>
+	strcpy(buffer, argv[1]);	//write userinput to buffer<br>
+}<br><br>
+
+Da die Variable isAdmin im Speicher hinter der Variable buffer steht, ist es möglich diese zu überschreiben indem einfach mehr Zeichen eingegeben werden als vom Buffer vorgesehen. Wie viele genau benötigt sind können durch debugging des Assembler codes herausgefunden werden.<br><br>
+
+Dump of assembler code for function main:<br>
+0x00000000004004e6 	  <+0>:	push      rbp<br>
+   0x00000000004004e7 <+1>:	mov       rbp,rsp<br>
+   0x00000000004004ea <+4>:	sub       rsp,0x30<br>
+   0x00000000004004ee <+8>:	mov       DWORD PTR [rbp-0x24],edi<br>
+   0x00000000004004f1 <+11>:mov       QWORD PTR [rbp-0x30],rsi<br>
+   0x00000000004004f5 <+15>:mov       DWORD PTR [rbp-0x4],0x0<br>
+   0x00000000004004fc <+22>:mov       rax,QWORD PTR [rbp-0x30]<br>
+   0x0000000000400500 <+26>:add       rax,0x8<br>
+   0x0000000000400504 <+30>:mov       rdx,QWORD PTR [rax]<br>
+   0x0000000000400507 <+33>:lea       rax,[rbp-0x20]<br>
+   0x000000000040050b <+37>:mov       rsi,rdx<br>
+   0x000000000040050e <+40>:mov       rdi,rax<br>
+   0x0000000000400511 <+43>:call      0x4003c0 <strcpy@plt><br>
+   0x0000000000400516 <+48>:mov       eax,0x0<br>
+   0x000000000040051b <+53>:leave     <br>
+   0x000000000040051c <+54>:ret       <br>
+End of assembler dump.<br><br>
+
+Dies ist der Assembler dump des Beispiels. <br>
+Dabei wird in den ersten drei Zeilen 0x30 speicher für lokale Variablen reserviert. Dies ist der Speicher für die buffer und die isAdmin Variable. in Zeile <+15> wird in den Basepointer - 0x4 eine Null reingeschrieben. Dies ist die isAdmin Variable in Quellcode. <br><br>
+
+In Zeile <+33> wird dann die Adresse der Nutzereingabe geladen lea steht dabei für load effective adress. Durch diese Zeile ist zu erkennen, dass die Nutzereingabe bei rbp-0x20 beginnt. Des weiteren ist bekannt das die Variable isAdmin bei rbp-0x4 steht. Somit müssen mindestens 0x20-0x4 (=28) Zeichen eingeben werden, um die Variable isAdmin zu erreichen. Dann muss zusätzlich die Variable isAdmin überschrieben werden beispielsweise mit 0x1. <br><br>
+
+Somit ist es möglich mit der Eingabe von 29 Zeichen Adminzugriff ohne Berechtigung zu erhalten.<br>
+
+<h4>Ausblick</h4>
+Dies ist jedoch nur ein kleines Beispiel der Nutzung eines Buffer Overflows. Die Möglichkeiten sind jedoch viel größer. Mithilfe von Buffer Overflows können auch Rücksprungadressen geändert werden und somit in code gesprungen werden der normalerweise nicht für den Nutzer erreichbar ist. Des weiteren kann sogar eigener Shellcode injeziert werden und durch einen Buffer Overflow ausgeführt werden. <br>
+<br><br>
+{% include 'static/footer.html' %}
