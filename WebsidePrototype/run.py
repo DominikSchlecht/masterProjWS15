@@ -22,5 +22,9 @@ def wlan():
 def proxychains():
     return render_template('proxychains.html')
 
+@app.route("/bufferoverflow/")
+def bufferoverflow():
+    return render_template('bufferoverflow.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
