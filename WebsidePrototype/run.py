@@ -30,5 +30,9 @@ def bufferoverflow():
 def nmap():
     return render_template('nmap.html')
 
+@app.route("/burpsuite/")
+def burpsuite():
+    return render_template('burpsuite.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
