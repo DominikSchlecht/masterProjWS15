@@ -26,6 +26,10 @@ def proxychains():
 def bufferoverflow():
     return render_template('bufferoverflow.html')
 
+@app.route("/xss/")
+def xss():
+    return render_template('xss.html')
+
 @app.route("/nmap/")
 def nmap():
     return render_template('nmap.html')
