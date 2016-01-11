@@ -26,5 +26,9 @@ def proxychains():
 def bufferoverflow():
     return render_template('bufferoverflow.html')
 
+@app.route("/nmap/")
+def nmap():
+    return render_template('nmap.html')
+
 if __name__ == "__main__":
     app.run(debug=True)

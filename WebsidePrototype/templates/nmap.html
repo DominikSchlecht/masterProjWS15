@@ -1,0 +1,122 @@
+{% include 'static/header.html' %}
+<h2>Nmap Tutorial</h2>
+<h3>Einführung</h3>
+
+Nmap (“Network Mapper”) ist ein Open-Source-Werkzeug für die Netzwerkanalyse und Sicherheitsüberprüfung. Es wurde entworfen, um große Netzwerke schnell zu scannen, obwohl es auch bei einzelnen Hosts gut funktioniert. Nmap benutzt rohe IP-Pakete, um festzustellen, welche Hosts im Netzwerk verfügbar sind, welche Dienste (Anwendungsname und -version) diese Hosts bieten, welche Betriebssysteme (und Versionen davon) darauf laufen, welche Art von Paketfiltern/-Firewalls benutzt werden sowie dutzende anderer Eigenschaften. Auch wenn Nmap üblicherweise für Sicherheitsüberprüfungen verwendet wird, wird es von vielen Systemen und Netzwerkadministratoren für Routineaufgaben benutzt, z.B. Netzwerkinventarisierung, Verwaltung von Ablaufplänen für Dienstaktualisierungen und die Überwachung von Betriebszeiten von Hosts oder Diensten.<br>
+Obwohl ein ausspähen eines Netzwerks mit Nmap auf gewisse Weise verschleiert werden kann, so erzeugt es dennoch eine hohe Netzwerklast und wird als Angriff auf das Netzwerk angesehen und von den meisten Administratoren verboten. Es gilt daher sicherzustellen, dass Nmap nicht auf das Hochschulnetz oder sonstige Netzwerke ohne ausdrückliche Erlaubnis ausgeführt wird.<br>
+Die Ausgabe von Nmap ist eine Liste gescannter Ziele mit zusätzlicher Information zu jedem, abhängig von den benutzten Optionen. Die entscheidende Information dabei steht in der “Tabelle der interessanten Ports”. Diese Tabelle listet die Portnummer und das -protokoll sowie den Dienstnamen und -zustand auf. Der Zustand ist entweder open, filtered, closed oder unfiltered. Open bedeutet, dass auf diesem Port des Zielrechners eine Anwendung auf eingehende Verbindungen/Pakete lauscht. Filtered bedeutet, dass eine Firewall, ein Filter oder ein anderes Netzwerkhindernis den Port blockiert, so dass Nmap nicht wissen kann, ob er open oder closed ist. Für geschlossene Ports gibt es keine Anwendung, die auf ihnen lauscht, auch wenn sie jederzeit geöffnet werden könnten. Als unfiltered werden Ports dann klassifiziert, wenn sie auf Nmaps Testpakete antworten, Nmap aber nicht feststellen kann, ob sie open oder closed sind. Nmap gibt die Zustandskombinationen open|filtered und closed|filtered an, wenn es nicht feststellen kann, welcher der beiden Zustände für einen Port zutrifft. Die Port-Tabelle enthält eventuell auch Details zur Softwareversion, sofern eine Versionserkennung verlangt wurde. Wurde ein IP-Protokoll-Scan verlangt (-sO), dann bietet Nmap Angaben über die unterstützten IP-Protokolle statt über lauschende Ports.<br>
+Zusätzlich zur Tabelle der interessanten Ports kann Nmap weitere Angaben über Ziele bieten, darunter Reverse-DNS-Namen, Mutmaßungen über das benutzte Betriebssystem, Gerätearten und MAC-Adressen.<br>
+Einen typischen Nmap-Scan sieht man in Beispiel 1. Die in diesem Beispiel benutzten Nmap-Argumente sind -A für die Betriebssystem- und Versionserkennung, Script-Scanning und Traceroute und -T4 für eine schnellere Ausführung. Danach kommen die Namen der Zielhosts.<br><br>
+
+Beispiel 1. Ein repräsentativer Nmap-Scan<br><br>
+# nmap -A -T4 scanme.nmap.org<br><br>
+
+Starting Nmap ( https://nmap.org )<br>
+Interesting ports on scanme.nmap.org (64.13.134.52):<br>
+Not shown: 994 filtered ports<br>
+PORT    STATE  SERVICE VERSION<br>
+22/tcp  open   ssh     OpenSSH 4.3 (protocol 2.0)<br>
+25/tcp  closed smtp<br>
+53/tcp  open   domain  ISC BIND 9.3.4<br>
+70/tcp  closed gopher<br>
+80/tcp  open   http    Apache httpd 2.2.2 ((Fedora))<br>
+|_ HTML title: Go ahead and ScanMe!<br>
+113/tcp closed auth<br>
+Device type: general purpose<br>
+Running: Linux 2.6.X<br>
+OS details: Linux 2.6.20-1 (Fedora Core 5)<br><br>
+
+TRACEROUTE (using port 80/tcp)<br>
+HOP RTT   ADDRESS<br>
+[Cut first seven hops for brevity]<br>
+8   10.59 so-4-2-0.mpr3.pao1.us.above.net (64.125.28.142)<br>
+9   11.00 metro0.sv.svcolo.com (208.185.168.173)<br>
+10  9.93  scanme.nmap.org (64.13.134.52)<br><br>
+
+Nmap done: 1 IP address (1 host up) scanned in 17.00 seconds<br><br>
+
+ (Quelle: https://nmap.org/book/man.html)<br>
+
+<h3>Optionen</h3>
+
+Sämtliche Optionen von Nmap werden in der man page aufgelistet oder auch durch Eingabe von nmap ohne Parameter in die Konsole. Die häufigsten Parameter werden im Folgenden beschrieben.<br><br>
+
+-sT<br>
+TCP Connect() scan<br>
+Versucht sich auf Ports zu verbinden um sie zu prüfen.<br><br>
+
+-sS<br>
+TCP stealth SYN scan<br>
+Verwendet nur SYN requests statt Connect um TCP Ports zu erkennen und ist daher etwas leiser<br><br>
+
+-sn<br>
+No Port Scan<br>
+Findet heraus welche Hosts im Netzwerk online sind ohne die Ports zu scanen<br><br>
+
+-sU<br>
+UDP Scan<br>
+Scannt sämtliche UDP Ports<br><br>
+
+-O<br>
+OS detection<br>
+Versucht herauszufinden welches Betriebssystem zu jedem Host gehört<br><br>
+
+-6<br>
+Enable IPv6 scanning<br>
+Um Nmap mit IPv6 zu verwenden muss sowohl die Quelle als auch das Zielsystem IPv6 fähig sein.<br>
+In Version 7.01 ermöglicht diese Option auf Windows (ab Vista) raw-socket IPv6 scans nur auf Ethernet-Geräten und nicht auf Tunneln.<br><br>
+
+-v/-V<br>
+verbosity<br>
+Erhöhen/Verringern der Ausführlichkeit des Berichts (auch mehrfach hintereinander verwendbar)<br><br>
+
+-F<br>
+Fast mode<br>
+Scannt nur die 100 häufigsten TCP ports<br><br>
+
+-A<br>
+Agressive scan<br>
+Diese Option stellt zusätzliche erweiterte und aggressive Optionen zur Verfügung. In Version 7.01 hat es dieselbe Bedeutung wie OS detection (-O), version scanning (-sV), script scanning (-sC) und traceroute (--traceroute).<br><br>
+
+
+-Pn<br>
+No Ping<br>
+Schaltet die Nmap Erkennung aus und führt damit sämtliche Scans auch gegen Hosts aus, die keinen Ping zurückliefern.<br><br>
+
+
+<h3>Aufgaben</h3>
+
+<h4>A1</h4>
+Führen sie einen Nmap scan auf ihren Rechner durch und analysieren sie die Rückgabe.<br>
+<h4>A2</h4>
+Welche Hosts sind in ihrem Netzwerk online?<br>
+<h4>A3</h4>
+Wählen sie einen Host im Netzwerk (z.B. den ihres Sitznachbarn) und finden sie über nmap heraus, welches Betriebssystem er benutzt, welche Ports offen sind und welche Services darauf laufen.<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+<h3>Lösung</h3>
+
+<h4>A1</h4>
+nmap -A localhost<br><br>
+Hierbei sollte ein Ergebnis ähnlich des folgenden herauskommen:<br>
+Interesting ports on 10.0.0.4:<br>
+The 1668 ports scanned but not shown below are in state: closed)<br>
+PORT     STATE SERVICE VERSION<br>
+21/tcp   open  ftp     vsftpd 2.0.3<br>
+22/tcp   open  ssh     OpenSSH 4.2 (protocol 1.99)<br>
+631/tcp  open  ipp     CUPS 1.1<br>
+6000/tcp open  X11      (access denied)<br>
+Device type: general purpose<br>
+Running: Linux 2.4.X|2.5.X|2.6.X<br>
+OS details: Linux 2.4.0 - 2.5.20, Linux 2.5.25 - 2.6.8 or<br>
+        Gentoo 1.2 Linux 2.4.19 rc1-rc7<br><br>
+
+In diesem Beispiel sind die TCP Ports 21, 22, 631 und 6000 offen und alle außer 6000 geben ihre Version bekannt. Zudem Erkennen wir das 10.0.0.4 ein Linux System mit einem Kernel zwischen Version 2.4 und 2.6 ist.<br>
+
+<h4>A2</h4>
+nmap –sn &lt;routerIP&gt;/24<br><br>
+Hierbei sollten alle Hosts im Netzwerk, die online sind mit Netzwerknamen, Macadresse, IP und evtl. dem Hersteller aufgelistet werden<br>
+
+<h4>A3</h4>
+nmap -sS -sU -T4 -A -v &lt;target&gt; oder nmap -sS -sU -T4 –O -sV -v &lt;target&gt;<br><br>
+Die Option T4 wählt ein schnelles Timing template und beschleunigt den Vorgang, ist jedoch nicht nötig. Die Optionen –sS und –sU werden benötigt um sowohl TCP als auch UDP Ports zu scannen. Mit –A bekommen wir die Servicenamen, die Version und das Betriebssystem heraus. –v hilft uns dabei Informationen über den Fortschritt des Scans zu erhalten, da vor allem der UDP Scan einige Zeit in Anspruch nimmt.<br>
+{% include 'static/footer.html' %}
