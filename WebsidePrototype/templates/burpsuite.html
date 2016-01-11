@@ -1,3 +1,69 @@
 {% include 'static/header.html' %}
-Index
+<h2>Burp Suite Free Tutorial</h2>
+
+<h3>Einführung</h3>
+<br>
+Burp Suite ist eine integrierte Plattform um Sicherheitstests von Webapplikationen durchzuführen. Die darin enthaltenen Tools arbeiten gut zusammen, um einen ganzheitlichen Test vom anfänglichen Mappen und der Analyse der Angriffsoberfläche bis zum Finden und Ausnutzen von Sicherheitslücken zu ermöglichen.<br>
+Dabei bietet es zahlreiche Möglichkeiten der Automatisierung, die jedoch in der kostenlosen Version stark begrenzt sind.<br>
+Burp arbeitet als Proxy auf dem eigenen Rechner und muss als solcher zunächst im Browser eingerichtet werden. Wie der Browser dafür eingerichtet werden muss kann man auf der Supportseite von Portswigger nachlesen, hierbei sollte auch gleich das CA-Zertifikat für HTTPS-Traffic installiert werden:<br><br>
+<a href="https://support.portswigger.net/customer/en/portal/articles/1783055-configuring-your-browser-to-work-with-burp">https://support.portswigger.net/customer/en/portal/articles/1783055-configuring-your-browser-to-work-with-burp</a>
+<br><br>
+Auf der VM ist Burp bereits auf Firefox eingerichtet. Um es zu verwenden muss zunächst die Burp Suite gestartet werden. Anschließend wird in Firefox über das Proxy Managment Tool Foxy Proxy (ein bereits vorinstalliertes Addon) die Burp Suite als Proxy ausgewählt.
+
+<h3>Funktionen</h3>
+<br>
+Die kostenlose Funktion bietet einige Einschränkungen im Funktionsumfang, ist jedoch bereits sehr nützlich für kleinere und einfache Aufgaben. In diesem Tutorial kann leider nicht auf sämtliche Funktionen der Burp Suite eingegangen werden. Folgende Funktionen sind in der kostenlosen Version enthalten.<br>
+
+<h4>Burp Proxy</h4>
+
+Ein abfangender Proxy, der es ermöglicht Traffic zwischen dem eigenen Browser und der Zielapplikation zu inspizieren und zu modifizieren.<br><br>
+
+Verwendung:<br>
+Der Proxy ist in der Freien Version das vermutlich hilfreichste und am häufigsten verwendete Werkzeug.<br>
+Solange im Tab Intercept ein Button mit dem Namen „intercept is on“ zu sehen ist, wird jede HTTP und HTTPS Anfrage im Proxy gehalten, kann in dem Fenster darunter verändert und mittels Forward modifiziert an den Empfänger geschickt werden. Mittels Drop wird die Anfrage verworfen und über Action oder Rechtsklick lässt sich die Nachricht an ein anderes Werkzeug wie den Repeater senden und dort weiter bearbeiten.<br>
+Über die beiden History Tabs lassen sich ältere Request erneut aufrufen und verändern.<br>
+Die Options wurden eventuell bereits bei der Einrichtung benötigt. Hier lassen sich neben dem Listener auch verschiede Regeln erstellen, welche Requests abgefangen oder weitergeleitet werden sollen. In den meisten Fällen wird dies jedoch nicht benötigt.<br><br>
+Burp Proxy markiert bereits selbständig interessante Felder durch fette, blaue Schrifft.<br><br>
+
+<h5>Aufgabe:</h5>
+Gehen sie auf Google und versuchen sie eine Google suche über Burpproxy abzufangen und zu ändern.<br>
+
+<h4>Burp Spider</h4>
+
+Ein anwendungsbezogenes Spider Programm, das es ermöglicht Inhalt und Funktionalitäten eines Ziels zu durchwandern und aufzulisten. So können Beispielsweise sämtliche Adressen eines Webservers erfasst werden.<br><br>
+
+Verwendung:<br>
+Zunächst wird in den Options definiert wie und wonach gesucht wird. Anschließen kann eine Website zum Spider hinzugefügt werden. Der Spider versucht nun sämtliche Adressen des Webservers herauszufinden. Die Adressen werden im Tab Targets angezeigt. In den Grundeinstellungen wird jede Seite die besucht wird bereits mitgeloggt.<br>
+
+<h4>Burp Repeater</h4>
+
+Ein Werkzeug das es ermöglicht Anfragen zu manipulieren und erneut zu senden.<br><br>
+
+Verwendung:<br>
+Zunächst wird vom Proxy eine Request an den Repeater gegeben. Im Repeater Tab kann die Anfrage nun beliebig verändert werden und mit go gesendet werden. Auf der rechten Seite wird die Rückgabe des Servers angezeigt. So kann eine Verdächtige Response manuell getestet werden.<br>
+<br>
+<h5>Aufgabe:</h5>
+Hohlen sie sich die zuvor manipulierte Google abfrage in den Repeater und versuchen sie erneut diese zu manipulieren.<br>
+
+<h4>Burp Intruder</h4>
+
+Mithilfe des Intruders lassen sich leistungsstarke maßgeschneiderte Angriffe durchführen um unübliche Schwachstellen zu finden und auszunutzen.<br><br>
+
+Verwendung:<br>
+Der Intruder ermöglicht es eine Vielzahl von Eingaben auf eine Website automatisch zu fahren und die Rückgaben zu analysieren. Es wird eine Nachricht vom Proxy an den Intruder geschickt. Unter Positions werden zunächst diejenigen Elemente markiert, die verändert werden sollen. Bei einer Anmeldung Beispielsweise der Username und das Password. Unter Payload lässt sich nun definieren was in die markierten Elemente eingesetzt werden soll. Über die Options lässt sich dies noch weiter verfeinern.<br>
+In der Freien Version ist der Intruder stark beschränkt und kaum zu gebrauchen ein Testen mithilfe des Repeaters ist meist Zielführender.<br><br><br><br>
+
+Die folgenden Funktionen sind ebenfalls in der freien Version verfügbar. Werden jedoch hier nur kurz erwähnt.<br>
+
+<h4>Burp Sequencer</h4>
+
+Ein Sequenzierer, für das Testen der Zufälligkeit von Session Token.<br>
+
+<h4>Burp Decoder</h4>
+
+Ein einfaches Werkzeug um Codierte Daten in ihre Kanonische Form zu bringen oder Rohdaten in verschiedene codierte und gehashte Formen zu bringen. Es ist dazu in der Lage einige Codierungsformate selbständig zu erkennen.<br>
+
+<h4>Burp Comparer</h4>
+
+Ein Werkzeug um die visuellen Unterschiede zweier Items miteinander vergleichen zu können.<br><br>
 {% include 'static/footer.html' %}
