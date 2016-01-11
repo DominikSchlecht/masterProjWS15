@@ -1,91 +1,75 @@
-<html>
-  <head>
-    <center>
-      <h1>XSS-Demo</h1>
-    </center>
-  </head>
-  <body>
-    <form method="POST" action="text.php">
-      <center>
-      <label for="text">Suchbegriff: </label>
-	      <input  name="text">
-	       <button type="submit">suchen</button>
-       </center>
-    </form>
 
-    <h3>XSS</h3>
+{% include 'static/header.html' %}
+<h3>XSS</h3>
 
-    Mit Cross-Site Scripting (XSS) wird das Ausnutzen einer Sicherheitslücke in Webanwendungen bezeichnet,
-    indem ein Angreifer Webseiten mit clientseitigen Skripten infiziert, die von anderen Nutzern aufgerufen werden.
-    Ca. 80% der ausgenutzten Sicherheitslücken in Webanwendungen gehen auf Cross-Site Scripting zurück.
-    Die Auswirkungen von XSS können zwischen einem kleinen Ärgernis und einem erheblichen Sicherheitsrisiko liegen,
-    je nach Sensibilität der Daten.
+Mit Cross-Site Scripting (XSS) wird das Ausnutzen einer Sicherheitslücke in Webanwendungen bezeichnet,
+indem ein Angreifer Webseiten mit clientseitigen Skripten infiziert, die von anderen Nutzern aufgerufen werden.
+Ca. 80% der ausgenutzten Sicherheitslücken in Webanwendungen gehen auf Cross-Site Scripting zurück.
+Die Auswirkungen von XSS können zwischen einem kleinen Ärgernis und einem erheblichen Sicherheitsrisiko liegen,
+je nach Sensibilität der Daten.
 
-    <br />
+<br />
 
-    <h3>Reflected XSS (non-persistent)</h3>
-    <br />
-    <img src="reflected.PNG" alt="reflected">
-    <br />
-    <br />
-    <br />
+<h3>Reflected XSS (non-persistent)</h3>
+<br />
+<img src="reflected.PNG" alt="reflected">
+<br />
+<br />
+<br />
 
-    <h3>Stored XSS (persistend)</h3>
-    <br />
-    <img src="stored.PNG" alt="storedXSS">
-    <br />
-    <br />
-    <br />
+<h3>Stored XSS (persistend)</h3>
+<br />
+<img src="stored.PNG" alt="storedXSS">
+<br />
+<br />
+<br />
 
-    <h3>Local XSS (DOM Injection)</h3>
-    <br />
-    <img src="local.PNG" alt="localXSS">
-    <br />
-    <br />
-    <br />
+<h3>Local XSS (DOM Injection)</h3>
+<br />
+<img src="local.PNG" alt="localXSS">
+<br />
+<br />
+<br />
 
-    <h3>Demo</h3>
+<h3>Demo</h3>
 
-    Ein kleines XSS-Demo ist schnell erstellt. Dazu wird lediglich ein Browser und XAMP (oder ähnliches) benötigt.
-    Zunächst eine HTML-Datei erstellen, die ein Eingabefeld enthält. Das könnte ungefähr so aussehen:
-    <br />
+Ein kleines XSS-Demo ist schnell erstellt. Dazu wird lediglich ein Browser und XAMP (oder ähnliches) benötigt.
+Zunächst eine HTML-Datei erstellen, die ein Eingabefeld enthält. Das könnte ungefähr so aussehen:
+<br />
 
-    &lt;html&gt;
-      &lt;head&gt;
-        &lt;center&gt;
-          &lt;h1&gt;XSS-Demo&lt;/h1&gt;
-        &lt;/center&gt;
-      &lt;/head&gt;
-      &lt;body&gt;
-        &lt;form method=&quot;POST&quot; action=&quot;text.php&quot;&gt;
-          &lt;center&gt;
-          &lt;label for=&quot;text&quot;&gt;Suchbegriff: &lt;/label&gt;
-    	      &lt;input  name=&quot;text&quot;&gt;
-    	       &lt;button type=&quot;submit&quot;&gt;suchen&lt;/button&gt;
-           &lt;/center&gt;
-        &lt;/form&gt;
-      &lt;/body&gt;
-    &lt;/html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;center&gt;
+      &lt;h1&gt;XSS-Demo&lt;/h1&gt;
+    &lt;/center&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;form method=&quot;POST&quot; action=&quot;text.php&quot;&gt;
+      &lt;center&gt;
+      &lt;label for=&quot;text&quot;&gt;Suchbegriff: &lt;/label&gt;
+	      &lt;input  name=&quot;text&quot;&gt;
+	       &lt;button type=&quot;submit&quot;&gt;suchen&lt;/button&gt;
+       &lt;/center&gt;
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
 
-    <br />
-    <br />
-    <br />
-    Jetzt fehlt noch eine PHP-Datei, die diese Anfrage entgegennimmt:
-    <br />
-    <br />
-    <br />
-    &lt;?php
-    if(isset($_POST[&quot;text&quot;]))
-    {
-    $text = $_POST[&quot;text&quot;];
-    echo &quot;Ihr Suchbegriff war: '$text'&quot;;
-    }
-    ?&gt;
-    <br />
-    <br />
-    <br />
-    Gibt man nun in das Textfeld z.B. &lt;script&gt;alert("XSS!!!")&lt;script&gt; ein, hat man ein kleines XSS-Demo ausgeführt.
-
-
-  </body>
-</html>
+<br />
+<br />
+<br />
+Jetzt fehlt noch eine PHP-Datei, die diese Anfrage entgegennimmt:
+<br />
+<br />
+<br />
+&lt;?php
+if(isset($_POST[&quot;text&quot;]))
+{
+$text = $_POST[&quot;text&quot;];
+echo &quot;Ihr Suchbegriff war: '$text'&quot;;
+}
+?&gt;
+<br />
+<br />
+<br />
+Gibt man nun in das Textfeld z.B. &lt;script&gt;alert("XSS!!!")&lt;script&gt; ein, hat man ein kleines XSS-Demo ausgeführt.
+{% include 'static/footer.html' %}
