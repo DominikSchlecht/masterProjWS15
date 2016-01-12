@@ -421,7 +421,14 @@ In einem IPv4 Netzwerk installiert der Angreifer seinen Rechner als IPv6 Router,
 
 \subsection*{Technisches}
 Sobald der Angriff gestartet wird, erhalten die Clients im angegriffenen Netz eine IPv6-Adresse, die IPv6-Adressen des DNS-Servers und des Gateways des Angreifers. Diese werden durch vom Tool radvd versendete Router Advertisments konfiguriert. Da der IPv6-Verkehr vom Betriebssystem priorisiert behandelt wird, richten sich sämtliche DNS Anfragen an den DNS-Server des Angreifers (der „alte“ DNS-Server hat nur eine IPv4-Adresse). 
-Dieser liefert immer eine AAAA-Antwort. Dabei ist es egal ob eine IPv4- oder IPv6-Adresse angefragt wurde, da der Angreifer Adressen mittels Nat64 übersetzen kann. Da alle Hosts des angegriffenen Netzes IPv6-Adressen bei DNS Anfragen gemeldet bekommen, läuft der Netzwerkverkehr immer über das IPv6-Gateway, also über den Rechner des Angreifers. Dieser kann z.B. mit Wireshark den Netzwerkverkehr mitlesen.
+Dieser liefert immer eine A- und eine AAAA-Antwort (Abb. \ref{fig:fakeIPv6DNS}). Die AAAA-Antwort ist dabei die gekapselte IPv4-Adresse. Da alle Hosts des angegriffenen Netzes somit immer IPv6-Adressen bei DNS Anfragen gemeldet bekommen, läuft der Netzwerkverkehr immer über das IPv6-Gateway (IPv6 wird priorisiert), also über den Rechner des Angreifers. Dieser kann z.B. mit Wireshark den Netzwerkverkehr mitlesen.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{bilder/fakeIPv6/fakeIPv6DNS.pdf}
+	\caption{Ablauf der Verbindung.}
+	\label{fig:fakeIPv6DNS}
+\end{figure}
 
 \subsection*{Erklärung der verwendeten Skripte und Tools}
 
