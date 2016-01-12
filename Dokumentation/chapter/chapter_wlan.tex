@@ -16,13 +16,13 @@ Voraussetzungen für die weiteren Übungen:\\
 
 - Alfa USB WLAN-Adapter\\
 - Workstation/Notebook\\
-- Virtual Box mit Kali Linux Image (+ Extension Pack)\\
+- Virtualisierungsumgebung mit Linux Image\\
 - Grundlegende Kenntnisse mit Linux\\
 
 Konfiguration des Alfa Adapters in Kombination mit Virtual Box:\\
 
 Anschluss des Adapters über das beigelegte Y-Kabel an den Host.
-In Virtual Box die Kali Maschine auswählen $\rightarrow$ Rechtsklick: Ändern $\rightarrow$ USB auswählen $\rightarrow$ USB-2.0-Controller aktivieren $\rightarrow$ USB-Filter hinzufügen
+In Virtual Box die Linux Maschine auswählen $\rightarrow$ Rechtsklick: Ändern $\rightarrow$ USB auswählen $\rightarrow$ USB-2.0-Controller aktivieren $\rightarrow$ USB-Filter hinzufügen
 $\rightarrow$ Ralink WLAN auswählen (falls nicht vorhanden im GeräteManager nach dem WLAN Adapter suchen) $\rightarrow$ Mit OK bestätigen.\\
 %Zusätzlich einen neuen Filter anlegen und Hersteller- bzw. Produkt-ID aus dem ersten Filter übernehmen. Die anderen Felder können unausgefüllt werden
 Den WLAN Adapter ausstecken\\
@@ -302,15 +302,15 @@ $$cudaHashcat64.exe~\text{-}m~2500~\text{-}a~3~capture.hccap~\text{-}pwd\text{-}
 \textit{-m 2500 = Anweisung, dass ein WPA/WPA2 Key gecrackt werden soll}\\
 \textit{-a 3 = Verwende Bruteforce}
 \textit{caputre.cap = Pfad bzw. Name des hccap file}\\
-\textit{?d..?d = definierte Maske für zu testenden Passwortkandidaten, Anzahl entspricht "bis zu Länge"\\}\\
+\textit{?d..?d = definierte Maske für zu testenden Passwortkandidaten, Anzahl entspricht "bis zu Länge"\\}
 
-Wurde der Befehl bestätigt, kann mit der Taste "s" der Status des Vorgangs eingesehen werden. Einige Dinge sind bereits aus dem vorherigen Aufruf bekannt. Interessant sind die Keys per second, die getestet werden. Der Wert liegt hier bei 41586. Somit liegt der Speedup im Vergleich zur CPU bei fast 60facher
-Geschwindigkeit. Dies ist natürlich deutlich schneller als im vorherigen Durchlauf. Jedoch wird auch in diesem Fall eine geschätzte Zeit von über 10 Jahren angezeigt. Das bedeutet, dass trotz der besseren Performance keine signifikante Verringerung der Laufzeit erreicht wurde. 
-Letztendlich kann nun auch mit einer einzelnen GPU dieser Standard Key nicht geknackt werden.\\
+Wurde der Befehl bestätigt, kann mit der Taste 's' der Status des Vorgangs eingesehen werden.
 
 \includegraphics[width=\textwidth]{bilder/wlan/cudaHashcatNUMSeriesCrack.png}\\
 
-%evtl noch Diagramm hier
+ Einige Dinge sind bereits aus dem vorherigen Aufruf bekannt. Interessant sind die Keys per second, die getestet werden. Der Wert liegt hier bei 41586. Somit liegt der Speedup im Vergleich zur CPU bei fast 60facher
+Geschwindigkeit. Dies ist natürlich deutlich schneller als im vorherigen Durchlauf. Jedoch wird auch in diesem Fall eine geschätzte Zeit von über 10 Jahren angezeigt. Das bedeutet, dass trotz der besseren Performance keine signifikante Verringerung der Laufzeit erreicht wurde. 
+Letztendlich kann nun auch mit einer einzelnen GPU dieser Standard Key nicht geknackt werden.\\
 
 
 \section{WPS}
@@ -366,6 +366,39 @@ Nachdem nun die gängigsten Angriffsarten und ihre Durchführung erläutert wurd
 
 Weiter wurde gezeigt, dass WPS eine weitere Schwachstelle darstellt und ein Angreifer so die Sicherheit einer starken Verschlüsselung vollkommen umgehen kann. Daher ist es ratsam WPS nur in Ausnahmefällen zu verwenden und ansonsten dieses Feature zu deaktivieren. \\
 
-Ein weit verbreiteter Irrtum ist auch, dass das Verstecken des Netzwerknamens, auch SSID genannt, die Sicherheit verbessert. Jedoch haben wir gesehen wie einfach nach WLAN Netzwerken in der Umgebung gescannt werden kann. Dabei alle Netzwerke, auch diejenigen mit versteckter SSID, angezeigt. Damit verbessert dieses Feature, was viele Netzwerkgeräte unterstützen, definitiv nicht. 
+Ein weit verbreiteter Irrtum ist auch, dass das Verstecken des Netzwerknamens, auch SSID genannt, die Sicherheit verbessert. Jedoch haben wir gesehen wie einfach nach WLAN Netzwerken in der Umgebung gescannt werden kann.\\
 
+Warum das Verstecken der SSID eines WLANs keine zusätzliche Sicherheit bringt und wie diese schnell herausgefunden werden kann?\\
+	
+Das Verstecken der SSID führt dazu, dass sich der Anwender in falscher Sicherheit wiegt und er glaubt, dass er eine zusätzliche "Sicherheitsschicht" eingeführt hat, was gefährlich sein kann.
+Denn der Betreiber des WLANs glaubt was nicht gefunden wird, kann auch nicht angegriffen werden.
+ABER: Die Maßnahme ersetzt weder die Verschlüsselung noch die Authentifizierung!!\\
+
+Grundsätzlich: Ein verstecktes WLAN ist niemals "unsichtbar".\\
+
+Bei einem normal sichtbaren Netz sendet der Access Points Beacons mit der SSID und weiteren Informationen
+aus. \\
+
+Wird das Broadcasting ausgeschaltet, wird einfach das Feld für die SSID in dem Frame auf NULL gesetzt. 
+
+Dies kann leicht überprüft werden, falls sich ein verstecktes WLAN in der Nähe befindet und ein Durchlauf mit \textit{airodump-ng} durchgeführt wird, ist dieses erkennbar mit dem Feld der SSID auf NULL gesetzt.\\
+
+Wie baut jetzt ein Client eine Verbindung zu einem Access Point auf?\\
+
+1. Die Initiative geht von Client aus (Probe Request).\\
+2. Der AP antwortet mit Probe Response.\\
+  
+Request und Response enthalten jeweils das Feld für die SSID in Klartext.
+Das Problem dabei ist, der Client sendet, je nach Einstellung, die Requests aus, auch wenn er nicht in der Reichweite des Gerätes ist. \\
+	=> Auslesen aller gespeicherten Hidden SSIDS möglich. Vor allem bei Smartphones.\\
+	=> Erstellen von Profilen bei längerfristiger Überwachung der Geräte.\\
+	
+Falls sich der Client nicht automatisch verbindet, muss man sich in Reichweite des Netzwerks befinden und einen Verbindungsaufbau zwischen Client und AP aufzeichnen um an die SSID des Netzes zu kommen. \\
+Möchte man als Angreifer nicht warten, bis sich ein Client verbindet, können die bereits verbundenen Geräte zu einem reconnect gezwungen werden. Dies wird über eine Deauthentifizierung der Geräte erreicht.
+Dazu folgender Befehl:
+
+
+$$aireplay\text{-}ng~\text{-}\text{-}deauth~5~\text{-}a~<AP-MAC> \text{-}c~<Client\text{-}Mac>~wlan0mon$$\\
+
+Läuft nebenbei noch die Aufzeichnung mit \textit{airodump-ng}, wird jetzt bei den verfügbaren Netzwerken auch die SSID für das Hidden WLAN angezeigt.
 
