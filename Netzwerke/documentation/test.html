@@ -337,16 +337,15 @@ Eine weitere Möglichkeit in Linux-Netzwerken ist, dass den Benutzern keine Root
 Die Addressierung und der anschließende Verbindungsaufbau zu einem Server erfolgt über eine eindeutige IP-Adresse. Damit der Mensch leichter eine Verbindung zu einem Server aufbauen kann,
 wurde das DNS (Domain Name System) eingeführt. Dieses verwendet so genannte Domains zur Idenitifzierung von Servern, beispielweise "www.thi.de", da sich diese leichter merken lassen, als
 eine IP-Adresse (z.B. 194.94.240.179). DNS ähnelt damit der Funktionsweise eines Telefonbuchs.
-Das Domain Name System ist baumförmig aufgebaut, wie nachfolgende Abbildung <a href="#reffig:dns">(0)</a>
+Das Domain Name System ist baumförmig aufgebaut, wie nachfolgende Abbildung <a href="#reffig:dns">4.10</a>
  illustriert: <br>
 
-\beginfigure[h!]
-	\centering
-	 <font face=symbol>Î</font> cludegraphics[width=0.7\textwidth]bilder/dns.pdf
-	<font face=symbol>Ç</font>tionAufbau DNS 
+<figure>
+	<img src="bilder/png/dns.png"></img>
+	<figcaption>Abbildung 4.10: Aufbau DNS</figcaption>
 	<a name="reffig:dns">
+</figure>
 
-\endfigure
 
 
 
@@ -355,39 +354,35 @@ Ein Client (z.B. Windows-Rechner) möchte die Internetseite der Technischen Hoch
 Wenn dieser in seinem Cache keinen Eintrag findet, frägt er - beginnend am Root-DNS-Server - iterativ alle Nameserver nach ihren Einträgen ab, um zum Schluss die IP-Adresse von www.thi.de
 zu erhalten.<br>
 
-\beginfigure[h!]
-	\centering
-	 <font face=symbol>Î</font> cludegraphics[width=0.7\textwidth]bilder/DNS-Request.pdf
-	<font face=symbol>Ç</font>tionAblauf DNS-Anfrage 
+<figure>
+	<img src="bilder/png/DNS-Request.png"></img>
+	<figcaption>Abbildung 4.11: Ablauf DNS-Anfrage</figcaption>	
 	<a name="reffig:dnsrequest">
+</figure>
 
-\endfigure
 
 <h2>Technisches</h2>
 Um einen DNS-Eintrag für eine Domain, beispielsweise www.thi.de, zu manipulieren, kann mittels DNS Cache Poisoning der lokale DNS-Cache des Clients mit falschen Einträgen "vergiftet" werden.
 Da bei jeder DNS-Anfrage eine zufällig generierte Transaktions-ID mitgeschickt wird, und eine DNS-Antwort nur akzeptiert wird, wenn diese mit der Anfrage übereinstimmt, muss man als Angreifer diese ermitteln, was sich in einem lokalen Netzwerk mit einem Sniffer sehr einfach realisieren lässt. Alternativ kann auch die Transaktions-ID erraten werden, wofür für die 16-Bit lange Transaktions-ID im Durchschnitt 32.768 Versuche notwendig sind.
 
 <h2>Tools</h2>
-DNSSpoofing wurde von Dug Song  <font size="-1"><i>Diese und weitere Tools von Dug Song sind unter \urlwww.monkey.org/&nbsp;dugsong/dsniff erhältlich.</i></font> entwickelt und veröffentlicht. Mit Unterstützung dieses Tools ist ein Manipulation des DNS-Caches eines Clients im lokalen
+DNSSpoofing wurde von Dug Song  <font size="-1"><i>Diese und weitere Tools von Dug Song sind unter www.monkey.org/~dugsong/dsniff erhältlich.</i></font> entwickelt und veröffentlicht. Mit Unterstützung dieses Tools ist ein Manipulation des DNS-Caches eines Clients im lokalen
 Netzwerk sehr leicht durchzuführen. Das Tool ermittelt die verwendeten Transaktions-ID durch Sniffen der ID, wenn der DNS-Server versucht eine Antwort an den Client zu übermitteln. Sobald er die ID der
 Anfrage ermittelt hat, muss er eine schnellere Antwort an den anfragenden Client versenden, als der eigentliche DNS-Server. Dies geschieht in mehrfachen Tests und Analysen durch Wireshark regelmäßig. <br>
 
 
 <h2>Benutzung von DNS-Spoofing-Skript</h2>
-Um dnsspoof einsetzen zu können, muss initial eine hosts-Datei erstellt werden, die die zu manipulierenden Einträge in folgendem Format enthält: \newline
+Um dnsspoof einsetzen zu können, muss initial eine hosts-Datei erstellt werden, die die zu manipulierenden Einträge in folgendem Format enthält: <br>
 
-\beginlstlisting[caption=Beispiel für eine Hosts-Datei]Name
-<IP-Adresse>		<Domain>
-<192.168.20.135>	www.thi.de
-(Wichtig ist hierbei die Trennung von IP-Adresse und Domainname durch Tab und keinen Leerzeichen!)
-\endlstlisting
+<br>
+IP-Adresse Domain <br>
+192.168.20.135	www.thi.de <br>
+(Wichtig ist hierbei die Trennung von IP-Adresse und Domainname durch Tab und keinen Leerzeichen!) <br><br>
 
-Anschließend wird \textitdnsspoof mit folgenden Parameter aufgerufen: \newline
 
-\beginlstlisting[caption=Parameter für dnsspoof]
-	-i Interface in dem sich lokales Netzwerk befindet
-	-f Hosts-File, absoluter Pfad zu Ort der erstellten hosts-Datei
-\endlstlisting
+Anschließend wird dnsspoof mit folgenden Parameter aufgerufen: <br><br>
+	-i Interface in dem sich lokales Netzwerk befindet<br>
+	-f Hosts-File, absoluter Pfad zu Ort der erstellten hosts-Datei<br>	
 	
 
 
@@ -430,7 +425,7 @@ Das selbst geschriebene Python-Skript versendet eine vorgegebene Anzahl von SYN-
 des Zielserveres eine ACK-Bestätigung zurückgeschickt wird. Dadurch wird für eine bestimmte Zeit Ressourcen reserviert, die in Summe zur Überlastung des Servers führen.
 
 <h2>Tools</h2>
-siehe \textitTechnisches in Kapitel <a href="#refdos:technisches">(0)</a>
+siehe Technisches <a href="#refdos:technisches">hier</a>
 
 
 <h2>Benutzung von DoS-Skript</h2>
@@ -440,7 +435,7 @@ Das Skript frägt interaktiv den Benutzer alle erforderlichen Angaben ab. Diese 
 
 <h3>Netzwerk Monitoring</h3>
 Mittels eines Intrusion Detecten (IDS) und Prevention System (IPS) kann die Aktivität und der Ursprung eintreffender SYN-Pakete analysiert werden und beispielsweise nur eine bestimmte Anzahl von Paketen pro
-Minute zugelassen werden. Sollten von der Quell-IP-Adresse dann noch weitere Pakete eintreffen, werden diese bereits an der Firewall verworfen.  <font size="-1"><i>Mehr Informationen zu Umfang und Möglichkeiten von IDS und IPS finden Sie unter folgendem Paper:</i></font> 
+Minute zugelassen werden. Sollten von der Quell-IP-Adresse dann noch weitere Pakete eintreffen, werden diese bereits an der Firewall verworfen.
 
 <h3>SYN-Cookies</h3>
 Mittels SYN-Cookies kann bei Verbindungsaufbau durch den Server überprüft werden, ob der Client bereits versucht hat, eine Verbindung herzustellen. Bei Implementierung von SYN-Cookies reserviert der Server keine Ressourcen bei Eintreffen eines SYN-Paketes von einem Client, sondern speichert nur einen Hashwert mit Informationen des SYN-ACK-Paketes. Wenn der Client im dritten Schritt ein SYN-Paket mit der Bestätigung des SYN-ACKs an den Server übermittelt hat, wird mittels des gespeicherten Hashwertes überprüft, ob dieser Client bereits vorher mit dem Server kommuniziert hat. Falls diese Überprüfunge positiv ausfällt, wird eine TCP-Verbindung aufgebaut.<p><hr>
@@ -481,77 +476,68 @@ HTTPS (Hypertext Transfer Protocol Secure) wird dazu verwendet um Dokumente auf 
 siehe Eintrag Address-Resolution-Protocol
 
 <h2>Szenario</h2>
-Eine MITM-Attacke auf eine verschlüsselte HTTPS-Verbindung ist nur mit sehr viel Rechenkapazität zu entschlüsseln. Eine einfachere Möglichkeit des Mitschneiden von übertragenen Datenpaketen ist die Verwendung einer unverschlüsselten HTTP-Verbindung. Da ein Großteil der Benutzer einen Unterschied von \textithttps://www.url.de zu \textithttp://www.url.de in der URL-Leiste kaum erkennen würden, ist SSLStrip eine gute Möglichkeit Datenpakete mitlesen und verändern zu können. \newline
+Eine MITM-Attacke auf eine verschlüsselte HTTPS-Verbindung ist nur mit sehr viel Rechenkapazität zu entschlüsseln. Eine einfachere Möglichkeit des Mitschneiden von übertragenen Datenpaketen ist die Verwendung einer unverschlüsselten HTTP-Verbindung. Da ein Großteil der Benutzer einen Unterschied von https://www.url.de zu http://www.url.de in der URL-Leiste kaum erkennen würden, ist SSLStrip eine gute Möglichkeit Datenpakete mitlesen und verändern zu können. <br>
 Das Auslesen von Passwörtern für Online-Banking oder Webmail wären potentielle Ziele eines solchen Angriffs.
 
 <h2>Technisches</h2>
-SSLStrip  <font size="-1"><i>Dieses Tool kann über folgende Links abgerufen werden: \urlhttps://github.com/graingert/sslstrip/, \urlhttp://www.thoughtcrime.org/software/sslstrip/</i></font> wurde von Moxie Marlinspike 2009 entwickelt und ist aktuell in Version 0.9.2 verfügbar. Das Tool durchsucht jeden transparenten HTTP-Verkehr nach https-Links und wandelt diese in http-Links um. Um die Attacke durchführen zu können, wird zusätzlich ARP-Spoofing benötigt. Mittels ARP-Spoofing werden auch die unverschlüsselten HTTP-Links über SSLStrip verschickt. Da mittlerweile viele Webseiten (z.B. Online-Banking, Webmail, ...) nur noch verschlüsselte HTTP(S)-Verbindungen zulassen, baut SSLStrip eine verschlüsselte Verbindung zu diesen Seiten auf, und gibt deren Antwort in einer unverschlüsselten Verbindung an den kompromittierten Client zurück. Folgende Abbildung zeigt den Ablauf der HTTP(S)-Verbindungen zwischen einem Client, Angreifer und dem aufgerufenen (Web-)Server. <p><hr>
+SSLStrip  <font size="-1"><i>Dieses Tool kann über folgende Links abgerufen werden: https://github.com/graingert/sslstrip/, http://www.thoughtcrime.org/software/sslstrip/</i></font> wurde von Moxie Marlinspike 2009 entwickelt und ist aktuell in Version 0.9.2 verfügbar. Das Tool durchsucht jeden transparenten HTTP-Verkehr nach https-Links und wandelt diese in http-Links um. Um die Attacke durchführen zu können, wird zusätzlich ARP-Spoofing benötigt. Mittels ARP-Spoofing werden auch die unverschlüsselten HTTP-Links über SSLStrip verschickt. Da mittlerweile viele Webseiten (z.B. Online-Banking, Webmail, ...) nur noch verschlüsselte HTTP(S)-Verbindungen zulassen, baut SSLStrip eine verschlüsselte Verbindung zu diesen Seiten auf, und gibt deren Antwort in einer unverschlüsselten Verbindung an den kompromittierten Client zurück. Folgende Abbildung zeigt den Ablauf der HTTP(S)-Verbindungen zwischen einem Client, Angreifer und dem aufgerufenen (Web-)Server. <p><hr>
 
-\beginfigure[h!]
-	\centering
-	 <font face=symbol>Î</font> cludegraphics[width=0.6\textwidth]bilder/https.pdf
-	<font face=symbol>Ç</font>tionReguläre HTTPS-Verbindung zwischen Client und Server
+<figure>
+	<img src="bilder/png/https.png"></img>
+	<figcaption>Abbildung 4.12: Reguläre HTTPS-Verbindung</figcaption>
 	<a name="reffig:https">
+</figure>
 
-\endfigure
-
-\beginfigure[h!]
-	\centering
-	 <font face=symbol>Î</font> cludegraphics[width=0.65\textwidth]bilder/sslstrip.pdf
-	<font face=symbol>Ç</font>tionSSL-Strip Szenario
+<figure>
+	<img src="bilder/png/sslstrip.png"></img>
+	<figcaption>Abbildung 4.13: SSL-Strip Szenario</figcaption>
 	<a name="reffig:sslstrip">
-
-\endfigure
+</figure>
 
 <h2>Tools</h2>
 Um SSLStrip einsetzen zu können sind mehrere Schritte notwendig. Auf Kali Linux 2.0 sind alle benötigten Tools bereits vorinstalliert. <br>
 
 
 IP-Forwarding, also das Weiterleiten von IP-Paketen, kann durch folgende Befehle aktiviert werden:<br>
+<br>
+sysctl -w net.ipv4.ip_forward=1 <br>
+alternativ: echo 1 > /proc/sys/net/ipv4/ip_forward <br>
+<br>	
 
+Anschließend wird ARP-Spoofing gestartet. Dies geschieht mit folgenden Befehlen:<br>
+<br>
+arpspoof -i interface -t targetIP gatewayIP <br>
+<br>
+Parameter:<br>
+	-i  interface		Angabe des Interfaces, in dem sich Angreifer und Client befinden.<br>
+	-t targetIP   	IP-Adresse des anzugreifenden Clients<br>
+	gatewayIP   		IP-Adresse des Gateways im LAN<br>
 
-\beginlstlisting[caption=Aktivieren von IP-Forwarding]Name
-	sysctl -w net.ipv4.ip_forward=1
-	alternativ: echo 1 > /proc/sys/net/ipv4/ip_forward
-\endlstlisting
-	
-
-Anschließend wird ARP-Spoofing gestartet. Dies geschieht mit folgenden Befehlen:
-\beginlstlisting[caption=Parameter für ARP-Spoofing]
-arpspoof -i <interface> -t <targetIP> <gatewayIP>
-Parameter:
-	-i  <interface>		Angabe des Interfaces, in dem sich Angreifer und Client befinden.
-	-t <targetIP>   	IP-Adresse des anzugreifenden Clients
-	<gatewayIP>   		IP-Adresse des Gateways im LAN
-\endlstlisting
-
+<br>
+<br>
 Nachdem nun mittels ARP-Spoofing alle IP-Pakete vom angegriffenen Client über den Angreifer gesendet werden, müssen die umgeleiteten HTTP-Pakete via IPtables an das Tool SSLStrip weitergereicht werden. Dies geschieht mittels folgendem Eintrag:<br>
+<br>
+iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port listenPort <br><br>
+Parameter:<br>
+	-t nat                 	: Firewall-Gruppe <br>
+	-A PREROUTING          	: Regel wird angewandt, BEVOR Paket geroutet wird<br>
+	-p tcp                 	: Nur TCP-Pakete<br>
+	--destination-port 80  	: Nur Pakete auf Port 80 (http)<br>
+	-j REDIRECT            	: Legt Aktion fest, also Weiterleitung<br>
+	--to-port <listenPort> 	: Port auf dem SSLStrip lauscht.<br>
+<br><br>
 
-
-\beginlstlisting[caption=Eintrag in IP-Tables damit HTTP-Pakete an sslstrip weitergereicht werden]
-iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port <listenPort>
-Parameter:
-	-t nat                 	: Firewall-Gruppe
-	-A PREROUTING          	: Regel wird angewandt, BEVOR Paket geroutet wird
-	-p tcp                 	: Nur TCP-Pakete
-	--destination-port 80  	: Nur Pakete auf Port 80 (http)
-	-j REDIRECT            	: Legt Aktion fest, also Weiterleitung
-	--to-port <listenPort> 	: Port auf dem SSLStrip lauscht.
-\endlstlisting
-
-
-Nun muss noch SSLStrip selbst gestartet werden. Dies geschieht mittels folgender Eingabe:
-\beginlstlisting[caption=Erforderliche Parameter für SSLStrip]
-sslstrip -a -k -l <listenPort> -w <logpath>
-Parameter:
-	-s : Gesamter SSL Traffic wird gelogged
-	-p : Nur SSL POST Traffic wird protokolliert
-	-a : SSL- und HTTP-Traffic wird aufgezeichnet
-	-k : Bestehende SSL-Verbindungen terminieren, damit diese neu aufgebaut werden
-	-l : Port auf dem SSLStrip lauscht. Muss identisch zu --to-port bei iptables-Eintrag sein
-	-w : Pfad in dem gehijackter HTTPS-Traffic im Klartext abgespeichert wird
-\endlstlisting
-	
+Nun muss noch SSLStrip selbst gestartet werden. Dies geschieht mittels folgender Eingabe:<br>
+<br>
+sslstrip -a -k -l listenPort -w logpath <br>
+Parameter:<br>
+	-s : Gesamter SSL Traffic wird gelogged<br>
+	-p : Nur SSL POST Traffic wird protokolliert<br>
+	-a : SSL- und HTTP-Traffic wird aufgezeichnet<br>
+	-k : Bestehende SSL-Verbindungen terminieren, damit diese neu aufgebaut werden<br>
+	-l : Port auf dem SSLStrip lauscht. Muss identisch zu --to-port bei iptables-Eintrag sein<br>
+	-w : Pfad in dem gehijackter HTTPS-Traffic im Klartext abgespeichert wird<br>
+<br><br>	
 <h2>Benutzung von SSLStrip-Skript</h2>
 Zur Automatisierung wurden vorangegangene Befehle in einem Skript automatisiert. Nachdem SSLStrip im Auswahlmenü selektiert wurde, wird zuerst nach der Netzwerkschnittstelle gefragt, in der Angreifer und Zielclient sich befinden. Anschließend wird das ausgewählte Netzwerk nach aktiven Hosts gescannt und aufgelistet. Im folgenden Schritt wird die Ziel-IP-Adresse des anzugreifenden Clients eingegeben, gefolgt von der IP-Adresse des Gateways für ARP-Spoofing. Abschließend werden die erforderlichen Konfigurationen für SSLStrip-Attacke im Hintergrund durchgeführt und der mitgeschnittene HTTPS-Verkehr im Klartext in der LOG-Datei abgerufen werden.
  
