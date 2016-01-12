@@ -24,7 +24,7 @@ Da es bei Erscheinen von ARP (1982) noch keine Rolle spielte, ob das Protokoll s
 \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.80\textwidth]{bilder/arpSpoofing/arp_reply_small.pdf}
-	\caption{Aufgezeichnete ARP-Reply (hier von der Adresse 192.168.178.32)}
+	\caption{Aufgezeichneter ARP-Reply (hier von der Adresse 192.168.178.32)}
 	\label{fig:arp_reply_small}
 \end{figure}
 
@@ -457,8 +457,8 @@ interface eth0 {
 	\centering
 		\begin{tabular}{lp{9cm}}
 			Konfigurationselement & Bedeutung \\ \hline
-			AdvSendAdvert on & Legt das Interface fest für das RAs versendet werden sollen. \\
-			MinRtrAdvInterval 3 & Aktiviert das Senden von RAs und die Antwort auf Router Solicitations. \\
+			interface eth0 & Legt das Interface fest für das RAs versendet werden sollen. \\
+			AdvSendAdvert on & Aktiviert das Senden von RAs und die Antwort auf Router Solicitations. \\
 			MinRtrAdvInterval 3 & Minimalzeit zwischen ausgesendeten RAs in Sekunden. Betrifft nur das periodische Senden, nicht die Antwort auf Router Solicitations. \\
 			MaxRtrAdvInterval 10 & Maximalzeit zwischen ausgesendeten RAs in Sekunden. Betrifft nur das periodische Senden, nicht die Antwort auf Router Solicitations. \\
 			AdvHomeAgentFlag off & Der Router kann nicht als Home-Agent für Mobile-IPv6 verwendet werden. \\
@@ -508,11 +508,11 @@ options {
 		forwarders & Alle aufgeführten IP-Adressen stellen DNS-Server dar. Bind muss die Anfrage an einen dieser Server weiterreichen. \\
 		dnssec-validation auto & Bind versucht Antworten aus DNSSEC gesicherten Zonen zu validieren. „auto“ gibt dabei an, dass Binds default Sicherheitseintrag verwendet wird. \\
 		auth-nxdomain no & Der DNS-Server darf keine autoritativen Antworten senden (z.B., wenn er im Cache die Information gespeichert hat, dass eine Adresse nicht über den Nameserver ihrer Zone existiert) \\
-		listen-on-v6 { any; } & Bind lauscht auf Port 53 (default) auf Anfragen aus allen Netzen. \\
-		allow-query { any; } & Clients dürfen aus allen Netzen heraus Anfragen an den DNS-Server stellen. \\
+		listen-on-v6 \{ any; \} & Bind lauscht auf Port 53 (default) auf Anfragen aus allen Netzen. \\
+		allow-query \{ any; \} & Clients dürfen aus allen Netzen heraus Anfragen an den DNS-Server stellen. \\
 		dns64 2001:db8:1:FFFF::/96 & Die folgenden Punkte legen das Verhalten von dns64 für das Netz 2001:db8:1:FFFF::/96 fest. \\
-		clients { any; } & Dns64 ist für alle Clients des Netzes aktiv. \\
-		exclude { any; } & Dns64 verwirft sämtliche AAAA-Antworten, fragt A-Einträge an und bildet daraus neue AAAA-Antworten (siehe Nat64) \\
+		clients \{ any; \} & Dns64 ist für alle Clients des Netzes aktiv. \\
+		exclude \{ any; \} & Dns64 verwirft sämtliche AAAA-Antworten, fragt A-Einträge an und bildet daraus neue AAAA-Antworten (siehe Nat64). \\
 	\end{tabular}
 	\caption{Erläuterung der Bind Konfiguration}
 	\label{tab:bindConfig}
@@ -581,7 +581,7 @@ Als IPv6-DHCP-Server kommt wide-dhcpv6 zum Einsatz. Hierbei handelt es sich um e
 apt-get install wide-dhcpv6-server
 \end{lstlisting}
 
-Die Konfigurationsdatei liegt unter /etc/wide-dhcpv6/dhcp6s.conf (muss vor der ersten Ausführung des Python Skripts noch nicht vorhanden sein). In Tabelle \ref{tab:wideDhcpConfig} wird der Inhalt dieser Datei erläutert.
+Die Konfigurationsdatei liegt unter \textit{/etc/wide-dhcpv6/dhcp6s.conf} (muss vor der ersten Ausführung des Python Skripts noch nicht vorhanden sein). In Tabelle \ref{tab:wideDhcpConfig} wird der Inhalt dieser Datei erläutert.
 \begin{lstlisting}[
 	basicstyle=\footnotesize,
 ]
@@ -604,7 +604,7 @@ pool addrPool {
 			option domain-name "securityWorkbench" & Name der Domain. \\
 			interface eth0 & Setzt das DHCP-Interface auf eth0. \\
 			address-pool addrPool 3600 & Legt den Adresspool für DHCP auf „addrPool“fest. 3600 stellt die Gültigkeit in Sekunden dar.  \\
-			pool addrPool & Legt einen neuen Adresspool an. \\
+			pool addrPool & Legt einen neuen Adresspool (addrPool) an. \\
 			range 2001:db8:1:CAFE::10 to 2001:db8:1:CAFE::0240 & Gibt den Adressbereich des Adresspools an. \\
 		\end{tabular}
 	\caption{Erläuterung der wide-dhcp6 Konfiguration}

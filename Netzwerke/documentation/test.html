@@ -29,18 +29,18 @@
 
 <p><a href="#szenarios"><h1>4 Szenarios</h1></a>
 <p><a href="#arp"><h2>4.1 ARP-Spoofing</h2></a>
-<p><a href="#arp.1"><h3>4.1.1 Voraussetzungen</h3></a>
+<!--<p><a href="#arp.1"><h3>4.1.1 Voraussetzungen</h3></a>
 <p><a href="#arp.2"><h3>4.1.2 Grundlagen</h3></a>
 <p><a href="#arp.3"><h3>4.1.3 Szenario</h3></a>
 <p><a href="#arp.4"><h3>4.1.4 Technisches</h3></a>
 <p><a href="#arp.5"><h3>4.1.5 Erklärung der verwendeten Skripte und Tools</h3></a>
 <p><a href="#arp.6"><h3>4.1.6 Benutzung des Python Skripts</h3></a>
-<p><a href="#arp.7"><h3>4.1.7 Gegenmaßnahmen</h3></a>
+<p><a href="#arp.7"><h3>4.1.7 Gegenmaßnahmen</h3></a> -->
 
-<p><a href="#toc.2"><h2>2&nbsp;DNS-Spoofing</h2></a>
-<p><a href="#toc.3"><h2>3&nbsp;Denial of Service (DoS)</h2></a>
-<p><a href="#toc.4"><h2>4&nbsp;SSL-Strip</h2></a>
-<p><a href="#toc.5"><h2>5&nbsp;Fake IPv6 Netz</h2></a>
+<p><a href="#toc.2"><h2>4.2 DNS-Spoofing</h2></a>
+<p><a href="#toc.3"><h2>4.3 Denial of Service (DoS)</h2></a>
+<p><a href="#toc.4"><h2>4.4 SSL-Strip</h2></a>
+<p><a href="#fake"><h2>4.5Fake IPv6 Netz</h2></a>
 <p><a href="#exercises"><h1>5 Übungen</h1></a>
 <p><a href="#prospects"><h1>6 Ausblick</h1></a>
 <hr>
@@ -548,20 +548,20 @@ Zur Automatisierung wurden vorangegangene Befehle in einem Skript automatisiert.
 HTTP Strict Transport Security ist ein Mechanismus um einem Client mitzuteilen, dass er für eine bestimmte Zeit nur verschlüsselte Verbindungen verwenden soll. Der Server übermittelt in seiner Antwort im Header, zusätzliche Informationen über die Gültigkeit der Information und ob sämtliche Subdomains ebenfalls ausschließlich verschlüsselte Verbindungen annehmen dürfen.  <p><hr>
 
 
-<p><a name="toc.5"><h1>5&nbsp;Fake IPv6 Netz</h1>
+<p><a name="fake"><h2>Fake IPv6 Netz</h2>
 
-<h2>Voraussetzungen</h2>
+<h3>Voraussetzungen</h3>
 Für diesen Angriff ist Zugang zum Netzwerk des anzugreifenden Hosts notwendig. Ebenso ist es notwendig eine gültige IPv4-Adresse aus diesem Netzwerk zu besitzen. Die Rechner des angegriffenen Netzes müssen IPv6 aktiviert haben, allerdings dürfen keine IPv6-Adressen und Routen über einen DHCP Server verteilt werden.
 Der angreifende Rechner benötigt Tools um Router Advertisments im Netz zu versenden, IPv6-Adressen zu verteilen, IPv6-Adressen in IPv4-Adressen umzuwandeln sowie einen DNS Server.
 
-<h2>Grundlagen</h2>
+<h3>Grundlagen</h3>
 
-<h3>IPv6</h3>
-IPv6 wurde eingeführt, da der IPv4 Adressraum mit 2\textsuperscript32 (wobei nicht alle für die Adressierung verwendet werden können) Adressen zu klein geworden ist. Der Adressraum wurde auf 2\textsuperscript128 erweitert um auch in der Zukunft genug Adressen zur Verfügung zu haben. IPv6 stellt ein vollkommen neues Protokoll dar und ist daher nicht abwärtskompatibel zu IPv4 (so wurde z.B. ARP durch das Neighbor Discovery Protocol ersetzt). 
+<h4>IPv6</h4>
+IPv6 wurde eingeführt, da der IPv4 Adressraum mit 2<sup>32</sup> (wobei nicht alle für die Adressierung verwendet werden können) Adressen zu klein geworden ist. Der Adressraum wurde auf 2<sup>128</sup> erweitert um auch in der Zukunft genug Adressen zur Verfügung zu haben. IPv6 stellt ein vollkommen neues Protokoll dar und ist daher nicht abwärtskompatibel zu IPv4 (so wurde z.B. ARP durch das Neighbor Discovery Protocol ersetzt). 
 Die Konfiguration der IPv6-Adressen erfolgt entweder via SLAAC (Stateless Address Autoconfiguration) bei der sich der Host selber eine Adresse bestehend aus dem Netzwerkpräfix und dem Interface Identifier zuweist und diese dem Netzwerk mitteilt. Eine andere Möglichkeit ist es, einen DHCP-Server für IPv6 einzusetzen. Dies hat den Vorteil, dass z.B. DNS-Adressen und Domainnamen mitkonfiguriert werden können.
 Der IPv6 Netzwerkverkehr wird in einem dual-stack Netz (IPv4 und IPv6 im Parallelbetrieb) bevorzugt. Diese Eigenschaft ist die Grundlage dieses Angriffes.
 
-<h3>Nat64</h3>
+<h4>Nat64</h4>
 Hierbei handelt es sich um einen Mechanismus, mit dessen Hilfe IPv6-Adressen in IPv4-Adressen (und IPv4 in IPv6) umgewandelt werden. Dies ermöglicht die Kommunikation von Rechnern aus unterschiedlichen IP-Konfigurationen. 
 Die Umwandlung einer IPv4-Adresse in eine IPv6-Adresse erfolgt über eine Kapselung:
 Beispiel:
@@ -573,284 +573,209 @@ Beispiel:
 </ul>
 Dies ergibt die Adresse: 2010:808:abc:FFFF:: C0A8:B20A. Die Umwandlung einer IPv6- in eine IPv4-Adresse stellt die umgekehrte Operation dar, es werden die letzten 8 Byte der Adresse in eine IPv4-Adresse umgewandelt.
 
-<h3>Router Advertisment</h3>
+<h4>Router Advertisment</h4>
 Mittels Router Advertisment bieten Router ihre Dienste in einem Netzwerk an. Dies geschieht entweder auf Anfrage (Router Solicitation) oder in festen Zeitabständen.
 
-<h2>Szenario</h2>
-In einem IPv4 Netzwerk installiert der Angreifer seinen Rechner als IPv6 Router, DHCP-Server und Gateway. Zusätzlich stellt er einen DNS-Server bereit. Das Ziel dieses MITM-Angriffes ist, den kompletten Netzwerkverkehr (IPv4 und IPv6) über den Rechner des Angreifers laufen zu lassen. Hierfür wird Nat64 eingesetzt, das angegriffene Netz kommuniziert dadurch nur noch über IPv6, die Umwandlung in IPv4-Adressen erfolgt am Rechner des Angreifers. Abbildung <a href="#reffig:fakeIpv6_szenario">(0)</a>
+<h3>Szenario</h3>
+In einem IPv4 Netzwerk installiert der Angreifer seinen Rechner als IPv6 Router, DHCP-Server und Gateway. Zusätzlich stellt er einen DNS-Server bereit. Das Ziel dieses MITM-Angriffes ist, den kompletten Netzwerkverkehr (IPv4 und IPv6) über den Rechner des Angreifers laufen zu lassen. Hierfür wird Nat64 eingesetzt, das angegriffene Netz kommuniziert dadurch nur noch über IPv6, die Umwandlung in IPv4-Adressen erfolgt am Rechner des Angreifers. Abbildung <a href="#reffig:fakeIpv6_szenario">4.14</a>
  stellt schematisch das angegriffene Netz inklusive Rechner des Angreifers dar.
-\beginfigure[h!]
-	\centering
-	 <font face=symbol>Î</font> cludegraphics[width=0.8\textwidth]bilder/fakeIPv6/fakeIpv6_szenario.pdf
-	<font face=symbol>Ç</font>tionSchematische Darstellung des angegriffenen Netzes
+<figure>
+	<img src="bilder/fakeIPv6/fakeIpv6_szenario.png"></img>
+	<figcaption>Abbildung 4.14: Schematische Darstellung des angegriffenen Netzes</figcaption>
 	<a name="reffig:fakeIpv6_szenario">
+</figure>
 
-\endfigure
-
-<h2>Technisches</h2>
+<h3>Technisches</h3>
 Sobald der Angriff gestartet wird, erhalten die Clients im angegriffenen Netz eine IPv6-Adresse, die IPv6-Adressen des DNS-Servers und des Gateways des Angreifers. Diese werden durch vom Tool radvd versendete Router Advertisments konfiguriert. Da der IPv6-Verkehr vom Betriebssystem priorisiert behandelt wird, richten sich sämtliche DNS Anfragen an den DNS-Server des Angreifers (der „alte“ DNS-Server hat nur eine IPv4-Adresse). 
 Dieser liefert immer eine AAAA-Antwort. Dabei ist es egal ob eine IPv4- oder IPv6-Adresse angefragt wurde, da der Angreifer Adressen mittels Nat64 übersetzen kann. Da alle Hosts des angegriffenen Netzes IPv6-Adressen bei DNS Anfragen gemeldet bekommen, läuft der Netzwerkverkehr immer über das IPv6-Gateway, also über den Rechner des Angreifers. Dieser kann z.B. mit Wireshark den Netzwerkverkehr mitlesen.
 
-<h2>Erklärung der verwendeten Skripte und Tools</h2>
+<h3>Erklärung der verwendeten Skripte und Tools</h3>
 
-<h3>Radvd</h3>
+<h4>Radvd</h4>
 Der Router Advertisment Deamon (radvd) ist ein Programm, welches auf IPv6 Routern läuft. Es sendet zum einen periodisch Router Advertisments (RAs) aus. Zum anderen reagiert es auch, wenn per Router Solicitation angefragt wird. Die Installation erfolgt aus den Debian-Paketquellen. Zusätzlich muss für das Senden von RAs das IPv6 Forwarding aktiviert sein:
-\lstsetlanguage=bash
-\beginlstlisting[
-	basicstyle=\footnotesize,
-]
-apt-get install radvd
-echo 1 \textgreater /proc/sys/net/ipv6/conf/all/forwarding
-\endlstlisting
-
-Die Konfigurationsdatei liegt unter \textit/etc/radvd.conf (muss vor der ersten Ausführung des Python Skripts noch nicht vorhanden sein). In Tabelle <a href="#reftab:radvdConfig">(0)</a>
+<br>
+<code>
+apt-get install radvd<br>
+echo 1 &gt; /proc/sys/net/ipv6/conf/all/forwarding
+</code>
+<br><br>
+Die Konfigurationsdatei liegt unter <i>/etc/radvd.conf</i> (muss vor der ersten Ausführung des Python Skripts noch nicht vorhanden sein). In Tabelle <a href="#reftab:radvdConfig">4.1</a>
  wird der Inhalt dieser Datei erläutert.
-\beginlstlisting[
-	basicstyle=\footnotesize,
-]
-interface eth0 
-	AdvSendAdvert on;
-	MinRtrAdvInterval 3;
-	MaxRtrAdvInterval 10;
-	AdvHomeAgentFlag off;
-	AdvOtherConfigFlag on;
-	prefix 2001:06f8:0608:fab::/64 
-		AdvOnLink on;
-		AdvAutonomous on;
-		AdvRouterAddr on;
-	;
-;
-\endlstlisting
-
-\begintable
-	\centering
-		\begintabularlp9cm
-			Konfigurationselement & Bedeutung <br>
- \hline
-			AdvSendAdvert on & Legt das Interface fest für das RAs versendet werden sollen. <br>
-
-			MinRtrAdvInterval 3 & Aktiviert das Senden von RAs und die Antwort auf Router Solicitations. <br>
-
-			MinRtrAdvInterval 3 & Minimalzeit zwischen ausgesendeten RAs in Sekunden. Betrifft nur das periodische Senden, nicht die Antwort auf Router Solicitations. <br>
-
-			MaxRtrAdvInterval 10 & Maximalzeit zwischen ausgesendeten RAs in Sekunden. Betrifft nur das periodische Senden, nicht die Antwort auf Router Solicitations. <br>
-
-			AdvHomeAgentFlag off & Der Router kann nicht als Home-Agent für Mobile-IPv6 verwendet werden. <br>
-
-			AdvOtherConfigFlag on & Stellt sicher, dass nicht-adressbezogene Konfigurationsinformationen mitgeteilt werden sollen. <br>
-
-			prefix 2001:06f8:0608:fab::/64 & Legt das Netzwerkpräfix fest, das die Hosts nutzen sollen. <br>
-
-			AdvOnLink on & Legt fest, dass die Bereitstellung on-link erfolgt (ohne Hop über weiteren Router). <br>
-
-			AdvAutonomous on & Das Präfix kann für selbstständige Adress Konfiguration verwendet werden. <br>
-
-			AdvRouterAddr on & Legt fest, dass die Adresse des Interfaces und nicht das Präfix gesendet wird.  <br>
-
-		\endtabular
-	<font face=symbol>Ç</font>tionErläuterung der radvd Konfiguration
-	<a name="reftab:radvdConfig">
-
-\endtable
-\FloatBarrier
-<h3>Bind</h3>
+<br><br>
+<code>
+interface eth0 {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;AdvSendAdvert on;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;MinRtrAdvInterval 3;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;MaxRtrAdvInterval 10;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;AdvHomeAgentFlag off;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;AdvOtherConfigFlag on;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;prefix 2001:06f8:0608:fab::/64 {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AdvOnLink on;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AdvAutonomous on;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AdvRouterAddr on;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+};<br>
+</code>
+<br>
+<table>
+<tr><th align="left">Konfigurationselement</th><th align="left">Bedeutung</th></tr>
+<tr><td>interface eth0</td><td>Legt das Interface fest für das RAs versendet werden sollen.</td></tr>
+<tr><td>AdvSendAdvert on</td><td>Aktiviert das Senden von RAs und die Antwort auf Router Solicitations.</td></tr>
+<tr><td>MinRtrAdvInterval 3</td><td>Minimalzeit zwischen ausgesendeten RAs in Sekunden. Betrifft nur das periodische Senden, nicht die Antwort auf Router Solicitations.</td></tr>
+<tr><td>MaxRtrAdvInterval 10</td><td>Maximalzeit zwischen ausgesendeten RAs in Sekunden. Betrifft nur das periodische Senden, nicht die Antwort auf Router Solicitations.</td></tr>
+<tr><td>AdvHomeAgentFlag off</td><td>Der Router kann nicht als Home-Agent für Mobile-IPv6 verwendet werden.</td></tr>
+<tr><td>AdvOtherConfigFlag on</td><td>Stellt sicher, dass nicht-adressbezogene Konfigurationsinformationen mitgeteilt werden sollen.</td></tr>
+<tr><td>prefix 2001:06f8:0608:fab::/64</td><td>Legt das Netzwerkpräfix fest, das die Hosts nutzen sollen.</td></tr>
+<tr><td>AdvOnLink on</td><td>Legt fest, dass die Bereitstellung on-link erfolgt (ohne Hop über weiteren Router).</td></tr>
+<tr><td>AdvAutonomous on</td><td>Das Präfix kann für selbstständige Adress Konfiguration verwendet werden.</td></tr>
+<tr><td>AdvRouterAddr on</td><td>Legt fest, dass die Adresse des Interfaces und nicht das Präfix gesendet wird.</td></tr>
+<caption>Tabelle 4.1: Erläuterung der radvd Konfiguration</caption>
+<a name="reftab:radvdConfig">
+</table>
+	
+<h4>Bind</h4>
 Als DNS Server kommt Bind (Berkeley Internet Name Domain) zum Einsatz. Dieser offene DNS-Server ist für alle gängigen Betriebssysteme verfügbar und genießt eine hohe Verbreitung. Die Installation erfolgt aus den Debian-Paketquellen:
-\lstsetlanguage=bash
-\beginlstlisting[
-	basicstyle=\footnotesize,
-]
+<br>
+<code>
 apt-get install bind9
-\endlstlisting
-
-Die Konfigurationsdatei liegt unter \textit/etc/bind/named.conf.options (muss vor der ersten Ausführung des Python Skripts noch nicht vorhanden sein). In Tabelle <a href="#reftab:bindConfig">(0)</a>
+</code>
+<br>
+<br>
+Die Konfigurationsdatei liegt unter <i>/etc/bind/named.conf.options</i> (muss vor der ersten Ausführung des Python Skripts noch nicht vorhanden sein). In Tabelle <a href="#reftab:bindConfig">4.2</a>
  wird der Inhalt dieser Datei erläutert.
-\beginlstlisting[
-	basicstyle=\footnotesize,
-]
-options 
-	directory "/var/cache/bind";
-	forwarders 
-		8.8.8.8
-	;
-	dnssec-validation auto;
-	auth-nxdomain no;
-	listen-on-v6  any; ;
-	allow-query  any; ;
-	dns64 2001:db8:1:FFFF::/96 
-		clients  any; ;
-		exclude  any; ;
-	;
-;
-\endlstlisting
+<br><br>
+<code>
+options {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;directory "/var/cache/bind";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;forwarders {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.8.8.8<br>
+&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dnssec-validation auto;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;auth-nxdomain no;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;listen-on-v6 { any; };<br>
+&nbsp;&nbsp;&nbsp;&nbsp;allow-query { any; };<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dns64 2001:db8:1:FFFF::/96 {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clients { any; };<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exclude { any; };<br>
+&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+};<br>
+</code>
+<br>
 
-\begintable
-	\begintabularlp9cm
-		Konfigurationselement & Bedeutung <br>
- \hline
-		directory "/var/cache/bind" & Verzeichnis in dem sich die Zonendaten befinden. <br>
+<table>
+<tr><th align="left">Konfigurationselement</th><th align="left">Bedeutung</th></tr>
+<tr><td>directory "/var/cache/bind"</td><td>Verzeichnis in dem sich die Zonendaten befinden.</td></tr>
+<tr><td>forwarders</td><td>Alle aufgeführten IP-Adressen stellen DNS-Server dar. Bind muss die Anfrage an einen dieser Server weiterreichen.</td></tr>
+<tr><td>dnssec-validation auto</td><td>Bind versucht Antworten aus DNSSEC gesicherten Zonen zu validieren. "auto" gibt dabei an, dass Binds default Sicherheitseintrag verwendet wird.</td></tr>
+<tr><td>auth-nxdomain no</td><td>Der DNS-Server darf keine autoritativen Antworten senden (z.B., wenn er im Cache die Information gespeichert hat, dass eine Adresse nicht über den Nameserver ihrer Zone existiert)</td></tr>
+<tr><td>listen-on-v6 { any }</td><td>Bind lauscht auf Port 53 (default) auf Anfragen aus allen Netzen.</td></tr>
+<tr><td>allow-query { any }</td><td>Clients dürfen aus allen Netzen heraus Anfragen an den DNS-Server stellen.</td></tr>
+<tr><td>ns64 2001:db8:1:FFFF::/96</td><td>Die folgenden Punkte legen das Verhalten von dns64 für das Netz 2001:db8:1:FFFF::/96 fest.</td></tr>
+<tr><td>clients { any }</td><td>Dns64 ist für alle Clients des Netzes aktiv.</td></tr>
+<tr><td>exclude { any }</td><td>Dns64 verwirft sämtliche AAAA-Antworten, fragt A-Einträge an und bildet daraus neue AAAA-Antworten (siehe Nat64).</td></tr>
+<caption>Tabelle 4.2: Erläuterung der Bind Konfiguration</caption>
+<a name="reftab:bindConfig">
+</table>
 
-		forwarders & Alle aufgeführten IP-Adressen stellen DNS-Server dar. Bind muss die Anfrage an einen dieser Server weiterreichen. <br>
 
-		dnssec-validation auto & Bind versucht Antworten aus DNSSEC gesicherten Zonen zu validieren. „auto“ gibt dabei an, dass Binds default Sicherheitseintrag verwendet wird. <br>
-
-		auth-nxdomain no & Der DNS-Server darf keine autoritativen Antworten senden (z.B., wenn er im Cache die Information gespeichert hat, dass eine Adresse nicht über den Nameserver ihrer Zone existiert) <br>
-
-		listen-on-v6  any;  & Bind lauscht auf Port 53 (default) auf Anfragen aus allen Netzen. <br>
-
-		allow-query  any;  & Clients dürfen aus allen Netzen heraus Anfragen an den DNS-Server stellen. <br>
-
-		dns64 2001:db8:1:FFFF::/96 & Die folgenden Punkte legen das Verhalten von dns64 für das Netz 2001:db8:1:FFFF::/96 fest. <br>
-
-		clients  any;  & Dns64 ist für alle Clients des Netzes aktiv. <br>
-
-		exclude  any;  & Dns64 verwirft sämtliche AAAA-Antworten, fragt A-Einträge an und bildet daraus neue AAAA-Antworten (siehe Nat64) <br>
-
-	\endtabular
-	<font face=symbol>Ç</font>tionErläuterung der Bind Konfiguration
-	<a name="reftab:bindConfig">
-
-\endtable
-
-\FloatBarrier
-
-<h3>Tayga</h3>
+<h4>Tayga</h4>
 Bei Tayga handelt es sich um eine Nat64 Implementierung für Linux-Systeme. Es legt eine neue, virtuelle Netzwerkschnittstelle an um IPv4- in IPv6-Adressen umzuwandeln. Die Installation erfolgt aus den Debian-Paketquellen:
-\lstsetlanguage=bash
-\beginlstlisting[
-	basicstyle=\footnotesize,
-]
+<br>
+<code>
 apt-get install tayga
-\endlstlisting
+</code>
+<br><br>
 
-
-Die Konfigurationsdatei liegt unter \textit/etc/tayga.conf (muss vor der ersten Ausführung des Python Skripts noch nicht vorhanden sein). In Tabelle <a href="#reftab:taygaConfig">(0)</a>
+Die Konfigurationsdatei liegt unter <i>/etc/tayga.conf</i> (muss vor der ersten Ausführung des Python Skripts noch nicht vorhanden sein). In Tabelle <a href="#reftab:taygaConfig">4.3</a>
  wird der Inhalt dieser Datei erläutert.
-\beginlstlisting[
-	basicstyle=\footnotesize,
-]
-un-device sBnat64
-ipv4-addr 192.168.255.1
-prefix 2001:db8:1:FFFF::/96
-dynamic-pool 192.168.255.0/24
-\endlstlisting
+<br><br>
+<code>
+un-device sBnat64<br>
+ipv4-addr 192.168.255.1<br>
+prefix 2001:db8:1:FFFF::/96<br>
+dynamic-pool 192.168.255.0/24<br>
+</code>
+<br>
 
-\begintable
-	\centering
-		\begintabularlp9cm
-			Konfigurationselement & Bedeutung <br>
- \hline
-			tun-device sBnat64 & Legt den Namen des virtuellen Interfaces fest. <br>
-
-			ipv4-addr 192.168.255.1 & IPv4-Adresse, die von Tayga verwendet wird. Diese darf nicht Teil des angegriffenen Netzes sein. <br>
-
-			Prefix 2001:db8:1:FFFF::/96 & Verwendetes Präfix um IPv4-Adressen in IPv6-Adressen zu kapseln. <br>
-
-			dynamic-pool 192.168.255.0/24 & Legt einen Adresspool fest, welcher für Mapping von IPv6-Adressen verwendet wird, die nicht dem Präfix entsprechen. <br>
-
-		\endtabular
-	<font face=symbol>Ç</font>tionErläuterung der tayga Konfiguration
-	<a name="reftab:taygaConfig">
-
-\endtable
-
-\FloatBarrier
-
+<table>
+<tr><th align="left">Konfigurationselement</th><th align="left">Bedeutung</th></tr>
+<tr><td>tun-device sBnat64</td><td>Legt den Namen des virtuellen Interfaces fest.</td></tr>
+<tr><td>ipv4-addr 192.168.255.1</td><td>IPv4-Adresse, die von Tayga verwendet wird. Diese darf nicht Teil des angegriffenen Netzes sein.</td></tr>
+<tr><td>Prefix 2001:db8:1:FFFF::/96</td><td>Verwendetes Präfix um IPv4-Adressen in IPv6-Adressen zu kapseln.</td></tr>
+<tr><td>dynamic-pool 192.168.255.0/24</td><td>Legt einen Adresspool fest, welcher für Mapping von IPv6-Adressen verwendet wird, die nicht dem Präfix entsprechen.</td></tr>
+<caption>Tabelle 4.3: Erläuterung der tayga Konfiguration</caption>
+<a name="reftab:taygaConfig">
+</table>
+<br>
 Durch Ausführen von 
-\lstsetlanguage=bash
-\beginlstlisting[
-	basicstyle=\footnotesize,
-]
+<br>
+<code>
 /usr/sbin/tayga --mktun
-\endlstlisting
+</code>
+<br>
 
-wird das virtuelle Interface angelegt. Mit \textitifconfig kann die Konfiguration eingesehen werden (Abb. <a href="#reffig:tunInterface">(0)</a>
-). 
-\beginfigure[h!]
-	\centering
-	 <font face=symbol>Î</font> cludegraphics[width=0.80\textwidth]bilder/fakeIPv6/tunInterface.pdf
-	<font face=symbol>Ç</font>tionIfconfig-Ausgabe des virtuellen Interfaces
-	<a name="reffig:tunInterface">
-
-\endfigure
-
-
-<h3>Wide-dhcpv6</h3>
-Als IPv6-DHCP-Server kommt wide-dhcpv6 zum Einsatz. Hierbei handelt es sich um eine open-source Implementierung von DHCP für IPv6. Die Installation erfolgt aus den Debian-Paketquellen:
-\lstsetlanguage=bash
-\beginlstlisting[
-	basicstyle=\footnotesize,
-]
-apt-get install wide-dhcpv6-server
-\endlstlisting
-
-Die Konfigurationsdatei liegt unter /etc/wide-dhcpv6/dhcp6s.conf (muss vor der ersten Ausführung des Python Skripts noch nicht vorhanden sein). In Tabelle <a href="#reftab:wideDhcpConfig">(0)</a>
- wird der Inhalt dieser Datei erläutert.
-\beginlstlisting[
-	basicstyle=\footnotesize,
-]
-option domain-name-servers 2001:db8:1::2;
-option domain-name "securityWorkbench";
-interface eth0 
-	address-pool addrPool 3600;
-;
-pool addrPool 
-	range 2001:db8:1:CAFE::10 to 2001:db8:1:CAFE::0240;
-;
-
-\endlstlisting
-
-\begintable
-	\centering
-		\begintabularlp9cm
-			Konfigurationselement & Bedeutung <br>
- \hline
-			option domain-name-servers 2001:db8:1::2 & Legt die IPv6-Adresse des DNS-Servers fest. <br>
-
-			option domain-name "securityWorkbench" & Name der Domain. <br>
-
-			interface eth0 & Setzt das DHCP-Interface auf eth0. <br>
-
-			address-pool addrPool 3600 & Legt den Adresspool für DHCP auf „addrPool“fest. 3600 stellt die Gültigkeit in Sekunden dar.  <br>
-
-			pool addrPool & Legt einen neuen Adresspool an. <br>
-
-			range 2001:db8:1:CAFE::10 to 2001:db8:1:CAFE::0240 & Gibt den Adressbereich des Adresspools an. <br>
-
-		\endtabular
-	<font face=symbol>Ç</font>tionErläuterung der wide-dhcp6 Konfiguration
-	<a name="reftab:wideDhcpConfig">
-
-\endtable
-
-\FloatBarrier
-
-
-<h3>Iptables</h3>
-Zusätzlich müssen noch einige Iptables Einträge vorgenommen werden (Tab. <a href="#reftab:IptablesEintraege">(0)</a>
+wird das virtuelle Interface angelegt. Mit <i>ifconfig</i> kann die Konfiguration eingesehen werden (Abb. <a href="#reffig:tunInterface">4.15</a>
 ).
-\begintable
-	\centering
-		\begintabularp6cmp9cm
-			Eintrag & Auswirkung <br>
- \hline
-			/sbin/iptables -I FORWARD -j ACCEPT -i sBnat64 -o eth0 & Alle Pakete, die an Interface sBnat64 eingehen und über Interface eth0 versendet werden, werden akzeptiert. <br>
- \hline
-			/sbin/iptables -I FORWARD -j ACCEPT -i eth0 -o sBnat64 -m state --state RELATED,ESTABLISHED & Alle Pakete, die an Interface eth0 eingehen, über Interface sBnat64 versendet und die zu einer bestehenden Verbindung oder mit einer bestehenden Verbindung verwandt sind (z.B. ein ICMP Fehler) werden akzeptiert. <br>
- \hline
-			/sbin/iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE & Pakete, die über das Interface eth0 versendet werden und auf die NAT angewendet wird, werden nach dem Routen (aber vor dem Versenden) maskiert. Der Router setzt seine eigene Adresse als Quelladresse ein. <br>
- \hline
-			/sbin/ip6tables -A OUTPUT -p icmpv6 --icmpv6-type 1 -j DROP & ICMPv6 Pakete werden verworfen. <br>
+<figure>
+	<img src="bilder/fakeIPv6/tunInterface.png"></img>
+	<figcaption>Abbildung 4.15: Ifconfig-Ausgabe des virtuellen Interfaces</figcaption>
+	<a name="reffig:tunInterface">
+</figure>
 
-		\endtabular
-	<font face=symbol>Ç</font>tionIptables Einträge
-	<a name="reftab:IptablesEintraege">
 
-\endtable
+<h4>Wide-dhcpv6</h4>
+Als IPv6-DHCP-Server kommt wide-dhcpv6 zum Einsatz. Hierbei handelt es sich um eine open-source Implementierung von DHCP für IPv6. Die Installation erfolgt aus den Debian-Paketquellen:
+<br>
+<code>
+apt-get install wide-dhcpv6-server
+</code>
+<br><br>
+Die Konfigurationsdatei liegt unter </i>/etc/wide-dhcpv6/dhcp6s.conf</i> (muss vor der ersten Ausführung des Python Skripts noch nicht vorhanden sein). In Tabelle <a href="#reftab:wideDhcpConfig">4.4</a>
+ wird der Inhalt dieser Datei erläutert.
+<br><br>
+<code>
+option domain-name-servers 2001:db8:1::2;<br>
+option domain-name "securityWorkbench";<br>
+interface eth0 {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;address-pool addrPool 3600;<br>
+};<br>
+pool addrPool {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;range 2001:db8:1:CAFE::10 to 2001:db8:1:CAFE::0240;<br>
+};<br>
+</code>
+<br>
+<table>
+<tr><th align="left">Konfigurationselement</th><th align="left">Bedeutung</th></tr>
+<tr><td>option domain-name-servers 2001:db8:1::2</td><td>Legt die IPv6-Adresse des DNS-Servers fest.</td></tr>
+<tr><td>option domain-name "securityWorkbench"</td><td>Name der Domain.</td></tr>
+<tr><td>interface eth0</td><td>Setzt das DHCP-Interface auf eth0.</td></tr>
+<tr><td>address-pool addrPool 3600</td><td>Legt den Adresspool für DHCP auf "addrPool" fest. 3600 stellt die Gültigkeit in Sekunden dar.</td></tr>
+<tr><td>pool addrPool</td><td>Legt einen neuen Adresspool (addrPool) an.</td></tr>
+<tr><td>range 2001:db8:1:CAFE::10 to 2001:db8:1:CAFE::0240</td><td>Gibt den Adressbereich des Adresspools an.</td></tr>
+<caption>Tabelle 4.4: Erläuterung der wide-dhcp6 Konfiguration</caption>
+<a name="reftab:wideDhcpConfig">
+</table>
+<br>
 
-<h2>Benutzung des Python Skripts</h2>
+<h4>Iptables</h4>
+Zusätzlich müssen noch einige Iptables Einträge vorgenommen werden (Tab. <a href="#reftab:IptablesEintraege">4.5</a>
+).
+<br>
+<table>
+<tr><th align="left">Eintrag</th><th align="left">Auswirkung</th></tr>
+<tr><td>iptables -I FORWARD -j ACCEPT -i sBnat64 -o eth0</td><td>Alle Pakete, die an Interface sBnat64 eingehen und über Interface eth0 versendet werden, werden akzeptiert.</td></tr>
+<tr><td>iptables -I FORWARD -j ACCEPT -i eth0 -o sBnat64 -m state --state RELATED,ESTABLISHED</td><td>Alle Pakete, die an Interface eth0 eingehen, über Interface sBnat64 versendet und die zu einer bestehenden Verbindung oder mit einer bestehenden Verbindung verwandt sind (z.B. ein ICMP Fehler) werden akzeptiert.</td></tr>
+<tr><td>iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE</td><td>Pakete, die über das Interface eth0 versendet werden und auf die NAT angewendet wird, werden nach dem Routen (aber vor dem Versenden) maskiert. Der Router setzt seine eigene Adresse als Quelladresse ein.</td></tr>
+<tr><td>ip6tables -A OUTPUT -p icmpv6 --icmpv6-type 1 -j DROP</td><td>ICMPv6 Pakete werden verworfen.</td></tr>
+<caption>Tabelle 4.5: Iptables Einträge</caption>
+<a name="reftab:IptablesEintraege">
+</table>
+<br>
+
+<h3>Benutzung des Python Skripts</h3>
 <ol>
 	
-<li> Im Hauptmenü des Skriptes den Punkt „Fake IPv6 Network“ wählen. Anschließend „Start Attack“ auswählen.
+<li> Im Hauptmenü des Skriptes den Punkt "Fake IPv6 Network" wählen. Anschließend "Start Attack" auswählen.
 	
 <li> Das Interface angeben, welches für den Angriff verwendet werden soll. Bei einfacher Bestätigung mit Enter, ohne ein Interface angegeben zu haben, wird standardmäßig das Interface eth0 verwendet.
 	
@@ -858,21 +783,18 @@ Zusätzlich müssen noch einige Iptables Einträge vorgenommen werden (Tab. <a h
 	
 <li> Der Angriff läuft, die Auswirkungen lassen sich in Wireshark beobachten.
 	
-<li> Drücken von „Enter“ beendet den Angriff.
+<li> Drücken von "Enter" beendet den Angriff.
 	
 <li> Soll der Angriff erneut gestartet werden, empfiehlt es sich den angreifenden Rechner neu zu starten um alle nicht persistenten Einstellungen zu verwerfen.
 </ol>
-Ausgabe des Programms während des Angriffs:
-\beginfigure[h!]
-	\centering
-	 <font face=symbol>Î</font> cludegraphics[width=0.80\textwidth]bilder/fakeIPv6/fakeIPv6menu.pdf
-	<font face=symbol>Ç</font>tionKonsolenausgabe des Angriffs
+<figure>
+	<img src="bilder/fakeIPv6/fakeIPv6menu.png"></img>
+	<figcaption>Abbildung 4.16: Konsolenausgabe des Angriffs</figcaption>
 	<a name="reffig:fakeIPv6menu">
+</figure>
 
-\endfigure
 
-
-<h2>Gegenmaßnahmen</h2>
+<h3>Gegenmaßnahmen</h3>
 Eine Möglichkeit das Netzwerk gegen diesen Angriff zu schützen ist, die automatische IPv6-Konfiguration zu verbieten und stattdessen auf manuelle Konfiguration umzuschalten. <br>
 
 RA-Snooping bietet eine weitere Möglichkeit. Hierbei werden auf Layer-2 Switches RAs analysiert. RAs aus falschen Quellen werden blockiert oder verworfen. <br>

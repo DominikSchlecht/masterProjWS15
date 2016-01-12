@@ -89,10 +89,10 @@ class FakeIPv6(attackBase.Attack):
 
 	def iptables(self):
 
-		os.popen("/sbin/iptables -I FORWARD -j ACCEPT -i " + self.natInterface + " -o " + self.listenIface)
-		os.popen("/sbin/iptables -I FORWARD -j ACCEPT -i " + self.listenIface + " -o " + self.natInterface +  " -m state --state RELATED,ESTABLISHED")
-		os.popen("/sbin/iptables -t nat -I POSTROUTING -o " + self.listenIface + " -j MASQUERADE")
-		os.popen("/sbin/ip6tables -A OUTPUT -p icmpv6 --icmpv6-type 1 -j DROP")
+		os.popen("iptables -I FORWARD -j ACCEPT -i " + self.natInterface + " -o " + self.listenIface)
+		os.popen("iptables -I FORWARD -j ACCEPT -i " + self.listenIface + " -o " + self.natInterface +  " -m state --state RELATED,ESTABLISHED")
+		os.popen("iptables -t nat -I POSTROUTING -o " + self.listenIface + " -j MASQUERADE")
+		os.popen("ip6tables -A OUTPUT -p icmpv6 --icmpv6-type 1 -j DROP")
 
 
 	# Write the DHCP config file (default: /etc/wide-dhcpv6/dhcp6s.conf)
@@ -229,10 +229,10 @@ class FakeIPv6(attackBase.Attack):
 		subprocess.call(["service", "radvd", "stop"])
 		subprocess.call(["service", "bind9", "stop"])
 		subprocess.call(["service", "wide-dhcpv6-server", "stop"])
-		os.popen("/sbin/iptables -F")
-		os.popen("/sbin/iptables -X")
-		os.popen("/sbin/ip6tables -F")
-		os.popen("/sbin/ip6tables -X")
+		os.popen("iptables -F")
+		os.popen("iptables -X")
+		os.popen("ip6tables -F")
+		os.popen("ip6tables -X")
 
 
 	def start(self):
