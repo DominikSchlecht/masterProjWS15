@@ -1,6 +1,80 @@
 {% include 'static/header.html' %}
 <h3>WEP</h3>
-TODO
+WEP (Wired Equivalent Privacy) ist ein Standard für die Verschlüsselung und Authentifizierung von WLANs aus dem Jahr 1999. Ziel war es, Funknetzwerke genauso sicher wie kabelgebundene Netzwerke zu machen. Um dieses Ziel zu erreichen bietet WEP Mechanismen für die Authentifizierung, Verschlüsselung und Integritätsprüfung. 
+
+WEP enthält grundlegende Design-Schwächen und gilt seit 2001 als geknackt. 
+
+Für die Authentifizierung der Clients am Access Point sieht WEP zwei Varianten vor, die Open System Authentication oder die Shared Key Authentication. 
+
+Die Open System Authentication ist die Standard-Authentifizierung bei WEP. Diese schaltet für ein WLAN alle Clients frei, eine Authentifizierung findet praktisch nicht statt.
+
+Die Shared Key Authentication setzt das WLAN-Passwort zur Authentifizierung der WLAN-Clients ein. Die Authentifizierung erfolgt per Challange-Response-Verfahren. 
+
+Das bei WEP verwendete Verschlüsselungsverfahren en ist RC4, eine Datenstromchiffrierung.  Ein mit WEP verschlüsseltes Datenpaket besteht aus dem geheimen WEP-Schlüssel mit 40 oder 104 Bit Länge (WEP64 / WEP128), einer 32 Bit Prüfsumme der unverschlüsselten Daten (Integrity Check Value, ICV) und einem 24 Bit langem Initialisierungsvektor,  den WEP-Schlüssel zum Gesamtschlüssel auf 64 Bit oder 128 Bit verlängert und einmal pro Datenpaket inkrementiert (-1) wird. 
+
+<h1>Cracking des WEP Keys</h1>
+Zuerst muss geprüft werden, ob der eingesteckte USB WLAN-Adapter erkannt wird und
+somit einsatzbereit ist. Dazu das Terminal öffnen in Kali Linux öffnen und folgenden Befehl
+eingeben.
+<p><em>iwconfig</em></p><br/>
+Nun sollte der Adapter als Interface, meist wlan0 oder wlan1, angezeigt werden.
+Bei den nun folgenden Befehlen wurde der WLAN-Adapter duch den Interface-Namen wlanX gekennzeichnet, welche durch den tatsächlichen Interface-Namen(z.B. wlan0) ersetzt werden muss.<br />
+
+Zusätzlich benötigen wir noch die MAC-Adresse des WLAN-Adapters, diese erhalten wir über den Befehl
+
+<p><em>ifconfig</em></p>
+
+
+Angreifer Wlan Mac:  00-C0-CA-88-85-98
+
+
+<p><em>airmon-ng check kill</em></p>
+
+Auf dem Betriebssystem laufen eventuell um Zugriff auf den WLAN-Adapter konkurierende Prozesse, welche durch das obenstehende Kommando beendet werden.
+
+<p><em>airodump-ng wlanX</em></p>
+
+Nach drücken von Enter können wir nun nach in der Umgebung verfügbaren Netzwerken im 2.4 GHz-Band suchen. Für die Suche im 5 GHz-Band muss der Parameter "-band abg" angehängt werden. Die Suche kann mit strg+c abgebrochen werden, wenn das anzugreifende Netz angezeigt wird.
+
+Das Ergebnis sieht in etwa so aus: <br>
+Ergebnis<br>
+
+ 66:E3:27:4F:DF:E7  -22        7        5    0  11  54e. WEP  WEP         HackMe_WEP_Open
+
+<br>
+
+Wir benötigen im weiteren die BSSID (MAC-Adresse des Access Points), den Netzwerknamen (SSID) und den Funkkanal, welche sich aus der durch den letzten Befehl generierten Tabelle entnehmen lässt.<br>
+
+Durch den Befehl
+
+<p><em>airodump-ng -c FUNKKANAL -w NETZWERKNAME --bssid BSSID wlanX</em></p>
+
+beginnen wir damit, den Datenverkehr des anzugreifenden Netzwerks in einer Datei aufzuzeichen. <br>
+
+Nun starten wir ein weiteres Terminal.
+
+<p><em>aireplay-ng -9 -e SSID -a BSSID wlan0</em></p>
+
+Durch den obenstehenden Befehl testen wir, ob der Ziel-Access Point anfällig für Injection ist. Durch diese Technik können wir zusätzlichen Datenverkehr auf dem Access Point generieren, um die Zeit für einen Angriff zu verkürzen.<br>
+
+besser als unten (reauthenticate alle 6 sekunden, keepalive jede sekunde): 
+Nun authentifizieren wir uns am Access Point. Jede Sekunde senden wir ein keepalive-Paket, die Authentifizierung erneuern wir alle 6 Sekunden.
+<p><em>aireplay-ng -1 6 -o 1 -q 1 -e NETZWERKNAME -a BSSID -h ADAPTER-MAC wlanX</em></p>
+
+Nun starten wir ein weiteres Terminal.
+
+Durch den untenstehenden Befehl lauschen wir auf ARP-Reqests aus dem Ziel-Netzwerk und senden diese wieder ins Netzwerk. Durch die Antwort des Acces Points erhalten wir zusätzliche Datenpakete.<br>
+<p><em>aireplay-ng -3 -b BSSID -h ADAPTER-MAC wlanX</em></p>
+
+Nun müssen wir warten, bis die Anzahl der Datenpakete mindestens 40000 erreicht. <br>
+
+Anschließend öffnen wir ein neues Terminal.<br>
+
+<p><em>aircrack-ng -b BSSID NETZWERKNAME-01.cap</em></p>
+
+Durch obenstehendes Kommando öffnen wir die Datei mit dem aufgezeichneten Datenverkehr und berechnen daraus den Schlüssel für das WLAN.<br>
+
+Nach einem erfolgreichen Angriff können wir die in den anderen Terminals laufenden Prozesse durch strg + c beenden.<br>
 
 <h3>WPA/WPA2</h3>
 WPA bzw. WPA2 (WiFi Protected Access) ist eine Kombination aus Authentifizierung und
@@ -162,4 +236,44 @@ mit denen Passwortkandidaten bearbeitet, mit anderen Wörtern verknüpft oder be
 Kombinationen übersprungen werden können. Regeln zu schreiben kann sehr aufwendig sein
 und erfordert viel Wissen über Passwörter. Daher kann für die ersten Versuche auch die
 best64.rule Regel verwendet werden, die standardmäßig bei hashcat dabei ist.
+
+<h2>DoS</h2>
+
+Für den DoS-Angriff verwenden wir das Tool MDK3 (Murder Death Kill 3), welches speziell für WLAN-Netzwerke entwickelt wurde. 
+
+Zuerst müssen die konkurierenden Prozesse über das Kommando 
+<p><em>airmon-ng check kill</em></p>
+beendet werden. 
+
+Danach versetzen wir den WLAN-Adapter in den Monitoring-Modus. Dies geschieht über das Kommando: 
+<p><em>airmon-ng start wlanX</em></p>
+Dabei gilt zu beachten das wlanX den eigentlichen Namen des WLAN-Adapters ersetzt werden muss (z.B. wlan1). 
+Der WLAN-Adapter erhält dabei einen neuen Namen, wlanXmon, wobei das X wieder durch den eigentlichen Namen des WLAN-Adapters ersetzt werden muss.
+
+Anschließend suchen wir uns den Ziel-Access Point aus. Dies geschieht über den Befehl: 
+<p><em>airodump-ng wlan0 --band abg</em></p>
+
+Aus der von diesem Werkzeug generierten Liste notieren wir die MAC-Adresse des Ziel-Access Points (BSSID) und die Art der Verschlüsselung. Diese wird im weiteren Verlauf benötigt. 
+
+Das MDK3-Tool stellt verschiedene Methoden bereit, um einen DoS-Angriff auf dem Ziel auszuführen. 
+
+<h3>Michael shutdown exploitation</h3>
+Diese Methode nutzt einen Fehler in der TKIP-Verschlüsselung aus, um den gesamten Datenverkehr im Ziel-Netzwerk zu unterbinden. Für einen erfolgreichen Angriff muss das WLAN mit TKIP verschlüsselt worden sein.<br/>
+<p><em>mdk3 wlanXmon m -t BSSID -j</em></p>
+Durch den Parameter -j wird MDK3 angewiesen, eine Schwachstelle in der QoS-Implementierung der TKIP-Verschlüsselung auszunutzen. Dadurch werden nur ein paar Datenpakete benötigt, um den Datenverkehr zu blockieren.
+Der Parameter wlanXmon muss wieder durch den eigentlichen Namen des WLAN-Adapters ersetzt werden. 
+
+<h3>Beacon Flood Mode</h3>
+Bei dieser Methode werden Beacon-Frames ausgesendet, um den Clients gefälschte Access Points vorzugaukeln. Dies kann zu Abstürzen der Netzwerkscanner oder Treiber der WLAN-Adapter führen. 
+<p><em>mdk3 wlanXmon b -c 1</em></p>
+Der Parameter wlanXmon muss wieder durch den eigentlichen Namen des WLAN-Adapters ersetzt werden.
+das -c legt den Funkkanal fest, auf dem die Access Points erstellt werden sollen. 
+
+<h3>Authentication DoS mode</h3>
+Bei dieser Methode werden vom Angreifer Authentication-Frames an den durch die BSSID spezifizerten Access Point geschickt. Zu viele Clients bringen den Access Point möglicherweise zum Absturz. 
+<p><em>mdk3 wlan0 a -a BSSID</em></p>
+
 {% include 'static/footer.html' %}
+
+
+
