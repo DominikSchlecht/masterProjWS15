@@ -8,7 +8,7 @@ Dabei bietet es zahlreiche Möglichkeiten der Automatisierung, die jedoch in der
 Burp arbeitet als Proxy auf dem eigenen Rechner und muss als solcher zunächst im Browser eingerichtet werden. Wie der Browser dafür eingerichtet werden muss kann man auf der Supportseite von Portswigger nachlesen, hierbei sollte auch gleich das CA-Zertifikat für HTTPS-Traffic installiert werden:<br><br>
 <a href="https://support.portswigger.net/customer/en/portal/articles/1783055-configuring-your-browser-to-work-with-burp">https://support.portswigger.net/customer/en/portal/articles/1783055-configuring-your-browser-to-work-with-burp</a>
 <br><br>
-Auf der VM ist Burp bereits auf Firefox eingerichtet. Um es zu verwenden muss zunächst die Burp Suite gestartet werden. Anschließend wird in Firefox über das Proxy Managment Tool Foxy Proxy (ein bereits vorinstalliertes Addon) die Burp Suite als Proxy ausgewählt.
+Auf der VM ist Burp bereits eingerichtet. Um es zu verwenden muss zunächst die Burp Suite gestartet werden. Es befindet sich im Ordner opt und lässt sich mit den Parametern java -jar burpsuite_free_v1.6.32.jar ausführen. Anschließend wird in Iceweasle über das Proxy Managment Tool Foxy Proxy (ein bereits vorinstalliertes Addon in der Browserleiste) die Burp Suite als Proxy ausgewählt.
 
 <h3>Funktionen</h3>
 <br>
@@ -26,7 +26,7 @@ Die Options wurden eventuell bereits bei der Einrichtung benötigt. Hier lassen 
 Burp Proxy markiert bereits selbständig interessante Felder durch fette, blaue Schrifft.<br><br>
 
 <h5>Aufgabe:</h5>
-Gehen sie auf Google und versuchen sie eine Google suche über Burpproxy abzufangen und zu ändern.<br>
+Gehen sie auf Wikipedia und versuchen sie eine Wikipedia Anmeldung über Burpproxy abzufangen und zu ändern.<br>
 
 <h4>Burp Spider</h4>
 
@@ -43,7 +43,7 @@ Verwendung:<br>
 Zunächst wird vom Proxy eine Request an den Repeater gegeben. Im Repeater Tab kann die Anfrage nun beliebig verändert werden und mit go gesendet werden. Auf der rechten Seite wird die Rückgabe des Servers angezeigt. So kann eine Verdächtige Response manuell getestet werden.<br>
 <br>
 <h5>Aufgabe:</h5>
-Hohlen sie sich die zuvor manipulierte Google abfrage in den Repeater und versuchen sie erneut diese zu manipulieren.<br>
+Hohlen sie sich die zuvor manipulierte Wikipedia Anmeldung in den Repeater und versuchen sie erneut diese zu manipulieren.<br>
 
 <h4>Burp Intruder</h4>
 
