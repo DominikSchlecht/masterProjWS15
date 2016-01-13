@@ -21,7 +21,7 @@ Als Proxy wird TOR verwendet. Weitere Informationen zur Funktionsweise kann man 
 Unter Debian kann TOR über apt installiert werden. Das Kommando hierfür ist: "sudo apt-get install tor". Nach der Installation sollte TOR auf Port 9050 lauschen. Dies kann durch das Kommando "sudo netstat -tulpena | grep 9050" überprüft werden.
 
 <h3>Anwendung</h3>
-Oftmals will man Anfragen an Webseiten anonym stellen. Gründe hierfür müssen nicht umbedingt illegal sein. Das anonyme ansehen von Webinhalten kann über z.B. den Tor-Browser (<a href="https://www.torproject.org/download/download-easy.html.en">Link</a>) relativ einfach durchgeführt werden. Doch wie kann man mit einem Konsolenprogramm, welches keine Proxys unterstützt, eine anonyme Anfrage an einene Server stellen? Hier hilft uns das Programm "proxychains", welche Programme entsprechend manipuliert.<br>
+Oftmals will man Anfragen an Webseiten anonym stellen. Gründe hierfür müssen nicht umbedingt illegal sein, sondern kann einfach den Schutz der Privatssphäre haben. Das anonyme Ansehen von Webinhalten kann über z.B. den Tor-Browser (<a href="https://www.torproject.org/download/download-easy.html.en">Link</a>) relativ einfach durchgeführt werden. Doch wie kann man mit einem Konsolenprogramm, welches keine Proxys unterstützt, eine anonyme Anfrage an einene Server stellen? Hier hilft uns das Programm "proxychains", welches Programme entsprechend manipuliert.<br>
 <br>
 Beispiel anhand von curl:<br>
 Mit curl kann eine Webseite sehr einfach heruntergeladen werden. Leider kann es jedoch nicht per Parameter dazu gebracht werden, einen Proxy wie TOR zu verwenden. So ergibt der Aufruf<br><br>
@@ -38,7 +38,7 @@ was meine "echte" IP ist. Benutzt man proxychains, wird der curl-Aufruf (standar
 142.4.213.25<br><br>
 Wie man sieht, wurde der Aufruf nun mit einer anderen IP aus dem TOR-Netzwerk ausfgeführt und ist somit nicht (oder nur sehr schwer) auf uns zurückverfolgbar.
 
-<p>Ausblick</p>
+<h3>Ausblick</h3>
 proxychains kann wesentlich mehr, als ein Programm durch eine einzelne Proxy zu schicken. Es unterstützt die Möglichkeit sog. Proxy-Chains zu bilden, also mehrere Proxys hintereinander zu schalten. Dies kann in vielen Situationen brauchbar sein, z.B. bei beschränkten Zugriffen oder bei höhreren Anforderungen an die Anonymität.
 <br><br>
 {% include 'static/footer.html' %}

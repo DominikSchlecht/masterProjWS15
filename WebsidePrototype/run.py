@@ -6,10 +6,6 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route("/ictf/")
-def ictf():
-    return render_template('ictf.html')
-
 @app.route("/netzwerk/")
 def netzwerk():
     return render_template('netzwerk.html')
@@ -37,6 +33,10 @@ def nmap():
 @app.route("/burpsuite/")
 def burpsuite():
     return render_template('burpsuite.html')
+
+@app.route("/commandinjection/")
+def commandinjection():
+    return render_template('commandinjection.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

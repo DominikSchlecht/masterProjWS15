@@ -16,13 +16,13 @@ Voraussetzungen für die weiteren Übungen:\\
 
 - Alfa USB WLAN-Adapter\\
 - Workstation/Notebook\\
-- Virtual Box mit Kali Linux Image (+ Extension Pack)\\
+- Virtualisierungsumgebung mit Linux Image\\
 - Grundlegende Kenntnisse mit Linux\\
 
 Konfiguration des Alfa Adapters in Kombination mit Virtual Box:\\
 
 Anschluss des Adapters über das beigelegte Y-Kabel an den Host.
-In Virtual Box die Kali Maschine auswählen $\rightarrow$ Rechtsklick: Ändern $\rightarrow$ USB auswählen $\rightarrow$ USB-2.0-Controller aktivieren $\rightarrow$ USB-Filter hinzufügen
+In Virtual Box die Linux Maschine auswählen $\rightarrow$ Rechtsklick: Ändern $\rightarrow$ USB auswählen $\rightarrow$ USB-2.0-Controller aktivieren $\rightarrow$ USB-Filter hinzufügen
 $\rightarrow$ Ralink WLAN auswählen (falls nicht vorhanden im GeräteManager nach dem WLAN Adapter suchen) $\rightarrow$ Mit OK bestätigen.\\
 %Zusätzlich einen neuen Filter anlegen und Hersteller- bzw. Produkt-ID aus dem ersten Filter übernehmen. Die anderen Felder können unausgefüllt werden
 Den WLAN Adapter ausstecken\\
@@ -36,6 +36,100 @@ Dann kann es helfen entweder den Adapter aus- und wieder anzustecken oder die Ei
 
 
 \section{WEP}
+WEP (Wired Equivalent Privacy) ist ein Standard für die Verschlüsselung und Authentifizierung von WLANs aus dem Jahr 1999. Ziel war es, Funknetzwerke genauso sicher wie kabelgebundene Netzwerke zu machen. Um dieses Ziel zu erreichen bietet WEP Mechanismen für die Authentifizierung, Verschlüsselung und Integritätsprüfung. 
+
+WEP enthält grundlegende Design-Schwächen und gilt seit 2001 als geknackt. 
+Für die Authentifizierung der Clients am Access Point sieht WEP zwei Varianten vor, die Open System Authentication oder die Shared Key Authentication. 
+
+Die Open System Authentication ist die Standard-Authentifizierung bei WEP. Diese schaltet für ein WLAn alle Clients frei, eine Authentifizierung findet praktisch nicht statt.
+
+Die Shared Key Authentication setzt das WLAN-Passwort zur Authentifizierung der WLAN-Clients ein. Die Authentifizierung erfolgt per Challange-Response-Verfahren. 
+
+Das bei WEP verwendete Verschlüsselungsverfahren en ist RC4, eine Datenstromchiffrierung.  Ein mit WEP verschlüsseltes Datenpaket besteht aus dem geheimen WEP-Schlüssel mit 40 oder 104 Bit Länge (WEP64 / WEP128), einer 32 Bit Prüfsumme der unverschlüsselten Daten (Integrity Check Value, ICV) und einem 24 Bit langem Initialisierungsvektor,  den WEP-Schlüssel zum Gesamtschlüssel auf 64 Bit oder 128 Bit verlängert und einmal pro Datenpaket inkrementiert (-1) wird. 
+
+Das gesamte Datenpaket besteht aus den Daten und der der 32-bit-Prüfsumme. Dies wird mit der IV-WEP-Schlüssel-Kombination verschlüsselt. Den verschlüsselten Daten wird der IV vorangestellt, damit der Empfänger den RC4-Schlüssel aus IV- und WEP-Schlüssel zusammensetzen und die verschlüsselten Daten entschlüsseln kann.
+
+{\Large Schwächen bei WEP}\\
+Der IV wird bei jedem Frame fortlaufend inkrementiert, weshalb er irgendwann wiederholt wird. 
+Da der IV im Klartext übertragen wird, entspricht die effektive Verschlüsselung nur 40 bzw. 104 Bit, obwohl häufig von 64 oder 128 Bit gesprochen wird.
+
+Die Authentifizierung, Verschlüsselung und Integritätsprüfung verwenden zudem den gleichen Schlüssel. 
+
+Ein Angriff auf die WEP-Verschlüsselung erfolgt üblicherweise durch das Aufzeichnen einer ausreichenden menge an Datenverkehr. Aus Diesem lässt sich im Anschluss daran der WEP-Schlüssel berechnen. Dies geschieht durch aufzeichnen der 2\^24 Schlüsselmöglichkeiten des IV, welche aufgrund der inkrementierenden Zählweise irgendwann wiederholt werden müssen. 
+
+Bei einem durchschnittlich ausgelasteten Access Point sind die Datenpakete auf circa eine Stunde gesammelt. Allerdings ist es möglich, diesen Vorgang zu beschleunigen. 
+
+Grober Ablauf eines WPA-/WPA2-Hacks:
+
+\begin{enumerate}
+\item Beenden beeinflussender Prozesse
+\item Aktivieren des Monitoring-Modes
+\item WLAN mit WEP identifizieren
+\item Datenverkehr mit Airodump-ng aufzeichnen
+\item Authentifizierung am AP und generieren von Datenverkehr (optional)
+\item Errechnen des WEP-Kennworts
+\end{enumerate}
+
+\textbf{\Large{Cracking der WEP-Verschlüsselung}}\\ 
+
+{\Large 1. Vorbereiten des Netzwerkinterfaces}\\
+Zunächst muss die Netzwerkkarte einsatzbereit gemacht werden. Hierzu ist es nötig, eventuell störende Prozesse auf dem Host zu beenden. Hierzu wird ein Terminal geöffnet und der Befehl
+
+$$airmon-ng check kill$$\\
+
+eingegeben. Über den Befehl 
+
+$$iwconfig$$\\ 
+
+lässt sich erkennen, ob der WLAN-Adapter vom Host korrekt erkannt und initialisiert wurde. Dieser taucht normalerweise als WLAN0 in der angezeigten Liste auf. Des weiteren wird hier auch die MAC-Adresse des Adapters angezeigt. 
+Beides wird im weiteren Verlauf noch benötigt.
+
+{\Large 2. Identifikation des Ziel-Netzwerks}\\
+
+Im nächsten Schritt identifizieren wir das WLAN, welches angegriffen werden soll. Der nachfolgende Befehl gibt eine Liste mit in der Umgebung verfügbaren Netzwerken aus. Das X sollte durch die im ersten Schritt identifizierte Nummer des Interfaces ersetzt werden. Dabei wir das Interface automatisch in den Monitoring-Mode versetzt. 
+
+$$airodump-ng wlanX$$\\
+\textit{X = NUM für das Interface}\\
+
+Aus der angezeigten Liste wählen wir das entsprechende WLAN aus. Für später benötigen wir dabei die Art der Authentifizierung, den Netzwerknamen, den Kanal und die BSSID des Ziels.
+
+{\Large 3. Aufzeichnen der WLAN Pakete mit airodump}\\
+Nun muss der Netzwerkverkehr im Zielnetzwerk aufgezeichnet erden. Dies erledigt das Werkzeug airodump.
+
+$$airodump-ng -c KANAL -w SSID --bssid BSSID wlanX$$\\
+\textit{X = NUM für das Interface}\\
+\textit{KANAL = Kanal des aufzuzeichnenden Netzwerks}\\
+\textit{SSID = Name des aufzuzeichnenden Netzwerks}\\
+\textit{BSSID = MAC-Adresse des Ziel-Accesspoints}\\
+
+Es werden mindestens 10000 Datenpakete für einen erfolgreichen Angriff benötigt. Die Pakete werden in einem .cap-File aufgezeichnet, welches im aktuellen Verzeichnis angelegt wird.
+
+{\Large 4. Generieren von zusätzlichem Datenverkehr auf dem Access Point}\\
+Um die für einen erfolgreichen Angriff benötigte Datenmenge schnell zu erreichen, gibt es die Möglichkeit Datenpakete in das Netzwerk einzuschleusen. Dabei kann der Angriff auf das Netzwerk allerdings entdeckt werden.
+Voraussetzung für ein erfolgreiches einschleusen von Datenpaketen ist, das das Netzwerk die Authentifizierungsmethode Open Authentication verwendet. 
+\\
+Zunächst öffnen wir ein neues Terminal. Anschließend authentifizieren wir uns mithilfe Tools aireplay am Access Point. Dies ist nötig, da der Access Point sonst die injizierten Paktete verwirft und keinen verwertbaren Datenverkehr zurückliefert. 
+$$aireplay-ng -1 0 -a BSSID -h WLAN-MAC -e SSID wlanX $$\\
+
+\textit{X = NUM für das Interface}\\
+\textit{SSID = Name des aufzuzeichnenden Netzwerks}\\
+\textit{BSSID = MAC-Adresse des Ziel-Access Points}\\
+\textit{WLAN-MAC = MAC-Adresse der eigenen WLAN-Karte}\\
+
+Anschließend lauschen wir auf ARP-Requests anderer Teilnehmer im Netzwerk und - wenn genügend zusammen gekommen sind - injizieren wir diese ins Netzwerk.
+$$aireplay-ng -3 -b BSSID -h WLAN-MAC wlanX$$\\
+\textit{X = NUM für das Interface}\\
+\textit{BSSID = MAC-Adresse des Ziel-Accesspoints}\\
+\textit{WLAN-MAC = MAC-Adresse der eigenen WLAN-Karte}\\
+
+Die Anzahl an aufgezeichneten Datenpaketen im ersten Terminal sollte nun innerhalb kürzester Zeit stark steigen.
+
+{\Large Errechnen des WEP-Kennworts}\\
+Sind genügend Datenpakete zusammen gekommen, so kann mit der Berechnung des Schlüssels begonnen werden.
+aircrack-ng -b BSSID FILENAME
+\textit{BSSID = MAC-Adresse des Ziel-Access Points}\\
+\textit{FILENAME = Dateiname des im Terminal 1 aufgezeichneten Datenverkehrs}\\
+Das Programm öffnet die Datei mit dem aufgezeichneten Datenverkehr und beginnt mit der Errechnung des Schlüssels. Im Erfolgsfall wird dieser nun unten angezeigt.
 
 \section{WPA/WPA2}
 
@@ -302,15 +396,15 @@ $$cudaHashcat64.exe~\text{-}m~2500~\text{-}a~3~capture.hccap~\text{-}pwd\text{-}
 \textit{-m 2500 = Anweisung, dass ein WPA/WPA2 Key gecrackt werden soll}\\
 \textit{-a 3 = Verwende Bruteforce}
 \textit{caputre.cap = Pfad bzw. Name des hccap file}\\
-\textit{?d..?d = definierte Maske für zu testenden Passwortkandidaten, Anzahl entspricht "bis zu Länge"\\}\\
+\textit{?d..?d = definierte Maske für zu testenden Passwortkandidaten, Anzahl entspricht "bis zu Länge"\\}
 
-Wurde der Befehl bestätigt, kann mit der Taste "s" der Status des Vorgangs eingesehen werden. Einige Dinge sind bereits aus dem vorherigen Aufruf bekannt. Interessant sind die Keys per second, die getestet werden. Der Wert liegt hier bei 41586. Somit liegt der Speedup im Vergleich zur CPU bei fast 60facher
-Geschwindigkeit. Dies ist natürlich deutlich schneller als im vorherigen Durchlauf. Jedoch wird auch in diesem Fall eine geschätzte Zeit von über 10 Jahren angezeigt. Das bedeutet, dass trotz der besseren Performance keine signifikante Verringerung der Laufzeit erreicht wurde. 
-Letztendlich kann nun auch mit einer einzelnen GPU dieser Standard Key nicht geknackt werden.\\
+Wurde der Befehl bestätigt, kann mit der Taste 's' der Status des Vorgangs eingesehen werden.
 
 \includegraphics[width=\textwidth]{bilder/wlan/cudaHashcatNUMSeriesCrack.png}\\
 
-%evtl noch Diagramm hier
+ Einige Dinge sind bereits aus dem vorherigen Aufruf bekannt. Interessant sind die Keys per second, die getestet werden. Der Wert liegt hier bei 41586. Somit liegt der Speedup im Vergleich zur CPU bei fast 60facher
+Geschwindigkeit. Dies ist natürlich deutlich schneller als im vorherigen Durchlauf. Jedoch wird auch in diesem Fall eine geschätzte Zeit von über 10 Jahren angezeigt. Das bedeutet, dass trotz der besseren Performance keine signifikante Verringerung der Laufzeit erreicht wurde. 
+Letztendlich kann nun auch mit einer einzelnen GPU dieser Standard Key nicht geknackt werden.\\
 
 
 \section{WPS}
@@ -358,7 +452,74 @@ $$\text{-}fail\text{-}wait\text{=}300$$\\
 
 erweitern. Der Wert muss nicht fest sein, sonder kann variiert werden um optimale Ergebnisse zu erzielen. 
 
+\section{DoS}
+Ein Denail of Service hat das Ziel, das Netzwerk zu blockieren. 
+Für den Denail of Service-Angriff verwenden wir das Tool MDK3 (Murder Death Kill 3), welches speziell für WLAN-Netzwerke entwickelt wurde. 
+\\
+Zuerst müssen die um den WLAN-Adapter konkurierenden Prozesse über das Kommando 
+$$airmon-ng check kill$$
+beendet werden. 
 
+Danach versetzen wir den WLAN-Adapter in den Monitoring-Modus. Dies geschieht über das Kommando: 
+$$airmon-ng start wlanX$$
+Dabei gilt zu beachten das wlanX durch den eigentlichen Namen des WLAN-Adapters ersetzt werden muss (z.B. wlan1). 
+Der WLAN-Adapter erhält dabei einen neuen Namen, wlanXmon. Das X kann sich auch hier wieder von System zu System unterscheiden. 
+\\
+Anschließend suchen wir uns den Ziel-Access Point aus. Dies geschieht über den Befehl: 
+$$airodump-ng wlanXmon --band abg$$
+
+Aus der von diesem Werkzeug generierten Liste notieren wir die MAC-Adresse des Ziel-Access Points (BSSID) und die Art der Verschlüsselung. Diese Informationen werden im weiteren Verlauf benötigt. 
+\\
+Das MDK3-Tool stellt verschiedene Methoden bereit, um einen DoS-Angriff auf dem Ziel auszuführen. 
+
+\textit{Michael shutdown exploitation}\\
+Diese Methode nutzt einen Fehler in der TKIP-Verschlüsselung aus, um den gesamten Datenverkehr im Ziel-Netzwerk zu unterbinden. Für einen erfolgreichen Angriff muss das WLAN mit TKIP verschlüsselt worden sein.\\
+$$mdk3 wlanXmon m -t BSSID -j$$
+Durch den Parameter -j wird MDK3 angewiesen, eine Schwachstelle in der QoS-Implementierung der TKIP-Verschlüsselung auszunutzen. Dadurch werden nur ein paar Datenpakete benötigt, um den Datenverkehr zu blockieren.
+Der Parameter wlanXmon muss wieder durch den eigentlichen Namen des WLAN-Adapters ersetzt werden. 
+
+\textit{Beacon Flood Mode}\\
+Bei dieser Methode werden Beacon-Frames ausgesendet, um den Clients gefälschte Access Points vorzugaukeln. Dies kann zu Abstürzen der Netzwerkscanner oder Treiber der WLAN-Adapter führen. 
+$$mdk3 wlanXmon b -c 1$$
+Der Parameter wlanXmon muss wieder durch den eigentlichen Namen des WLAN-Adapters ersetzt werden.
+das -c legt den Funkkanal fest, auf dem die Access Points erstellt werden sollen. 
+
+\textit{Authentication DoS mode}\\
+Bei dieser Methode werden vom Angreifer Authentication-Frames an den durch die BSSID spezifizerten Access Point geschickt. Zu viele Clients bringen den Access Point möglicherweise zum Absturz. 
+$$mdk3 wlanXmon a -a BSSID$$
+
+
+\section{Fake AP}
+Die Idee bösartiger WLAN-Zugangspunkte gibt es schon länger, doch diese Bedrohung gewinnt durch vermehrt aufgetauchte Skripte und Programme an Bedeutung. Für einen Fake AP wird meist ein Laptop so konfiguriert, das er sich als Hotspot oder Access Point ausgibt.\\ Dabei besteht entweder die Möglichkeit, eine bestehende SSID in der Umgebung zu wählen oder eine für viele Besitzer interessante SSID zu wählen. \\
+
+Der Betreiber eines Fake Access Point versucht in der Regel Informationen vom Opfer zu erlangen, beispielsweise Kennwörter oder Kreditkartendaten. Auch ein einschleusen von Schadcode auf dem Opfer ist möglich. 
+
+Ablauf: \\
+
+Zunächst wird ein eventuell vorhandener Access Point blockiert. \\ 
+Im nächsten Schritt wird ein eigener Access Point beziehungsweise Hotspot erstellt. \\
+Anschließend wird gewartet, bis sich Benutzer am Access Point anmelden. Ist das Signal des Angreifers aufgrund von z.B. örtlicher Nähe stärker, so kann es sein dass sich die Opfer automatisch mit dem Fake Access Point verbinden. \\
+Je nach Ziel des Angreifers wird den Opfern nun eine Anmeldemaske zum Phishing von Passwörtern oder Kreditkarten angezeigt. 
+Auch ein mitlesen und die Manipulation 	  des Datenverkehrs ist Möglich. \\ Über Lücken im Betriebssystem beziehungsweise Browser ist auch eine Infektion des Opfers mit Schadcode möglich. 
+
+Durchführung: \\
+
+Zur Durchführung des Angriffs verwenden wir das Tool wifiphisher.\\ 
+
+Dies benötigt Kali Linux und 2 WLAN-Netzwerkadapter. Einer von ihnen muss Injection unterstützen. \\
+
+Gestartet wird es im Terminal über 
+$$python wifiphisher.py ~$$\\
+
+Anschließend führt das Programm eine Suche nach WLANs in der Umgebung durch. Aus dieser Liste kann im Anschluss daran ein  Zielnetzwerk ausgewählt werden. Im Anschluss daran wird ein Webserver, und der Fake AP mit der entsprechenden Konfiguration gestartet. \\
+
+Danach wird begonnen, den Datenverkehr im Zielnetzwerk durch Abmeldung der Opfer vom Ziel-Access Point zu unterbrechen. \\
+
+Das Opfer verbindet sich nun mit dem falschen Access Point des Angreifers, dieser befindet sich nun in der "Man in the Middle"-Position. \\
+
+Beim Aufruf einer Webseite wird dem Opfer nun eine Webseite präsentiert, die der Konfigurationsoberfläche des Routers nachempfunden ist und zur Eingabe des WEP-Passworts aufgrund eines durchgeführten Firmwareupdates auffordert. Denkbar ist auch die Nachbildung von Login-Seiten verschiedener sozialer Netzwerke oder Mailprovider. Auch die Fälschung von Login-Seiten für Hotspots ist möglich. \\
+
+War der Angriff erfolgreich, das heißt ein Opfer hat beispielsweise das WPA-Passwort auf der präsentierten Seite eingegeben, so beendet sich wifiphisher nach dem Anzeigen der eingegebenen Daten.
 
 \section{Sicherungsmaßnahmen und Bewertung}
 
@@ -366,6 +527,39 @@ Nachdem nun die gängigsten Angriffsarten und ihre Durchführung erläutert wurd
 
 Weiter wurde gezeigt, dass WPS eine weitere Schwachstelle darstellt und ein Angreifer so die Sicherheit einer starken Verschlüsselung vollkommen umgehen kann. Daher ist es ratsam WPS nur in Ausnahmefällen zu verwenden und ansonsten dieses Feature zu deaktivieren. \\
 
-Ein weit verbreiteter Irrtum ist auch, dass das Verstecken des Netzwerknamens, auch SSID genannt, die Sicherheit verbessert. Jedoch haben wir gesehen wie einfach nach WLAN Netzwerken in der Umgebung gescannt werden kann. Dabei alle Netzwerke, auch diejenigen mit versteckter SSID, angezeigt. Damit verbessert dieses Feature, was viele Netzwerkgeräte unterstützen, definitiv nicht. 
+Ein weit verbreiteter Irrtum ist auch, dass das Verstecken des Netzwerknamens, auch SSID genannt, die Sicherheit verbessert. Jedoch haben wir gesehen wie einfach nach WLAN Netzwerken in der Umgebung gescannt werden kann.\\
 
+Warum das Verstecken der SSID eines WLANs keine zusätzliche Sicherheit bringt und wie diese schnell herausgefunden werden kann?\\
+	
+Das Verstecken der SSID führt dazu, dass sich der Anwender in falscher Sicherheit wiegt und er glaubt, dass er eine zusätzliche "Sicherheitsschicht" eingeführt hat, was gefährlich sein kann.
+Denn der Betreiber des WLANs glaubt was nicht gefunden wird, kann auch nicht angegriffen werden.
+ABER: Die Maßnahme ersetzt weder die Verschlüsselung noch die Authentifizierung!!\\
+
+Grundsätzlich: Ein verstecktes WLAN ist niemals "unsichtbar".\\
+
+Bei einem normal sichtbaren Netz sendet der Access Points Beacons mit der SSID und weiteren Informationen
+aus. \\
+
+Wird das Broadcasting ausgeschaltet, wird einfach das Feld für die SSID in dem Frame auf NULL gesetzt. 
+
+Dies kann leicht überprüft werden, falls sich ein verstecktes WLAN in der Nähe befindet und ein Durchlauf mit \textit{airodump-ng} durchgeführt wird, ist dieses erkennbar mit dem Feld der SSID auf NULL gesetzt.\\
+
+Wie baut jetzt ein Client eine Verbindung zu einem Access Point auf?\\
+
+1. Die Initiative geht von Client aus (Probe Request).\\
+2. Der AP antwortet mit Probe Response.\\
+  
+Request und Response enthalten jeweils das Feld für die SSID in Klartext.
+Das Problem dabei ist, der Client sendet, je nach Einstellung, die Requests aus, auch wenn er nicht in der Reichweite des Gerätes ist. \\
+	=> Auslesen aller gespeicherten Hidden SSIDS möglich. Vor allem bei Smartphones.\\
+	=> Erstellen von Profilen bei längerfristiger Überwachung der Geräte.\\
+	
+Falls sich der Client nicht automatisch verbindet, muss man sich in Reichweite des Netzwerks befinden und einen Verbindungsaufbau zwischen Client und AP aufzeichnen um an die SSID des Netzes zu kommen. \\
+Möchte man als Angreifer nicht warten, bis sich ein Client verbindet, können die bereits verbundenen Geräte zu einem reconnect gezwungen werden. Dies wird über eine Deauthentifizierung der Geräte erreicht.
+Dazu folgender Befehl:
+
+
+$$aireplay\text{-}ng~\text{-}\text{-}deauth~5~\text{-}a~<AP-MAC> \text{-}c~<Client\text{-}Mac>~wlan0mon$$\\
+
+Läuft nebenbei noch die Aufzeichnung mit \textit{airodump-ng}, wird jetzt bei den verfügbaren Netzwerken auch die SSID für das Hidden WLAN angezeigt.
 
