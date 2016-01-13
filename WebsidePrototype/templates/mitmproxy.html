@@ -1,0 +1,307 @@
+{% include 'static/header.html' %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=windows-1252"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 4.4.4.3 (Windows)"/>
+	<meta name="created" content="2009-04-16T11:32:02.640000000"/>
+	<meta name="changed" content="2016-01-13T13:27:18.995000000"/>
+	<meta name="Info 1" content=""/>
+	<meta name="Info 2" content=""/>
+	<meta name="Info 3" content=""/>
+	<meta name="Info 4" content=""/>
+	<style type="text/css">
+		@page { margin: 2cm }
+		p { margin-bottom: 0.21cm; so-language: zxx }
+		a:link { so-language: zxx }
+	</style>
+</head>
+<body dir="ltr">
+<p lang="zxx" style="margin-bottom: 0cm"><u><b>https-Traffic mitlesen
+(am Beispiel von mitmproxy)</b></u></p>
+<p lang="zxx" style="margin-bottom: 0cm">	</p>
+<p lang="zxx" style="margin-bottom: 0cm">Um die &uuml;bertragenen
+Informationen zu sch&uuml;tzen und sicher zu &uuml;bertragen nutzen
+heute die mei&szlig;ten Internetseiten <span style="text-decoration: none"><span style="font-weight: normal">https</span></span>.
+Also eine auf SSL/TLS basierende Verschl&uuml;sselung.<br/>
+Das
+Verfahren vertraut dabei grunds&auml;tzlich auf eine
+Zertifikatsinfrastruktur mit einer Reihe von sog. Root-CAs
+(Root-Certificate-Authorities), denen die g&auml;ngigen
+Standardbrowser vertrauen. <br/>
+Der Betreiber einer Webseite kann
+sich von einer solchen Root-CA nun ein Zertifikat f&uuml;r seine URL
+(bzw. auch f&uuml;r Subdomains) ausstellen lassen. Besucht ein Nutzer
+nun die Seite, pr&uuml;ft der Browser mittels des Zertifikats deren
+Authentizit&auml;t und jeglicher Datenverkehr zwischen Webserver und
+Browser kann verschl&uuml;sselt &uuml;bertragen. Dritte, die den
+Datenverkehr mitlesen k&ouml;nnen (ARP-Spoofing, Provider, etc. )
+sehen &ndash; wenn browserseitig ausschlie&szlig;lich gesicherte
+<span style="text-decoration: none"><span style="font-weight: normal">https</span></span>-Verbindungen
+akzeptiert werden &ndash; somit nur verschl&uuml;sselte Daten, die
+nicht/nur schwer entschl&uuml;sselbar sind.</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm">Hat dieser Dritte nun
+allerdings Zugriff auf das Zertifikat einer beliebigen, im Browser
+hinterlegten, Root-CA, so kann er sich f&uuml;r beliebige URLs selbst
+ein Zertifikat ausstellen. Wird im Browser nun eine <span style="text-decoration: none"><span style="font-weight: normal">https</span></span>-Seite
+aufgerufen, muss sich der Dritte nur noch dynamisch ein Zertifikat
+f&uuml;r genau diese Seite erstellen und kann dadurch jeglichen
+folgenden Datenverkehr mitlesen.</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+Ein Tool, welches
+diese Funktionalit&auml;t beinhaltet ist mitmproxy
+[<a href="https://github.com/mitmproxy/mitmproxy">https://github.com/mitmproxy/mitmproxy</a>]
+(es gibt noch viele weitere Tools, mit teils unterschiedlichen
+Funktionen, wie z.b. Burp Suite, Charles, sslsplit, usw.). Neben
+diesem Feature bietet mitmproxy z. B. auch die M&ouml;glichkeit
+Pakete auf ihrem Weg zu manipulieren. 
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm">Obwohl die Verschl&uuml;sselung
+mittels SSL/TLS grunds&auml;tzlich sicher ist, sind dennoch einige
+Beispielszenarien denkbar in denen dieses Verfahren m&ouml;glich
+w&auml;re:<br/>
+- Die Zertifkatsstelle/Zertifikatsvergabe wurde
+kompromittiert</p>
+<p lang="zxx" style="margin-bottom: 0cm">Ein unautorisierter Dritter
+kann sich a) ein Zertifikat f&uuml;r eine Website ausstellen lassen
+oder b) sich selbst beliebige Zertifikate ausstellen.<br/>
+- Besitz
+des Serverzertifikat wurde erlangt</p>
+<p lang="zxx" style="margin-bottom: 0cm">Ein Dritter hat Zugang zum
+privaten Schl&uuml;ssel des Webservers erlangt.<br/>
+- Zugriff auf
+den Opfer-PC &rarr; lokal Vertrauen gegen&uuml;ber neuen Zertifikaten
+aussprechen</p>
+<p lang="zxx" style="margin-bottom: 0cm">Ein Dritter hat die
+M&ouml;glichkeit einer neuen Root-CA das Vertrauen auszusprechen.<br/>
+-
+praktisch: Analyse von SSL/TLS-Verschl&uuml;sseltem Traffic von
+unbekannten Anwendungen (so lange kein Pinning verwerden wird&hellip;)</p>
+<p lang="zxx" style="margin-bottom: 0cm">Ziel hierbei ist es zu
+analysieren, welche Daten von dieser Anwendung (z. B. auch
+Android/IOS-Apps, da diese oftmals &uuml;ber <span style="text-decoration: none"><span style="font-weight: normal">https</span></span>
+mit ihren Servern kommunizieren) &uuml;bertragen werden.</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm">Mimtproxy agiert als
+transparenter Proxy zwischen Webserver und Browser. Effektiv werden
+also zwei getrennte <span style="text-decoration: none"><span style="font-weight: normal">https</span></span>-Verbindungen
+erstellt, was die Grafik von mitmproxy.org zeigt. 
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><img src="data:image/jpeg;base64,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" name="Bild1" align="left" width="378" height="221" border="0"/>
+In
+Worten: Der TCP-Verbindungsaufbau des Client / Browsers wird (via
+iptables) an mitmproxy weitergereicht. (1,2) 
+</p>
+<p lang="zxx" style="margin-bottom: 0cm">Auf den vom Client / Browser
+initiierten SSL-Handshake (3) wird seinerseits von mitmproxy ein
+SSL-Handshake zum eigentlichen Webserver erstellt (4,5). Anschlie&szlig;end
+wird der SSL-Handshake zwischen mitmproxy und Client / Browser mit
+gef&auml;lschtem Zertifikat abgeschlossen (6) und Requests laufen
+transparent zwischen Browser / Client und Webserver &uuml;ber
+mitmproxy. (7,8)</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><u><b>Demo 1 &ndash;
+Mitmproxy einrichten</b></u></p>
+<p lang="zxx" style="margin-bottom: 0cm"><u>Schritt 1 - (Optional)
+mitmproxy installieren</u></p>
+<p lang="zxx" style="margin-bottom: 0cm">sudo apt-get install
+python-pip python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev
+libjpeg8-dev zlib1g-dev</p>
+<p lang="zxx" style="margin-bottom: 0cm">sudo pip install mitmproxy</p>
+<p lang="zxx" style="margin-bottom: 0cm"><i>wichtig</i>: mitmproxy
+mittels pip, nicht mit apt-get installieren, da hier eine veraltete
+Version hinterlegt ist.</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm; font-style: normal; font-weight: normal">
+<u>Schritt 2 - mitmproxy starten</u></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-style: normal; font-weight: normal">
+sudo mitmproxy</p>
+<p lang="zxx" style="margin-bottom: 0cm; font-style: normal; font-weight: normal">
+<br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm; font-style: normal; font-weight: normal">
+<u>Schritt 3 &ndash; Proxy in Firefox einrichten</u></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-style: normal; font-weight: normal; text-decoration: none">
+Auf dem Ziel-PC in Firefox die <i>&lt;IP-Adresse des mitmproxy-PC&gt;
+</i><i>mit Port 8080 als Proxy eintragen:</i></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-style: normal; font-weight: normal; text-decoration: none">
+<i>Bearb</i><i>ei</i><i>ten - Einstellungen &ndash; Erweitert &ndash;
+Netzwerk &ndash; </i><i>Einstellungen &ndash; </i><i>manuelle
+Proxy-Konfiguration</i></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-style: normal; font-weight: normal; text-decoration: none">
+<i>&lt;IP-Adresse des mitmproxy-PC&gt; </i><i>mit Port 8080</i><i>
+</i><i>eintragen und &quot;f&uuml;r alle Protokolle diesen
+Proxy-Server verwenden&quot; ausw&auml;hlen und mit &quot;ok&quot;
+speichern.</i></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm">-------------------------------------</p>
+<p lang="zxx" style="margin-bottom: 0cm"><i>Alternativ &uuml;ber
+transparanten Proxy &ndash; v.a. zum testen von Anwendungen besser:</i></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><i><u>Schritt
+2 - mitmproxy starten</u></i></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><i>sudo
+mitmproxy -T &ndash;host</i></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><i><u>Schritt
+3 - Vorbereitungen, damit die Pakete an mitmproxy weitergeleitet
+werden</u></i></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><i>sudo
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT
+--to-port 8080</i></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><i>sudo
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT
+--to-port 8080</i></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><i><u>Schritt
+4 - Netzwerktraffic &uuml;ber den mitmproxy-PC leiten</u></i></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><i>(Eingabe
+auf dem Client; Einstellungen sind tempor&auml;r und werden beim
+Neustart entfernt; Der Einfachheit halber machen wir dies durch
+&Auml;nderung des Default-Gateways auf dem Ziel-PC; aufw&auml;ndigere
+Alternative: ARP-Spoofing)</i></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><i>sudo
+route del default</i></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><i>sudo
+route add default gw &lt;IP-Adresse des mitmproxy-PC&gt;</i></p>
+<p lang="zxx" style="margin-bottom: 0cm">-------------------------------------</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm; font-style: normal; font-weight: normal">
+<u>Schritt 5 - mitmproxy Zertifikat auf den Ziel-PC kopieren (z. B.
+via scp)</u></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-style: normal; font-weight: normal">
+Nach der Installation von mitmproxy findest sich das Zertifikat im
+Pfad (v. 0.15): ~/.mitmproxy/mitmproxy-ca-cert.cer</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><u>Schritt 6 - Zertifikat im
+Browser einbinden</u></p>
+<p lang="zxx" style="margin-bottom: 0cm">Firefox - Bearbeiten -
+Einstellungen - Erweitert - Zertifikate - Zertifikate anzeigen -
+Zertifizierungsstellen - Importieren.. - mitmproxy-ca-cert.cer
+ausw&auml;hlen &ndash; &ouml;ffnen</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm">Hinweis: Dieser Schritt
+sollte nur auf Labor-VMs durchgef&uuml;hrt werden, da im dadurch
+jeglicher https-Datenverkehr uneingeschr&auml;nkt von einem Dritten
+mitgelesen werden kann!</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><u><b>Demo 2 &ndash; https
+analysieren (mitmproxy in der Zwischenzeit nur minimieren)</b></u></p>
+<p lang="zxx" style="margin-bottom: 0cm; text-decoration: none"><b>a)
+Mit Wireshark</b></p>
+<p lang="zxx" style="margin-bottom: 0cm"><u><span style="font-weight: normal">Schritt
+1 &ndash; Wireshark auf dem mitmproxy-PC starten</span></u></p>
+<p lang="zxx" style="margin-bottom: 0cm; text-decoration: none"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><u>Schritt </u><u>2</u><u> -
+</u><u>Beliebige https-Seite aufrufen </u>(z.B.
+<a href="https://moodle.thi.de/moodle/login/index.php">https://moodle.thi.de/moodle/login/index.php</a>)</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><u>Schritt 3 &ndash; Analyse
+in Wireshark</u></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal; text-decoration: none">
+Suchen Sie nun die zum Aufruf geh&ouml;renden Pakete in Wireshark.</p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal; text-decoration: none">
+Hinweis: Der vor dem Aufruf durchgef&uuml;hrte DNS-Request/Response
+f&uuml;r die angefragte URL bietet einen guten Anhaltspunkt, um den
+Start der https-Verbindung zu finden.</p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal; text-decoration: none">
+<br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><u>Schritt
+4 &ndash; Welche Inhalte des Aufrufs k&ouml;nnen gefunden werden?</u></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal; text-decoration: none">
+<br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><span style="text-decoration: none"><b>b)
+Mit mitmproxy</b></span></p>
+<p lang="zxx" style="margin-bottom: 0cm; font-weight: normal"><u>Schritt
+1 &ndash; Analyse in mitmproxy</u></p>
+<p lang="zxx" style="margin-bottom: 0cm">In mitmproxy sollten die
+Anfragen und Antworten jetzt entschl&uuml;sselt angezeigt werden.</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm">Im Aufruf verwendete
+Webseitendaten/Benutzernamen/Passworter/andere sensible Information
+k&ouml;nnen nun einfach in mitmproxy unverschl&uuml;sselt angezeigt
+werden.</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm">Hinweis: Eine Hilfe zur
+Navigation in mitmproxy kann mittels &quot;?&quot; aufgerufen werden.</p>
+<p lang="zxx" style="margin-bottom: 0cm">Hinweis2: Werden in
+mitmproxy keine https-Anfragen angezeigt, kann es hilfreich sein, die
+Firefox-Chronik zu l&ouml;schen.</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><u><b>Demo 3 &ndash;
+Unbekannten https-Aufruf mit Wireshark und mitmproxy analysieren</b></u></p>
+<p lang="zxx" style="margin-bottom: 0cm"><u><span style="font-weight: normal">Schritt
+1 &ndash; getPage.pyc ausf&uuml;hren</span></u></p>
+<p lang="zxx" style="margin-bottom: 0cm; text-decoration: none"><span style="font-weight: normal">Das
+Script ruft autoamtisiert eine Seite auf.</span></p>
+<p lang="zxx" style="margin-bottom: 0cm; text-decoration: none"><br/>
+
+</p>
+<p lang="zxx" style="margin-bottom: 0cm"><u><span style="font-weight: normal">Schritt
+2 &ndash; Aufruf analysieren</span></u></p>
+<p lang="zxx" style="margin-bottom: 0cm; text-decoration: none"><span style="font-weight: normal">a)
+Welche Seite wurde aufgerufen?</span></p>
+<p lang="zxx" style="margin-bottom: 0cm; text-decoration: none"><span style="font-weight: normal">b)
+Welche Informationen wurden &uuml;bertragen?</span></p>
+<p lang="zxx" style="margin-bottom: 0cm; text-decoration: none"><br/>
+
+</p>
+</body>
+</html>
+{% include 'static/footer.html' %}
