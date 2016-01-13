@@ -6,10 +6,6 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route("/ictf/")
-def ictf():
-    return render_template('ictf.html')
-
 @app.route("/netzwerk/")
 def netzwerk():
     return render_template('netzwerk.html')
