@@ -42,7 +42,7 @@ weiterführende Bachelor-/ Master-Arbeiten in diesem Gebiet eingesetzt werden.<b
 
 Für das Projekt im WS 15/16 ist angedacht:
 
-<ul>
+<ul style="width: 80%">
 
 <li> Entwicklung eines Grobkonzepts für die Security Work Bench (langfristiges Konzept).
 
@@ -51,20 +51,20 @@ Für das Projekt im WS 15/16 ist angedacht:
 <li> Umsetzung für die ausgewählten Module (Entwurf, Aufbau und Erprobung, Dokumentation, Erstellen der Versuchsanleitungen)
 
 <li> Erste Vorschläge für das Projekt im WS 15/16 (abhängig von der Anzahl der Teilnehmer):
-	<ul>
-	
+	<ul style="width: 80%">
+
 <li> Entwicklung eines Wettbewerbs zur Computer-/ Netzsicherheit („Capture the Flag“) ähnlich dem iCTF: Die Teilnehmer bekommen zu Beginn des Wettbewerbs Server zugewiesen. Auf diesen sind Programme installiert welche am Laufen gehalten werden müssen. Zunächst gilt es Server und Programme zu analysieren, Schwachstellen zu erkennen und Sicherheitslücken zu schließen. Gleichzeitig sollen genau diese erkannten Schwachstellen dafür ausgenutzt werden, um die Gegner zu attackieren. Für all dies gibt es Punkte. Außerdem erhält man Punkte, wenn eigene Programme trotz Attacken am Laufen gehalten werden.
-	
+
 <li> Angriffe auf moderne Netzwerke: Im Rechnernetze-Labor sind zahlreiche Router, Ethernet Switches, Server und auch eine Firewall vorhanden. Mit diesen Geräten sollen Übungen zur Demonstration klassischer Angriffsszenarien entwickelt werden. Im zweiten Schritt sollen dann auch Maßnahmen zum Schutz untersucht und ggfs. implementiert werden.
-	
+
 <li> Klassische Schwachstellen in den Betriebssystemen: Entwicklung von Übungen, die bekannte Schwachstellen demonstrieren und deren Behebung
-	
+
 <li> Sicherheit von Passwörtern: Entwicklung von Übungen, die bekannte Schwachstellen demonstrieren und deren Behebung
 	</ul>
 </ul>
 
 <b>Ziele:</b><br>
-<ul>
+<ul style="width: 80%">
 
 <li> mit Abschluss dieses Projekts soll eine umfassender Plan für eine Security Work Bench an der thi erarbeitet sein.
 
@@ -81,13 +81,13 @@ Im Projekt <i>Security-Workbench</i> vom Wintersemester 2015/2016 wurden durch S
 
 
 Als Ergebnis können folgende Angriffstechniken vollautomatisiert vorgeführt werden:
-<ul>
+<ul style="width: 80%">
 
 <li> ARP-Spoofing
-	<ul>
-		
+	<ul style="width: 80%">
+
 <li> Mitlesen von Datenpakete
-		
+
 <li> Manipulation von Inhalten aus Datenpakete
 	</ul>
 
@@ -111,7 +111,7 @@ außerdem in eigene (abgeleitete) Klassen gekapselt. <br>
 Damit zukünftige Studenten dieses Projekt weiterentwickeln können, wurde großer Wert auf die Dokumentation gelegt. Alle Angriffsszenarien sind nach diesem
 Schema aufgebaut:
 
-<ul>
+<ul style="width: 80%">
 
 <li> Voraussetzungen
 
@@ -151,13 +151,13 @@ Mittels ARP (Address Resolution Protocol) kann die physikalische Adresse eines N
 Da es bei Erscheinen von ARP (1982) noch keine Rolle spielte, ob das Protokoll sicher ist oder nicht, sondern nur das es die benötigte Funktionalität liefert, sind dessen Schwächen erst später aufgekommen.<br>
 
 <figure>
-	<img src="bilder/arpSpoofing/arp_request_small.png"></img>
+	<img src="../static/netzwerk/arpSpoofing/arp_request_small.png"></img>
 	<figcaption>Abbildung 4.1: Aufgezeichneter ARP-Request (hier für die Adresse 192.168.178.32)</figcaption>
 	<a name="reffig:arp_request_small">
 </figure>
 
 <figure>
-	<img src="bilder/arpSpoofing/arp_reply_small.png"></img>
+	<img src="../static/netzwerk/arpSpoofing/arp_reply_small.png"></img>
 	<figcaption>Abbildung 4.2: Aufgezeichneter ARP-Reply (hier von der Adresse 192.168.178.32)</figcaption>
 	<a name="reffig:arp_reply_small">
 </figure>
@@ -174,7 +174,7 @@ Bei ARP-Spoofing handelt es sich um einen MITM (Man-In-The-Middle) Angriff, mit 
 Der Angreifer „vergiftet“ den ARP-Cache des angegriffenen Rechners um dessen Netzwerkverkehr umzuleiten und mitzulesen/ verändern.
 
 <figure>
-	<img src="bilder/arpSpoofing/fake_arp_small.png"></img>
+	<img src="../static/netzwerk/arpSpoofing/fake_arp_small.png"></img>
 	<figcaption>Abbildung 4.3: Aufgezeichneter fake ARP-Reply</figcaption>
 	<a name="reffig:fake_arp_small">
 </figure>
@@ -187,13 +187,13 @@ Dieser aufgezeichnete ARP-Reply zeigt, dass dem Ziel (192.168.178.31) mitgeteilt
 Das, oder die Opfer, tragen diese Information in die lokalen ARP-Tabellen ein.
 
 <figure>
-	<img src="bilder/arpSpoofing/arp_vorher.png"></img>
+	<img src="../static/netzwerk/arpSpoofing/arp_vorher.png"></img>
 	<figcaption>Abbildung 4.4: ARP-Tabelle vorher</figcaption>
 	<a name="reffig:arp_vorher">
 </figure>
 
 <figure>
-	<img src="bilder/arpSpoofing/arp_nachher.png"></img>
+	<img src="../static/netzwerk/arpSpoofing/arp_nachher.png"></img>
 	<figcaption>Abbildung 4.5: ARP-Tabelle nachher</figcaption>
 	<a name="reffig:arp_nachher">
 </figure>
@@ -205,25 +205,25 @@ Die beiden Abbildungen <a href="#reffig:arp_vorher">4.4</a>
 
 Sendet das Opfer jetzt Pakete über das Netzwerk, werden diese über den Angreifer umgeleitet und von diesem an das eigentliche Ziel weitergeleitet. Dieses sendet seine Antwort wiederrum an den Angreifer, welcher sie an das Opfer weitergibt. Die Abbildungen <a href="#reffig:arp_soofing_before">4.6</a>
  und <a href="#reffig:arp_soofing_after">4.7</a>
- zeigen, wie sich die Netzwerkkommunikation während 
+ zeigen, wie sich die Netzwerkkommunikation während
 Dem Angreifer ist es somit möglich:
-<ul>
-	
+<ul style="width: 80%">
+
 <li> Die komplette Netzwerkkommunikation mitzulesen
-	
+
 <li> Die Netzwerkkommunikation zu manipulieren
-	
+
 <li> Einen Denial-of-Service zu erwirken (z.B. Verkehr über Port 80 verwerfen, daraus folgt: keine Kommunikation mit Webserver mehr möglich)
 </ul>
 
 <figure>
-	<img src="bilder/arpSpoofing/arp_soofing_before.png"></img>
+	<img src="../static/netzwerk/arpSpoofing/arp_soofing_before.png"></img>
 	<figcaption>Abbildung 4.6: Vor dem Angriff: Die Netzwerkkommunikation des Opfers erfolgt über das Gateway des Netzes (bzw. direkt mit anderen Netzwerkteilnehmern)</figcaption>
 	<a name="reffig:arp_soofing_before">
 </figure>
 
 <figure>
-	<img src="bilder/arpSpoofing/arp_soofing_after.png"></img>
+	<img src="../static/netzwerk/arpSpoofing/arp_soofing_after.png"></img>
 	<figcaption>Abbildung 4.7: Während des Angriffs: Die Netzwerkkommunikation des Opfers erfolgt über den Rechner des Angreifers. Die Kommunikation aus dem öffentlichen Netz in Richtung Opfer (bzw. von anderen Teilnehmern des LANs) erfolgt ebenfalls über den Angreifer (die Pfeile sind hier nur in eine Richtung dargestellt)</figcaption>
 	<a name="reffig:arp_soofing_after">
 </figure>
@@ -239,14 +239,14 @@ Der Angriff wird über folgenden Aufruf gestartet:
 <i>ettercap -T -i eth0 -M ARP /Opfer-IP// ///</i>
 <br>
 Verwendete Parameter:
-<ul>
-	
+<ul style="width: 80%">
+
 <li> T: Verwenden des Textinterfaces, der Benutzer kann durchgehend mit h in der Konsole eine Hilfe anzeigen
-	
+
 <li> i: Gibt das Interface an über das der Verkehr umgeleitet werden soll. In obigem Beispiel „eth0“
-	
+
 <li> M: Aktiviert den MITM Angriff. Der folgende Parameter „ARP“ startet den MITM mittels ARP poisoning
-	
+
 <li> Anschließend wird die IP-Adresse des Opfers (oder die Netzadresse des Opfer-Netzes) angegeben. Es können auch mehrere Ziele angegeben werden: <i>/Opfer-IP1//Opfer-IP2/ </i>
 </ul>
 
@@ -255,7 +255,7 @@ Bei Manipulation der Netzwerkkommunikation wird zusätzlich etterfilter verwende
 ) ersetzt. Der Alte Bildpfad wird dabei nicht ersetzt, er steht noch immer im img-HTML-Tag, allerdings nicht mehr als Pfadangabe.
 
 <figure>
-	<img src="bilder/arpSpoofing/etterfilter.png"></img>
+	<img src="../static/netzwerk/arpSpoofing/etterfilter.png"></img>
 	<figcaption>Abbildung 4.8: Teil des Etterfilters um Bilder zu ersetzen.</figcaption>
 	<a name="reffig:etterfilter">
 </figure>
@@ -264,26 +264,26 @@ Gestartet wird der Angriff über: <i>ettercap -T -F pfad_zum_filter -i eth0 -M A
 <br>
 <p><a name="arp.6"><h3>4.1.6 Benutzung des Python Skripts</h3></p>
 <ol>
-	
-<li> Um einen "normalen" MITM Angriff zu starten muss im ARP Spoofing Menü Menüpunkt eins gewählt werden. 
-	
+
+<li> Um einen "normalen" MITM Angriff zu starten muss im ARP Spoofing Menü Menüpunkt eins gewählt werden.
+
 <li> Anschließend ist das Interface auszuwählen über welches der Netzwerkverkehr umgeleitet werden soll.
-	
+
 <li> <i>arp-scan --interface=eth0 -localnet</i> ermittelt alle angreifbaren IP-Adressen im lokalen Netzwerk, die über das in 2. gewählten Interface erreichbar sind (Abb. <a href="#reffig:arp_scan">4.9</a>
 ) .
 <figure>
-	<img src="bilder/arpSpoofing/arp_scan.png"></img>
+	<img src="../static/netzwerk/arpSpoofing/arp_scan.png"></img>
 	<figcaption>Abbildung 4.9: Ausgabe von arp-scan.</figcaption>
 	<a name="reffig:arp_scan">
 </figure>
-	
+
 <li> Nach Auswahl der anzugreifenden IP-Adresse startet Wireshark. Mit Drücken von Eingabe wird das Programm fortgesetzt und der ARP-Cache des Opfers "vergiftet"</font>.
-	
+
 <li> Am Opferrechner kann nun die manipulierte ARP-Tabelle eingesehen werden.
-	
+
 <li> Der Angreifer liest den kompletten Netzwerkverkehr mit.
-	
-<li> Pressen von "q" beendet den Angriff und stellt die ursprüngliche MAC-Adresse im Cache des Opfers wieder her. 
+
+<li> Pressen von "q" beendet den Angriff und stellt die ursprüngliche MAC-Adresse im Cache des Opfers wieder her.
 </ol>
 
 Die Manipulation des Netzwerkverkehrs kann über den zweiten Menüpunkt gestartet werden. Die Benutzung ist identisch zum "normalen" MITM-Angriff, mit dem Unterschied, dass Wireshark nicht gestartet wird. Sobald der Angriff läuft kann auf dem Opfer-System eine Webseite aufgerufen werden um zu zeigen, dass Bilder ersetzt wurden (gut geeignet: <a href="http://www.sz.de">Süddeutsche Zeitung</a>).
@@ -292,14 +292,14 @@ Die Manipulation des Netzwerkverkehrs kann über den zweiten Menüpunkt gestarte
 ARP-Spoofing lässt sich gut erkennen, wenn man sich die ARP-Tabellen der Netzwerkteilnehmer ansieht. Dann fällt auf, dass mehrere IP-Adressen einer einzigen MAC-Adresse zugeordnet sind. Auch über das Sniffen des Netzwerkverkehrs lässt es sich erkennen, da der Angreifer in regelmäßigen Zeitabständen eine Menge ARP-Pakete aussenden muss.
 Um das ARP-Spoofing zu verhindern können statische ARP-Tabellen verwendet werden. Der Nachteil dabei ist, dass diese Tabellen dann nicht mehr dynamisch sind und sie für jeden Teilnehmer geändert werden müssen, wenn z.B. ein neuer Netzwerkteilnehmer hinzukommt. Ein wenig mehr Sicherheit bringt es, wenn immerhin die MAC-Adresse des Gateways statisch eingetragen wird.
 Besser ist es, Systeme zu verwenden welche den Netzwerkverkehr analysieren und z.B. die ARP-Replys prüfen. So können fehlerhafte und gefälschte ARP-Replys herausgefiltert werden. Beispiele hierfür sind z.B. die Personal Firewalls von Sygate oder SnoopNetCop Pro. Diese melden Angriffe an den Benutzer, die Abwehrmaßnahmen müssen allerdings selbstständig getroffen werden.
-Eine weitere Möglichkeit in Linux-Netzwerken ist, dass den Benutzern keine Root-Rechte verliehen werden. Da das Senden von ARP-Replys diese benötigt, kann dies unterbunden werden. Diese Möglichkeit bietet allerdings keinen Schutz vor Angreifern, die einen eigenen Rechner in das Netz einbringen, oder einen Rechner mit einem Live Betriebssystem starten. 
+Eine weitere Möglichkeit in Linux-Netzwerken ist, dass den Benutzern keine Root-Rechte verliehen werden. Da das Senden von ARP-Replys diese benötigt, kann dies unterbunden werden. Diese Möglichkeit bietet allerdings keinen Schutz vor Angreifern, die einen eigenen Rechner in das Netz einbringen, oder einen Rechner mit einem Live Betriebssystem starten.
 <br><br><br>
 
 <p><a name="toc.2"><h1>2&nbsp;DNS-Spoofing</h1>
 
 <h2>Vorraussetzungen</h2>
 
-<ul>
+<ul style="width: 80%">
 
 <li> Kali Linux 2.0
 
@@ -319,7 +319,7 @@ Das Domain Name System ist baumförmig aufgebaut, wie nachfolgende Abbildung <a 
  illustriert: <br>
 
 <figure>
-	<img src="bilder/png/dns.png"></img>
+	<img src="../static/netzwerk/png/dns.png"></img>
 	<figcaption>Abbildung 4.10: Aufbau DNS</figcaption>
 	<a name="reffig:dns">
 </figure>
@@ -333,8 +333,8 @@ Wenn dieser in seinem Cache keinen Eintrag findet, frägt er - beginnend am Root
 zu erhalten.<br>
 
 <figure>
-	<img src="bilder/png/DNS-Request.png"></img>
-	<figcaption>Abbildung 4.11: Ablauf DNS-Anfrage</figcaption>	
+	<img src="../static/netzwerk/png/DNS-Request.png"></img>
+	<figcaption>Abbildung 4.11: Ablauf DNS-Anfrage</figcaption>
 	<a name="reffig:dnsrequest">
 </figure>
 
@@ -360,22 +360,22 @@ IP-Adresse Domain <br>
 
 Anschließend wird dnsspoof mit folgenden Parameter aufgerufen: <br><br>
 	-i Interface in dem sich lokales Netzwerk befindet<br>
-	-f Hosts-File, absoluter Pfad zu Ort der erstellten hosts-Datei<br>	
-	
+	-f Hosts-File, absoluter Pfad zu Ort der erstellten hosts-Datei<br>
+
 
 
 <h2>Gegenmaßnahmen</h2>
 
 <h3>DNSSEC</h3>
 Durch DNSSEC kann die Authenzität einer DNS-Antwort verifiziert werden und somit DNS Cache Poisoning vorgebeugt werden. Durch eine asymmetrische Signatur -  ähnlich PGP - kann der Absender
-der DNS-Antwort, also der DNS-Server, seine Antworten signieren, indem er mit dem nur ihm zugänglichen privaten Schlüssel den Record unterschreibt. Die Clientseite kann anschließend im 
+der DNS-Antwort, also der DNS-Server, seine Antworten signieren, indem er mit dem nur ihm zugänglichen privaten Schlüssel den Record unterschreibt. Die Clientseite kann anschließend im
 Gegenzug die Antwort mit dem öffentlichen Schlüssel des DNS-Servers überprüfen, ob die Antwort auch von dem richtigen Server war.<p><hr>
 
 <p><a name="toc.3"><h1>3&nbsp;Denial of Service (DoS)</h1>
 
 <h2>Vorraussetzungen</h2>
 
-<ul>
+<ul style="width: 80%">
 
 <li> Kali Linux 2.0
 
@@ -394,7 +394,7 @@ DoS (Denial of Service, zu dt: Dienstblockade) bezeichnet die vorübergehende Ni
 spricht man von DDoS (Distributed Denial of Service). <br>
 
 Bei einem DoS-Angriff mittels SYN-Flooding wird das Übertragungsprotokoll TCP verwendet, da es zustandsorientiert ist, und somit der angesprochene Server Ressourcen für den Anfragenden reserviert.
- Das Aufrechterhalten der Ressourcen wird durch eine fehlende ACK-Bestätigung des Clients realisiert, nachdem der Server vorher ein SYN-ACK-Bestätigung übermittelt hat. Durch Versenden von sehr vielen SYN-Paketen auf den selben Zielserver kann es vorkommen, dass auf dem angegriffenen Server keine Ressourcen mehr vorhanden sind, um weitere Anfragen annehmen zu können. Die dann folgenden Pakete werden vom Server umgehend verworfen und es kann keine Verbindung aufgebaut werden. 
+ Das Aufrechterhalten der Ressourcen wird durch eine fehlende ACK-Bestätigung des Clients realisiert, nachdem der Server vorher ein SYN-ACK-Bestätigung übermittelt hat. Durch Versenden von sehr vielen SYN-Paketen auf den selben Zielserver kann es vorkommen, dass auf dem angegriffenen Server keine Ressourcen mehr vorhanden sind, um weitere Anfragen annehmen zu können. Die dann folgenden Pakete werden vom Server umgehend verworfen und es kann keine Verbindung aufgebaut werden.
 
 <h2>Technisches</h2>
 <a name="refdos:technisches">
@@ -423,7 +423,7 @@ Mittels SYN-Cookies kann bei Verbindungsaufbau durch den Server überprüft werd
 
 <h2>Vorraussetzungen</h2>
 
-<ul>
+<ul style="width: 80%">
 
 <li> Kali Linux 2.0
 
@@ -461,13 +461,13 @@ Das Auslesen von Passwörtern für Online-Banking oder Webmail wären potentiell
 SSLStrip  <font size="-1"><i>Dieses Tool kann über folgende Links abgerufen werden: https://github.com/graingert/sslstrip/, http://www.thoughtcrime.org/software/sslstrip/</i></font> wurde von Moxie Marlinspike 2009 entwickelt und ist aktuell in Version 0.9.2 verfügbar. Das Tool durchsucht jeden transparenten HTTP-Verkehr nach https-Links und wandelt diese in http-Links um. Um die Attacke durchführen zu können, wird zusätzlich ARP-Spoofing benötigt. Mittels ARP-Spoofing werden auch die unverschlüsselten HTTP-Links über SSLStrip verschickt. Da mittlerweile viele Webseiten (z.B. Online-Banking, Webmail, ...) nur noch verschlüsselte HTTP(S)-Verbindungen zulassen, baut SSLStrip eine verschlüsselte Verbindung zu diesen Seiten auf, und gibt deren Antwort in einer unverschlüsselten Verbindung an den kompromittierten Client zurück. Folgende Abbildung zeigt den Ablauf der HTTP(S)-Verbindungen zwischen einem Client, Angreifer und dem aufgerufenen (Web-)Server. <p><hr>
 
 <figure>
-	<img src="bilder/png/https.png"></img>
+	<img src="../static/netzwerk/png/https.png"></img>
 	<figcaption>Abbildung 4.12: Reguläre HTTPS-Verbindung</figcaption>
 	<a name="reffig:https">
 </figure>
 
 <figure>
-	<img src="bilder/png/sslstrip.png"></img>
+	<img src="../static/netzwerk/png/sslstrip.png"></img>
 	<figcaption>Abbildung 4.13: SSL-Strip Szenario</figcaption>
 	<a name="reffig:sslstrip">
 </figure>
@@ -480,7 +480,7 @@ IP-Forwarding, also das Weiterleiten von IP-Paketen, kann durch folgende Befehle
 <br>
 sysctl -w net.ipv4.ip_forward=1 <br>
 alternativ: echo 1 > /proc/sys/net/ipv4/ip_forward <br>
-<br>	
+<br>
 
 Anschließend wird ARP-Spoofing gestartet. Dies geschieht mit folgenden Befehlen:<br>
 <br>
@@ -515,11 +515,11 @@ Parameter:<br>
 	-k : Bestehende SSL-Verbindungen terminieren, damit diese neu aufgebaut werden<br>
 	-l : Port auf dem SSLStrip lauscht. Muss identisch zu --to-port bei iptables-Eintrag sein<br>
 	-w : Pfad in dem gehijackter HTTPS-Traffic im Klartext abgespeichert wird<br>
-<br><br>	
+<br><br>
 <h2>Benutzung von SSLStrip-Skript</h2>
 Zur Automatisierung wurden vorangegangene Befehle in einem Skript automatisiert. Nachdem SSLStrip im Auswahlmenü selektiert wurde, wird zuerst nach der Netzwerkschnittstelle gefragt, in der Angreifer und Zielclient sich befinden. Anschließend wird das ausgewählte Netzwerk nach aktiven Hosts gescannt und aufgelistet. Im folgenden Schritt wird die Ziel-IP-Adresse des anzugreifenden Clients eingegeben, gefolgt von der IP-Adresse des Gateways für ARP-Spoofing. Abschließend werden die erforderlichen Konfigurationen für SSLStrip-Attacke im Hintergrund durchgeführt und der mitgeschnittene HTTPS-Verkehr im Klartext in der LOG-Datei abgerufen werden.
- 
- 
+
+
 <h2>Gegenmaßnahmen</h2>
 
 <h3>HTTP Strict Transport Security</h3>
@@ -535,18 +535,18 @@ Der angreifende Rechner benötigt Tools um Router Advertisments im Netz zu verse
 <h3>Grundlagen</h3>
 
 <h4>IPv6</h4>
-IPv6 wurde eingeführt, da der IPv4 Adressraum mit 2<sup>32</sup> (wobei nicht alle für die Adressierung verwendet werden können) Adressen zu klein geworden ist. Der Adressraum wurde auf 2<sup>128</sup> erweitert um auch in der Zukunft genug Adressen zur Verfügung zu haben. IPv6 stellt ein vollkommen neues Protokoll dar und ist daher nicht abwärtskompatibel zu IPv4 (so wurde z.B. ARP durch das Neighbor Discovery Protocol ersetzt). 
+IPv6 wurde eingeführt, da der IPv4 Adressraum mit 2<sup>32</sup> (wobei nicht alle für die Adressierung verwendet werden können) Adressen zu klein geworden ist. Der Adressraum wurde auf 2<sup>128</sup> erweitert um auch in der Zukunft genug Adressen zur Verfügung zu haben. IPv6 stellt ein vollkommen neues Protokoll dar und ist daher nicht abwärtskompatibel zu IPv4 (so wurde z.B. ARP durch das Neighbor Discovery Protocol ersetzt).
 Die Konfiguration der IPv6-Adressen erfolgt entweder via SLAAC (Stateless Address Autoconfiguration) bei der sich der Host selber eine Adresse bestehend aus dem Netzwerkpräfix und dem Interface Identifier zuweist und diese dem Netzwerk mitteilt. Eine andere Möglichkeit ist es, einen DHCP-Server für IPv6 einzusetzen. Dies hat den Vorteil, dass z.B. DNS-Adressen und Domainnamen mitkonfiguriert werden können.
 Der IPv6 Netzwerkverkehr wird in einem dual-stack Netz (IPv4 und IPv6 im Parallelbetrieb) bevorzugt. Diese Eigenschaft ist die Grundlage dieses Angriffes.
 
 <h4>Nat64</h4>
-Hierbei handelt es sich um einen Mechanismus, mit dessen Hilfe IPv6-Adressen in IPv4-Adressen (und IPv4 in IPv6) umgewandelt werden. Dies ermöglicht die Kommunikation von Rechnern aus unterschiedlichen IP-Konfigurationen. 
+Hierbei handelt es sich um einen Mechanismus, mit dessen Hilfe IPv6-Adressen in IPv4-Adressen (und IPv4 in IPv6) umgewandelt werden. Dies ermöglicht die Kommunikation von Rechnern aus unterschiedlichen IP-Konfigurationen.
 Die Umwandlung einer IPv4-Adresse in eine IPv6-Adresse erfolgt über eine Kapselung:
 Beispiel:
-<ul>
-	
+<ul style="width: 80%">
+
 <li> IPv4-Adresse: 192.168.178.10 (Hex: C0A8:B20A)
-	
+
 <li> IPv6-Präfix: 2010:808:abc:FFFF::/64
 </ul>
 Dies ergibt die Adresse: 2010:808:abc:FFFF:: C0A8:B20A. Die Umwandlung einer IPv6- in eine IPv4-Adresse stellt die umgekehrte Operation dar, es werden die letzten 8 Byte der Adresse in eine IPv4-Adresse umgewandelt.
@@ -558,17 +558,17 @@ Mittels Router Advertisment bieten Router ihre Dienste in einem Netzwerk an. Die
 In einem IPv4 Netzwerk installiert der Angreifer seinen Rechner als IPv6 Router, DHCP-Server und Gateway. Zusätzlich stellt er einen DNS-Server bereit. Das Ziel dieses MITM-Angriffes ist, den kompletten Netzwerkverkehr (IPv4 und IPv6) über den Rechner des Angreifers laufen zu lassen. Hierfür wird Nat64 eingesetzt, das angegriffene Netz kommuniziert dadurch nur noch über IPv6, die Umwandlung in IPv4-Adressen erfolgt am Rechner des Angreifers. Abbildung <a href="#reffig:fakeIpv6_szenario">4.14</a>
  stellt schematisch das angegriffene Netz inklusive Rechner des Angreifers dar.
 <figure>
-	<img src="bilder/fakeIPv6/fakeIpv6_szenario.png"></img>
+	<img src="../static/netzwerk/fakeIPv6/fakeIpv6_szenario.png"></img>
 	<figcaption>Abbildung 4.14: Schematische Darstellung des angegriffenen Netzes</figcaption>
 	<a name="reffig:fakeIpv6_szenario">
 </figure>
 
 <h3>Technisches</h3>
-Sobald der Angriff gestartet wird, erhalten die Clients im angegriffenen Netz eine IPv6-Adresse, die IPv6-Adressen des DNS-Servers und des Gateways des Angreifers. Diese werden durch vom Tool radvd versendete Router Advertisments konfiguriert. Da der IPv6-Verkehr vom Betriebssystem priorisiert behandelt wird, richten sich sämtliche DNS Anfragen an den DNS-Server des Angreifers (der „alte“ DNS-Server hat nur eine IPv4-Adresse). 
+Sobald der Angriff gestartet wird, erhalten die Clients im angegriffenen Netz eine IPv6-Adresse, die IPv6-Adressen des DNS-Servers und des Gateways des Angreifers. Diese werden durch vom Tool radvd versendete Router Advertisments konfiguriert. Da der IPv6-Verkehr vom Betriebssystem priorisiert behandelt wird, richten sich sämtliche DNS Anfragen an den DNS-Server des Angreifers (der „alte“ DNS-Server hat nur eine IPv4-Adresse).
 Dieser liefert immer eine A- und eine AAAA-Antwort (Abb. <a href="#reffig:fakeIPv6DNS">4.15</a>). Die AAAA-Antwort ist dabei die gekapselte IPv4-Adresse. Da alle Hosts des angegriffenen Netzes somit immer IPv6-Adressen bei DNS Anfragen gemeldet bekommen, läuft der Netzwerkverkehr immer über das IPv6-Gateway (IPv6 wird priorisiert), also über den Rechner des Angreifers. Dieser kann z.B. mit Wireshark den Netzwerkverkehr mitlesen.
 
 <figure>
-	<img src="bilder/fakeIPv6/fakeIPv6DNS.png"></img>
+	<img src="../static/netzwerk/fakeIPv6/fakeIPv6DNS.png"></img>
 	<figcaption>Abbildung 4.15: Ablauf der Verbindung.</figcaption>
 	<a name="reffig:fakeIPv6DNS">
 </figure>
@@ -616,7 +616,7 @@ interface eth0 {<br>
 <caption>Tabelle 4.1: Erläuterung der radvd Konfiguration</caption>
 <a name="reftab:radvdConfig">
 </table>
-	
+
 <h4>Bind</h4>
 Als DNS Server kommt Bind (Berkeley Internet Name Domain) zum Einsatz. Dieser offene DNS-Server ist für alle gängigen Betriebssysteme verfügbar und genießt eine hohe Verbreitung. Die Installation erfolgt aus den Debian-Paketquellen:
 <br>
@@ -691,7 +691,7 @@ dynamic-pool 192.168.255.0/24<br>
 <a name="reftab:taygaConfig">
 </table>
 <br>
-Durch Ausführen von 
+Durch Ausführen von
 <br>
 <code>
 /usr/sbin/tayga --mktun
@@ -701,7 +701,7 @@ Durch Ausführen von
 wird das virtuelle Interface angelegt. Mit <i>ifconfig</i> kann die Konfiguration eingesehen werden (Abb. <a href="#reffig:tunInterface">4.16</a>
 ).
 <figure>
-	<img src="bilder/fakeIPv6/tunInterface.png"></img>
+	<img src="../static/netzwerk/fakeIPv6/tunInterface.png"></img>
 	<figcaption>Abbildung 4.16: Ifconfig-Ausgabe des virtuellen Interfaces</figcaption>
 	<a name="reffig:tunInterface">
 </figure>
@@ -758,21 +758,21 @@ Zusätzlich müssen noch einige Iptables Einträge vorgenommen werden (Tab. <a h
 
 <h3>Benutzung des Python Skripts</h3>
 <ol>
-	
+
 <li> Im Hauptmenü des Skriptes den Punkt "Fake IPv6 Network" wählen. Anschließend "Start Attack" auswählen.
-	
+
 <li> Das Interface angeben, welches für den Angriff verwendet werden soll. Bei einfacher Bestätigung mit Enter, ohne ein Interface angegeben zu haben, wird standardmäßig das Interface eth0 verwendet.
-	
+
 <li> Anschließend werden alle verwendeten IPv4-Adressen des angegriffenen Netzwerkes aufgelistet. Es ist eine nicht-verwendete Adresse für das virtuelle tayga-Interface auszuwählen.
-	
+
 <li> Der Angriff läuft, die Auswirkungen lassen sich in Wireshark beobachten.
-	
+
 <li> Drücken von "Enter" beendet den Angriff.
-	
+
 <li> Soll der Angriff erneut gestartet werden, empfiehlt es sich den angreifenden Rechner neu zu starten um alle nicht persistenten Einstellungen zu verwerfen.
 </ol>
 <figure>
-	<img src="bilder/fakeIPv6/fakeIPv6menu.png"></img>
+	<img src="../static/netzwerk/fakeIPv6/fakeIPv6menu.png"></img>
 	<figcaption>Abbildung 4.17: Konsolenausgabe des Angriffs</figcaption>
 	<a name="reffig:fakeIPv6menu">
 </figure>
@@ -836,11 +836,6 @@ In diesem Kapitel folgen mögliche Aufgabenstellungen für künftige Bachelorstu
 
 <li> Welche (einfache) Möglichkeit besteht, um diese Schwachstelle zu schließen?
 </ol>
-
-<br><br><br>
-<p><a name="prospects"><h1>6 Ausblick</h1>
-
-
 
 <hr>
 {% include 'static/footer.html' %}
