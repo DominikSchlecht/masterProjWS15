@@ -1,0 +1,63 @@
+Webinterface: https://192.168.1.1
+IP:192.168.1.1
+User: root
+Passwort: toor
+
+WLAN: 
+2.4 GHz-Band
+
+SSID: HackMe_WPS
+Channel: 11
+Encryption: psk2+ccmp
+Password: HackMeHackMe
+WPS-Pin: 87654321
+WPS-Pushbutton enabled
+
+SSID: HackMe_WEP_Shared
+Channel: 11
+Encryption: wep-shared
+Password: A3C96DFCAD39657C7EF2B4F098
+Key-Number: 1 
+
+SSID: HackMe_WEP_Open
+Channel: 11
+Encryption: wep-open
+Password: A3C96DFCAD39657C7EF2B4F098
+Key-Number: 1
+
+SSID: HackMe_DoS
+Channel: 11
+Encryption: psk+tkip
+Password: 12345678
+
+SSID: HackMe_Hidden2_4
+Channel: 11
+Encryption: psk2
+Password: 12345678
+
+5 GHz-Band
+
+SSID: Bugfix_Dont_use
+Channel: 36
+Encryption: psk2+ccmp
+Password: Bugfix_Dont_use
+EINGERICHTET WEGEN BUG (hostapd, athk10), erstes auf diesem Interface konfiguriertes Netzwerk ist nicht sichtbar
+
+SSID: HackMe_WPA_Shared
+Channel: 36
+Encryption: psk2+ccmp
+Password: 12345678
+
+SSID: HackMe_Hidden (versteckt)
+Channel: 36
+Encryption: psk2
+Password: 12345678
+DEAKTIVIERT
+
+/etc/rc.local:
+# Put your custom commands here that should be executed once
+# the system init finished. By default this file does nothing.
+
+ping 192.168.1.200&
+
+exit 0
