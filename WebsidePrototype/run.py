@@ -38,5 +38,9 @@ def nmap():
 def burpsuite():
     return render_template('burpsuite.html')
 
+@app.route("/commandinjection/")
+def commandinjection():
+    return render_template('commandinjection.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
