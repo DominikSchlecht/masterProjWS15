@@ -1,4 +1,4 @@
-{% include 'static/header.html' %}
+
 <p><h1>Table Of Contents</h1>
 <p><a href="#einleitung"><h1>1 Einleitung</h1></a>
 <p><a href="#anforderungen"><h1>2 Anforderungen</h1></a>
@@ -564,7 +564,13 @@ In einem IPv4 Netzwerk installiert der Angreifer seinen Rechner als IPv6 Router,
 
 <h3>Technisches</h3>
 Sobald der Angriff gestartet wird, erhalten die Clients im angegriffenen Netz eine IPv6-Adresse, die IPv6-Adressen des DNS-Servers und des Gateways des Angreifers. Diese werden durch vom Tool radvd versendete Router Advertisments konfiguriert. Da der IPv6-Verkehr vom Betriebssystem priorisiert behandelt wird, richten sich sämtliche DNS Anfragen an den DNS-Server des Angreifers (der „alte“ DNS-Server hat nur eine IPv4-Adresse). 
-Dieser liefert immer eine AAAA-Antwort. Dabei ist es egal ob eine IPv4- oder IPv6-Adresse angefragt wurde, da der Angreifer Adressen mittels Nat64 übersetzen kann. Da alle Hosts des angegriffenen Netzes IPv6-Adressen bei DNS Anfragen gemeldet bekommen, läuft der Netzwerkverkehr immer über das IPv6-Gateway, also über den Rechner des Angreifers. Dieser kann z.B. mit Wireshark den Netzwerkverkehr mitlesen.
+Dieser liefert immer eine A- und eine AAAA-Antwort (Abb. <a href="#reffig:fakeIPv6DNS">4.15</a>). Die AAAA-Antwort ist dabei die gekapselte IPv4-Adresse. Da alle Hosts des angegriffenen Netzes somit immer IPv6-Adressen bei DNS Anfragen gemeldet bekommen, läuft der Netzwerkverkehr immer über das IPv6-Gateway (IPv6 wird priorisiert), also über den Rechner des Angreifers. Dieser kann z.B. mit Wireshark den Netzwerkverkehr mitlesen.
+
+<figure>
+	<img src="bilder/fakeIPv6/fakeIPv6DNS.png"></img>
+	<figcaption>Abbildung 4.15: Ablauf der Verbindung.</figcaption>
+	<a name="reffig:fakeIPv6DNS">
+</figure>
 
 <h3>Erklärung der verwendeten Skripte und Tools</h3>
 
@@ -691,11 +697,11 @@ Durch Ausführen von
 </code>
 <br>
 
-wird das virtuelle Interface angelegt. Mit <i>ifconfig</i> kann die Konfiguration eingesehen werden (Abb. <a href="#reffig:tunInterface">4.15</a>
+wird das virtuelle Interface angelegt. Mit <i>ifconfig</i> kann die Konfiguration eingesehen werden (Abb. <a href="#reffig:tunInterface">4.16</a>
 ).
 <figure>
 	<img src="bilder/fakeIPv6/tunInterface.png"></img>
-	<figcaption>Abbildung 4.15: Ifconfig-Ausgabe des virtuellen Interfaces</figcaption>
+	<figcaption>Abbildung 4.16: Ifconfig-Ausgabe des virtuellen Interfaces</figcaption>
 	<a name="reffig:tunInterface">
 </figure>
 
@@ -766,7 +772,7 @@ Zusätzlich müssen noch einige Iptables Einträge vorgenommen werden (Tab. <a h
 </ol>
 <figure>
 	<img src="bilder/fakeIPv6/fakeIPv6menu.png"></img>
-	<figcaption>Abbildung 4.16: Konsolenausgabe des Angriffs</figcaption>
+	<figcaption>Abbildung 4.17: Konsolenausgabe des Angriffs</figcaption>
 	<a name="reffig:fakeIPv6menu">
 </figure>
 
@@ -836,4 +842,3 @@ In diesem Kapitel folgen mögliche Aufgabenstellungen für künftige Bachelorstu
 
 
 <hr>
-{% include 'static/footer.html' %}
