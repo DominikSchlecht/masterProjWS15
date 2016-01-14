@@ -41,13 +41,13 @@ WEP (Wired Equivalent Privacy) ist ein Standard für die Verschlüsselung und Au
 WEP enthält grundlegende Design-Schwächen und gilt seit 2001 als geknackt. 
 Für die Authentifizierung der Clients am Access Point sieht WEP zwei Varianten vor, die Open System Authentication oder die Shared Key Authentication. 
 
-Die Open System Authentication ist die Standard-Authentifizierung bei WEP. Diese schaltet für ein WLAn alle Clients frei, eine Authentifizierung findet praktisch nicht statt.
+Die Open System Authentication ist die Standard-Authentifizierung bei WEP. Diese schaltet für ein WLAN alle Clients frei, eine Authentifizierung findet praktisch nicht statt.
 
 Die Shared Key Authentication setzt das WLAN-Passwort zur Authentifizierung der WLAN-Clients ein. Die Authentifizierung erfolgt per Challange-Response-Verfahren. 
 
 Das bei WEP verwendete Verschlüsselungsverfahren en ist RC4, eine Datenstromchiffrierung.  Ein mit WEP verschlüsseltes Datenpaket besteht aus dem geheimen WEP-Schlüssel mit 40 oder 104 Bit Länge (WEP64 / WEP128), einer 32 Bit Prüfsumme der unverschlüsselten Daten (Integrity Check Value, ICV) und einem 24 Bit langem Initialisierungsvektor,  den WEP-Schlüssel zum Gesamtschlüssel auf 64 Bit oder 128 Bit verlängert und einmal pro Datenpaket inkrementiert (-1) wird. 
 
-Das gesamte Datenpaket besteht aus den Daten und der der 32-bit-Prüfsumme. Dies wird mit der IV-WEP-Schlüssel-Kombination verschlüsselt. Den verschlüsselten Daten wird der IV vorangestellt, damit der Empfänger den RC4-Schlüssel aus IV- und WEP-Schlüssel zusammensetzen und die verschlüsselten Daten entschlüsseln kann.
+Das gesamte Datenpaket besteht aus den Daten und der der 32-bit-Prüfsumme. Dies wird mit der IV-WEP-Schlüssel-Kombination verschlüsselt. Den verschlüsselten Daten wird der IV vorangestellt, damit der Empfänger den RC4-Schlüssel aus IV- und WEP-Schlüssel zusammensetzen und die verschlüsselten Daten entschlüsseln kann.\\
 
 {\Large Schwächen bei WEP}\\
 Der IV wird bei jedem Frame fortlaufend inkrementiert, weshalb er irgendwann wiederholt wird. 
@@ -55,14 +55,14 @@ Da der IV im Klartext übertragen wird, entspricht die effektive Verschlüsselun
 
 Die Authentifizierung, Verschlüsselung und Integritätsprüfung verwenden zudem den gleichen Schlüssel. 
 
-Ein Angriff auf die WEP-Verschlüsselung erfolgt üblicherweise durch das Aufzeichnen einer ausreichenden menge an Datenverkehr. Aus Diesem lässt sich im Anschluss daran der WEP-Schlüssel berechnen. Dies geschieht durch aufzeichnen der 2\^24 Schlüsselmöglichkeiten des IV, welche aufgrund der inkrementierenden Zählweise irgendwann wiederholt werden müssen. 
+Ein Angriff auf die WEP-Verschlüsselung erfolgt üblicherweise durch das Aufzeichnen einer ausreichenden menge an Datenverkehr. Aus Diesem lässt sich im Anschluss daran der WEP-Schlüssel berechnen. Dies geschieht durch aufzeichnen der 2$^{24}$ Schlüsselmöglichkeiten des IV, welche aufgrund der inkrementierenden Zählweise irgendwann wiederholt werden müssen. 
 
 Bei einem durchschnittlich ausgelasteten Access Point sind die Datenpakete auf circa eine Stunde gesammelt. Allerdings ist es möglich, diesen Vorgang zu beschleunigen. 
 
-Grober Ablauf eines WPA-/WPA2-Hacks:
+Grober Ablauf eines WEP-Hacks:
 
 \begin{enumerate}
-\item Beenden beeinflussender Prozesse
+\item Beenden störender Prozesse auf dem Angriffssystem
 \item Aktivieren des Monitoring-Modes
 \item WLAN mit WEP identifizieren
 \item Datenverkehr mit Airodump-ng aufzeichnen
@@ -75,60 +75,71 @@ Grober Ablauf eines WPA-/WPA2-Hacks:
 {\Large 1. Vorbereiten des Netzwerkinterfaces}\\
 Zunächst muss die Netzwerkkarte einsatzbereit gemacht werden. Hierzu ist es nötig, eventuell störende Prozesse auf dem Host zu beenden. Hierzu wird ein Terminal geöffnet und der Befehl
 
-$$airmon-ng check kill$$\\
+$$airmon\text{-}ng~check~kill$$\\
 
 eingegeben. Über den Befehl 
 
 $$iwconfig$$\\ 
 
 lässt sich erkennen, ob der WLAN-Adapter vom Host korrekt erkannt und initialisiert wurde. Dieser taucht normalerweise als WLAN0 in der angezeigten Liste auf. Des weiteren wird hier auch die MAC-Adresse des Adapters angezeigt. 
-Beides wird im weiteren Verlauf noch benötigt.
+Beides wird im weiteren Verlauf noch benötigt.\\
 
 {\Large 2. Identifikation des Ziel-Netzwerks}\\
-
 Im nächsten Schritt identifizieren wir das WLAN, welches angegriffen werden soll. Der nachfolgende Befehl gibt eine Liste mit in der Umgebung verfügbaren Netzwerken aus. Das X sollte durch die im ersten Schritt identifizierte Nummer des Interfaces ersetzt werden. Dabei wir das Interface automatisch in den Monitoring-Mode versetzt. 
 
-$$airodump-ng wlanX$$\\
+$$airodump\text{-}ng~wlanX$$\\
 \textit{X = NUM für das Interface}\\
 
-Aus der angezeigten Liste wählen wir das entsprechende WLAN aus. Für später benötigen wir dabei die Art der Authentifizierung, den Netzwerknamen, den Kanal und die BSSID des Ziels.
+Aus der angezeigten Liste wählen wir das entsprechende WLAN aus. Für später benötigen wir dabei die Art der Authentifizierung, den Netzwerknamen, den Kanal und die BSSID des Ziels.\\
 
 {\Large 3. Aufzeichnen der WLAN Pakete mit airodump}\\
 Nun muss der Netzwerkverkehr im Zielnetzwerk aufgezeichnet erden. Dies erledigt das Werkzeug airodump.
 
-$$airodump-ng -c KANAL -w SSID --bssid BSSID wlanX$$\\
+$$airodump\text{-}ng~\text{-}c~KANAL~ \text{-}w~SSID~\text{--}bssid~BSSID~wlanX$$\\
 \textit{X = NUM für das Interface}\\
 \textit{KANAL = Kanal des aufzuzeichnenden Netzwerks}\\
 \textit{SSID = Name des aufzuzeichnenden Netzwerks}\\
 \textit{BSSID = MAC-Adresse des Ziel-Accesspoints}\\
 
-Es werden mindestens 10000 Datenpakete für einen erfolgreichen Angriff benötigt. Die Pakete werden in einem .cap-File aufgezeichnet, welches im aktuellen Verzeichnis angelegt wird.
+Es werden mindestens 40000 Datenpakete für einen erfolgreichen Angriff benötigt. Die Pakete werden in einem .cap-File aufgezeichnet, welches im aktuellen Verzeichnis angelegt wird.\\
 
 {\Large 4. Generieren von zusätzlichem Datenverkehr auf dem Access Point}\\
 Um die für einen erfolgreichen Angriff benötigte Datenmenge schnell zu erreichen, gibt es die Möglichkeit Datenpakete in das Netzwerk einzuschleusen. Dabei kann der Angriff auf das Netzwerk allerdings entdeckt werden.
 Voraussetzung für ein erfolgreiches einschleusen von Datenpaketen ist, das das Netzwerk die Authentifizierungsmethode Open Authentication verwendet. 
 \\
 Zunächst öffnen wir ein neues Terminal. Anschließend authentifizieren wir uns mithilfe Tools aireplay am Access Point. Dies ist nötig, da der Access Point sonst die injizierten Paktete verwirft und keinen verwertbaren Datenverkehr zurückliefert. 
-$$aireplay-ng -1 0 -a BSSID -h WLAN-MAC -e SSID wlanX $$\\
+$$aireplay\text{-}ng~\text{-}1~0~\text{-}a~BSSID~\text{-}h~WLAN\text{-}MAC~\text{-}e~SSID~wlanX~$$\\
 
 \textit{X = NUM für das Interface}\\
 \textit{SSID = Name des aufzuzeichnenden Netzwerks}\\
 \textit{BSSID = MAC-Adresse des Ziel-Access Points}\\
 \textit{WLAN-MAC = MAC-Adresse der eigenen WLAN-Karte}\\
 
-Anschließend lauschen wir auf ARP-Requests anderer Teilnehmer im Netzwerk und - wenn genügend zusammen gekommen sind - injizieren wir diese ins Netzwerk.
-$$aireplay-ng -3 -b BSSID -h WLAN-MAC wlanX$$\\
+Je nach Access Point kann es nötig sein, die Authentifizierung in regelmäßigen Abständen zu wiederholen. Hierzu nutzen wir anstatt des oben stehenden Kommandos das nun folgende in einem neuen Terminal:
+
+$$aireplay\text{-}ng~\text{-}1~6~\text{-}o~1~\text{-}q~1~\text{-}e~SSID~\text{-}a~BSSID~\text{-}h~WLAN\text{-}MAC~wlanX$$\\
+
+\textit{X = NUM für das Interface}\\
+\textit{SSID = Name des aufzuzeichnenden Netzwerks}\\
+\textit{BSSID = MAC-Adresse des Ziel-Access Points}\\
+\textit{WLAN-MAC = MAC-Adresse der eigenen WLAN-Karte}\\
+
+Das vorangegangene Kommando ist so parametriert, das alle 6 Sekunden eine Authentifizierung stattfindet und jede Sekunde ein Keepalive-Paket an den Access Point gesendet wird.\\
+
+Anschließend lauschen wir auf ARP-Requests anderer Teilnehmer im Netzwerk und - wenn genügend zusammen gekommen sind - injizieren wir diese zurück ins Netzwerk.
+$$aireplay\text{-}ng~\text{-}3~\text{-}b~BSSID~\text{-}h~WLAN\text{-}MAC~wlanX$$\\
 \textit{X = NUM für das Interface}\\
 \textit{BSSID = MAC-Adresse des Ziel-Accesspoints}\\
 \textit{WLAN-MAC = MAC-Adresse der eigenen WLAN-Karte}\\
 
-Die Anzahl an aufgezeichneten Datenpaketen im ersten Terminal sollte nun innerhalb kürzester Zeit stark steigen.
+Die Anzahl an aufgezeichneten Datenpaketen im ersten Terminal sollte nun innerhalb kürzester Zeit stark steigen.\\
 
-{\Large Errechnen des WEP-Kennworts}\\
+{\Large 5. Errechnen des WEP-Kennworts}\\
 Sind genügend Datenpakete zusammen gekommen, so kann mit der Berechnung des Schlüssels begonnen werden.
-aircrack-ng -b BSSID FILENAME
+$$aircrack\text{-}ng~\text{-}b~BSSID~FILENAME$$
 \textit{BSSID = MAC-Adresse des Ziel-Access Points}\\
 \textit{FILENAME = Dateiname des im Terminal 1 aufgezeichneten Datenverkehrs}\\
+
 Das Programm öffnet die Datei mit dem aufgezeichneten Datenverkehr und beginnt mit der Errechnung des Schlüssels. Im Erfolgsfall wird dieser nun unten angezeigt.
 
 \section{WPA/WPA2}
@@ -452,74 +463,79 @@ $$\text{-}fail\text{-}wait\text{=}300$$\\
 
 erweitern. Der Wert muss nicht fest sein, sonder kann variiert werden um optimale Ergebnisse zu erzielen. 
 
-\section{DoS}
-Ein Denail of Service hat das Ziel, das Netzwerk zu blockieren. 
-Für den Denail of Service-Angriff verwenden wir das Tool MDK3 (Murder Death Kill 3), welches speziell für WLAN-Netzwerke entwickelt wurde. 
-\\
+\section{Denial of Service}
+Ein Denail of Service (DoS) hat das Ziel, den Datenverkehr im Netzwerk zu blockieren oder den Access Point zum Absturz zu bringen.\\
+ 
+Für den Denail of Service-Angriff verwenden wir das Tool MDK3 (Murder Death Kill 3), welches speziell für WLAN-Netzwerke entwickelt wurde.\\
+
 Zuerst müssen die um den WLAN-Adapter konkurierenden Prozesse über das Kommando 
-$$airmon-ng check kill$$
-beendet werden. 
+$$airmon\text{-}ng~check~kill$$
+beendet werden. \\
 
 Danach versetzen wir den WLAN-Adapter in den Monitoring-Modus. Dies geschieht über das Kommando: 
-$$airmon-ng start wlanX$$
+$$airmon\text{-}ng~start~wlanX$$
 Dabei gilt zu beachten das wlanX durch den eigentlichen Namen des WLAN-Adapters ersetzt werden muss (z.B. wlan1). 
-Der WLAN-Adapter erhält dabei einen neuen Namen, wlanXmon. Das X kann sich auch hier wieder von System zu System unterscheiden. 
-\\
-Anschließend suchen wir uns den Ziel-Access Point aus. Dies geschieht über den Befehl: 
-$$airodump-ng wlanXmon --band abg$$
+Der WLAN-Adapter erhält dabei einen neuen Namen, wlanXmon. Das X kann sich auch hier wieder von System zu System unterscheiden.\\
 
-Aus der von diesem Werkzeug generierten Liste notieren wir die MAC-Adresse des Ziel-Access Points (BSSID) und die Art der Verschlüsselung. Diese Informationen werden im weiteren Verlauf benötigt. 
-\\
-Das MDK3-Tool stellt verschiedene Methoden bereit, um einen DoS-Angriff auf dem Ziel auszuführen. 
+Anschließend suchen wir uns den Ziel-Access Point aus. Dies geschieht über den Befehl: 
+$$airodump\text{-}ng~wlanXmon~\text{--}band~abg$$
+
+Aus der von diesem Werkzeug generierten Liste notieren wir die MAC-Adresse des Ziel-Access Points (BSSID) und die Art der Verschlüsselung. Diese Informationen werden im weiteren Verlauf benötigt.\\
+
+{\Large Angriffsmethoden von MDK3}\\
+Das MDK3-Tool hält verschiedene Methoden bereit, um einen DoS-Angriff auf dem Ziel auszuführen. Im Folgenden werden drei davon erläutert.\\
 
 \textit{Michael shutdown exploitation}\\
+
 Diese Methode nutzt einen Fehler in der TKIP-Verschlüsselung aus, um den gesamten Datenverkehr im Ziel-Netzwerk zu unterbinden. Für einen erfolgreichen Angriff muss das WLAN mit TKIP verschlüsselt worden sein.\\
-$$mdk3 wlanXmon m -t BSSID -j$$
+$$mdk3~wlanXmon~m~\text{-}t~BSSID~\text{-}j$$
 Durch den Parameter -j wird MDK3 angewiesen, eine Schwachstelle in der QoS-Implementierung der TKIP-Verschlüsselung auszunutzen. Dadurch werden nur ein paar Datenpakete benötigt, um den Datenverkehr zu blockieren.
-Der Parameter wlanXmon muss wieder durch den eigentlichen Namen des WLAN-Adapters ersetzt werden. 
+Der Parameter wlanXmon muss wieder durch den eigentlichen Namen des WLAN-Adapters ersetzt werden und BSSID durch die MAC-Adresse des Ziel-Access Points.\\
 
 \textit{Beacon Flood Mode}\\
-Bei dieser Methode werden Beacon-Frames ausgesendet, um den Clients gefälschte Access Points vorzugaukeln. Dies kann zu Abstürzen der Netzwerkscanner oder Treiber der WLAN-Adapter führen. 
-$$mdk3 wlanXmon b -c 1$$
+
+Bei dieser Methode werden Beacon-Frames ausgesendet, um den Clients gefälschte Access Points vorzugaukeln. Dies kann zu Abstürzen der Netzwerkscanner von Betriebssystemen oder Treiber der WLAN-Adapter führen. \\
+$$mdk3~wlanXmon~b~\text{-}c~1$$
 Der Parameter wlanXmon muss wieder durch den eigentlichen Namen des WLAN-Adapters ersetzt werden.
-das -c legt den Funkkanal fest, auf dem die Access Points erstellt werden sollen. 
+das -c legt den Funkkanal fest, auf dem die Beacon-Frames gesendet werden sollen.\\ 
 
 \textit{Authentication DoS mode}\\
-Bei dieser Methode werden vom Angreifer Authentication-Frames an den durch die BSSID spezifizerten Access Point geschickt. Zu viele Clients bringen den Access Point möglicherweise zum Absturz. 
-$$mdk3 wlanXmon a -a BSSID$$
 
+Bei dieser Methode werden vom Angreifer Authentication-Frames an den durch die BSSID spezifizerten Access Point geschickt. Zu viele Clients bringen den Access Point möglicherweise zum Absturz.\\ 
+$$mdk3~wlanXmon~a~\text{-}a~BSSID$$
+
+Auch hier muss der Parameter wlanXmon wieder durch den eigentlichen Namen des WLAN-Adapters ersetzt werden. 
 
 \section{Fake AP}
 Die Idee bösartiger WLAN-Zugangspunkte gibt es schon länger, doch diese Bedrohung gewinnt durch vermehrt aufgetauchte Skripte und Programme an Bedeutung. Für einen Fake AP wird meist ein Laptop so konfiguriert, das er sich als Hotspot oder Access Point ausgibt.\\ Dabei besteht entweder die Möglichkeit, eine bestehende SSID in der Umgebung zu wählen oder eine für viele Besitzer interessante SSID zu wählen. \\
 
-Der Betreiber eines Fake Access Point versucht in der Regel Informationen vom Opfer zu erlangen, beispielsweise Kennwörter oder Kreditkartendaten. Auch ein einschleusen von Schadcode auf dem Opfer ist möglich. 
+Der Betreiber eines Fake Access Point versucht in der Regel Informationen vom Opfer zu erlangen, beispielsweise Kennwörter oder Kreditkartendaten. Auch ein einschleusen von Schadcode auf dem Opfer ist möglich. \\
 
-Ablauf: \\
+{\Large Ablauf eines Angriffs}\\
 
-Zunächst wird ein eventuell vorhandener Access Point blockiert. \\ 
-Im nächsten Schritt wird ein eigener Access Point beziehungsweise Hotspot erstellt. \\
-Anschließend wird gewartet, bis sich Benutzer am Access Point anmelden. Ist das Signal des Angreifers aufgrund von z.B. örtlicher Nähe stärker, so kann es sein dass sich die Opfer automatisch mit dem Fake Access Point verbinden. \\
-Je nach Ziel des Angreifers wird den Opfern nun eine Anmeldemaske zum Phishing von Passwörtern oder Kreditkarten angezeigt. 
-Auch ein mitlesen und die Manipulation 	  des Datenverkehrs ist Möglich. \\ Über Lücken im Betriebssystem beziehungsweise Browser ist auch eine Infektion des Opfers mit Schadcode möglich. 
+Zunächst wird ein eventuell vorhandener Access Point blockiert und 
+im nächsten Schritt ein eigener Access Point beziehungsweise Hotspot erstellt. 
+Anschließend wird gewartet bis sich Benutzer am Access Point anmelden. Ist das Signal des Angreifers aufgrund von z.B. örtlicher Nähe stärker als das des Hotspots, so kann es sein dass sich die Opfer automatisch mit dem Fake Access Point verbinden. Je nach Ziel des Angreifers wird den Opfern nun eine Anmeldemaske zum Phishing von Passwörtern oder Kreditkartendaten angezeigt. 
+Auch ein Mitlesen und die Manipulation 	  des Datenverkehrs ist machbar. Über Lücken im Betriebssystem beziehungsweise Browser ist auch eine Infektion des Opfers mit Schadcode möglich. \\
 
-Durchführung: \\
+{\Large Durchführung eines Angriffs}\\
 
 Zur Durchführung des Angriffs verwenden wir das Tool wifiphisher.\\ 
 
-Dies benötigt Kali Linux und 2 WLAN-Netzwerkadapter. Einer von ihnen muss Injection unterstützen. \\
+Dies benötigt Kali Linux und 2 WLAN-Netzwerkadapter. Einer von ihnen muss Injection unterstützen. Bezogen werden kann wifiphisher über die Webseite \url{https://github.com/sophron/wifiphisher}. \\
 
 Gestartet wird es im Terminal über 
-$$python wifiphisher.py ~$$\\
+$$python~wifiphisher.py~$$\\
 
-Anschließend führt das Programm eine Suche nach WLANs in der Umgebung durch. Aus dieser Liste kann im Anschluss daran ein  Zielnetzwerk ausgewählt werden. Im Anschluss daran wird ein Webserver, und der Fake AP mit der entsprechenden Konfiguration gestartet. \\
+Anschließend führt das Programm eine Suche nach WLANs in der Umgebung durch. Aus dieser Liste kann dann ein  Zielnetzwerk ausgewählt werden. Im Anschluss daran wird ein Webserver und der Fake AP mit der entsprechenden Konfiguration gestartet. \\
 
 Danach wird begonnen, den Datenverkehr im Zielnetzwerk durch Abmeldung der Opfer vom Ziel-Access Point zu unterbrechen. \\
 
-Das Opfer verbindet sich nun mit dem falschen Access Point des Angreifers, dieser befindet sich nun in der "Man in the Middle"-Position. \\
+Das Opfer verbindet sich nun mit dem falschen Access Point des Angreifers, welcher sich nun in der "Man in the Middle"\text{-}Position befindet. \\
 
-Beim Aufruf einer Webseite wird dem Opfer nun eine Webseite präsentiert, die der Konfigurationsoberfläche des Routers nachempfunden ist und zur Eingabe des WEP-Passworts aufgrund eines durchgeführten Firmwareupdates auffordert. Denkbar ist auch die Nachbildung von Login-Seiten verschiedener sozialer Netzwerke oder Mailprovider. Auch die Fälschung von Login-Seiten für Hotspots ist möglich. \\
+Beim Aufruf einer beliebigen Webseite wird dem Opfer nun eine Seite präsentiert, die der Konfigurationsoberfläche eines Routers nachempfunden ist und zur Eingabe des WLAN-Passworts aufgrund eines durchgeführten Firmwareupdates auffordert. Denkbar ist auch die Nachbildung von Anmeldeseiten verschiedener sozialer Netzwerke oder Mailprovider. Auch die Fälschung von Login-Seiten für Hotspots ist möglich. \\
 
-War der Angriff erfolgreich, das heißt ein Opfer hat beispielsweise das WPA-Passwort auf der präsentierten Seite eingegeben, so beendet sich wifiphisher nach dem Anzeigen der eingegebenen Daten.
+War der Angriff erfolgreich, das heißt ein Opfer hat beispielsweise das WLAN-Passwort auf der präsentierten Seite eingegeben, so beendet sich wifiphisher nach dem Anzeigen der eingegebenen Daten automatisch und gibt dadurch den Zugriff auf den blockierten Access Point wieder frei.
 
 \section{Sicherungsmaßnahmen und Bewertung}
 
