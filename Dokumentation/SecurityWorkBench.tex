@@ -32,9 +32,12 @@ urlcolor=black,
 % Dokument compiliert wird; den Rest mit % auskommentieren
 \includeonly{
     chapter/title_page,
+    chapter/summary,
     chapter/einleitung,
     chapter/chapter_wlan,
-    chapter/chapter_ictf
+    chapter/chapter_ictf,
+    chapter/scenarios,
+    chapter/exercises
 }
 
 %-----------------------------------------------------------------
@@ -50,11 +53,17 @@ urlcolor=black,
 	\setcounter{page}{0}	% Wieder bei 1 Anfangen
 	\include{chapter/einleitung}
 	
+	\include{chapter/summary}
+	
 	%Kapitel über WLAN
 	\include{chapter/chapter_wlan}
 	
 	%Kapitel zum iCTF
 	\include{chapter/chapter_ictf}
+	
+	\include{chapter/scenarios}
+	
+	\include{chapter/exercises}
 
 %---------------Anhang-------------------------------------------
 	%\include{chapter/appendix} % Anhang
